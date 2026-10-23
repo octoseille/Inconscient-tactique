@@ -1,0 +1,19 @@
+{
+  "name": "Inconscient Tactique",
+  "short_name": "Tactique",
+  "description": "Système tactique personnel : Matrice Eisenhower, suivi d'habitudes et moteur de dépendances.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070d0b",
+  "theme_color": "#080e0c",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
