@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -14,7 +13,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 
-<style>
+<style id="mainAppStyle">
     :root {
         --bg-void: #070d0b;
         --bg-base: #0c1412;
@@ -34,29 +33,27 @@
         --accent-cyan: #00e5ff;
         --accent-amber: #ffab40;
         --accent-crimson: #ff3d71;
-        --accent-crimson-glow: rgba(255, 61, 113, 0.28);
         --accent-purple: #b388ff;
 
-        --q1-color: #ff3d71; /* Faire */
-        --q2-color: #00e5ff; /* Planifier */
-        --q3-color: #ffab40; /* Déléguer */
-        --q4-color: #90a4ae; /* Éliminer */
+        --q1-color: #ff3d71;
+        --q2-color: #00e5ff;
+        --q3-color: #ffab40;
+        --q4-color: #90a4ae;
         
-        --heat-0: #12211c;
-        --heat-1: #0b452e;
+        --heat-0: #13221e;
+        --heat-1: #0a402a;
         --heat-2: #056a3f;
         --heat-3: #009d57;
         --heat-4: #00e676;
 
-        --heat-neg-0: #12211c;
-        --heat-neg-1: #3b2814;
-        --heat-neg-2: #613612;
-        --heat-neg-3: #942525;
-        --heat-neg-4: #ff3d71;
+        --heat-bad-1: #4a2d10;
+        --heat-bad-2: #7a3e05;
+        --heat-bad-3: #a82419;
+        --heat-bad-4: #ff3d71;
 
         --radius-sm: 8px;
         --radius-md: 14px;
-        --radius-lg: 22px;
+        --radius-lg: 20px;
     }
 
     * {
@@ -88,7 +85,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        background: rgba(7, 13, 11, 0.88);
+        background: rgba(7, 13, 11, 0.85);
         backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--border-subtle);
         z-index: 20;
@@ -164,7 +161,6 @@
         box-shadow: 0 0 10px var(--accent-emerald-glow);
     }
 
-    /* SEARCH BAR */
     .search-wrapper {
         display: none;
         padding: 2px 0 6px 0;
@@ -181,7 +177,6 @@
         outline: none;
     }
 
-    /* HORIZONTAL CATEGORY SCROLLER */
     .cat-bar {
         display: flex;
         gap: 7px;
@@ -221,7 +216,6 @@
         color: var(--accent-emerald);
     }
 
-    /* MAIN CONTAINER & TABS */
     .view-container {
         flex: 1;
         overflow: hidden;
@@ -240,410 +234,7 @@
     .tab-view::-webkit-scrollbar { display: none; }
     .tab-view.active { display: flex; }
 
-    /* ONGLET HABITUDES SPÉCIFIQUE (IMMERSION PLEIN ÉCRAN) */
-    #tab-routine {
-        padding: 10px 0 80px 0;
-        overflow: hidden;
-        display: none;
-        flex-direction: column;
-        gap: 8px;
-    }
-    #tab-routine.active { display: flex; }
-
-    /* MACRO HEATMAP CONTAINER (ISO 8601) */
-    .macro-heat-section {
-        padding: 0 14px;
-        flex-shrink: 0;
-    }
-
-    .macro-heat-card {
-        background: var(--bg-panel);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-md);
-        padding: 12px 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .macro-heat-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .macro-heat-title {
-        font-size: 0.82rem;
-        font-weight: 800;
-        letter-spacing: 0.8px;
-        text-transform: uppercase;
-        color: var(--text-primary);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .scope-toggle-group {
-        display: flex;
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: 12px;
-        padding: 2px;
-    }
-
-    .scope-btn {
-        background: transparent;
-        border: none;
-        color: var(--text-tertiary);
-        font-size: 0.65rem;
-        font-weight: 800;
-        padding: 3px 8px;
-        border-radius: 9px;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    .scope-btn.active {
-        background: var(--accent-emerald);
-        color: #031208;
-    }
-
-    /* GRILLE STRICTE ISO 8601 : 7 LIGNES STRICTES (LUN -> DIM) */
-    .iso-heat-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .iso-day-labels {
-        display: grid;
-        grid-template-rows: repeat(7, 12px);
-        gap: 3px;
-        font-size: 0.58rem;
-        font-weight: 800;
-        color: var(--text-tertiary);
-        line-height: 12px;
-        text-align: right;
-        padding-right: 2px;
-    }
-
-    .iso-grid {
-        display: grid;
-        grid-template-rows: repeat(7, 12px);
-        grid-auto-flow: column;
-        grid-auto-columns: 12px;
-        gap: 3px;
-        overflow-x: auto;
-        padding-bottom: 2px;
-        scrollbar-width: none;
-    }
-    .iso-grid::-webkit-scrollbar { display: none; }
-
-    .iso-cell {
-        width: 12px;
-        height: 12px;
-        border-radius: 3px;
-        background: var(--heat-0);
-        cursor: pointer;
-        transition: transform 0.12s;
-    }
-    .iso-cell:active { transform: scale(1.4); z-index: 5; }
-    .iso-cell.ghost {
-        background: transparent;
-        border: 1px dashed rgba(255, 255, 255, 0.05);
-        pointer-events: none;
-    }
-    .iso-cell.today-ring {
-        outline: 1.5px solid #fff;
-        outline-offset: 1px;
-    }
-
-    /* HEATMAP NIVEAUX POSITIFS */
-    .iso-cell.p-0 { background: var(--heat-0); }
-    .iso-cell.p-1 { background: var(--heat-1); }
-    .iso-cell.p-2 { background: var(--heat-2); }
-    .iso-cell.p-3 { background: var(--heat-3); }
-    .iso-cell.p-4 { background: var(--heat-4); box-shadow: 0 0 6px var(--accent-emerald-glow); }
-
-    /* HEATMAP NIVEAUX NÉGATIFS */
-    .iso-cell.n-0 { background: var(--heat-neg-0); }
-    .iso-cell.n-1 { background: var(--heat-neg-1); }
-    .iso-cell.n-2 { background: var(--heat-neg-2); }
-    .iso-cell.n-3 { background: var(--heat-neg-3); }
-    .iso-cell.n-4 { background: var(--heat-neg-4); box-shadow: 0 0 6px var(--accent-crimson-glow); }
-
-    /* CAROUSEL SWIPEABLE PLEIN ÉCRAN */
-    .habit-slider-container {
-        flex: 1;
-        overflow-x: auto;
-        overflow-y: hidden;
-        display: flex;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        gap: 12px;
-        padding: 6px 14px 10px 14px;
-        scrollbar-width: none;
-    }
-    .habit-slider-container::-webkit-scrollbar { display: none; }
-
-    /* Classe injectée dynamiquement pour bloquer le swipe de carte pendant la roulette */
-    .habit-slider-container.locked-for-dial {
-        overflow-x: hidden !important;
-        scroll-snap-type: none !important;
-    }
-
-    .habit-full-card {
-        flex: 0 0 calc(100vw - 28px);
-        scroll-snap-align: center;
-        background: var(--bg-card);
-        border: 1px solid var(--border-medium);
-        border-radius: var(--radius-lg);
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    .habit-full-card.type-negative {
-        border-color: rgba(255, 61, 113, 0.3);
-    }
-
-    .habit-card-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    .habit-card-title-wrap {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    }
-
-    .habit-card-title {
-        font-size: 1.25rem;
-        font-weight: 900;
-        letter-spacing: 0.3px;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .habit-card-tag {
-        font-size: 0.65rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        color: var(--text-tertiary);
-        letter-spacing: 1px;
-    }
-
-    .habit-card-actions {
-        display: flex;
-        gap: 6px;
-    }
-
-    .habit-kpi-row {
-        display: flex;
-        gap: 10px;
-        margin-top: 6px;
-    }
-
-    .kpi-chip {
-        font-size: 0.72rem;
-        font-weight: 800;
-        padding: 3px 8px;
-        border-radius: 8px;
-        background: var(--bg-panel);
-        border: 1px solid var(--border-subtle);
-        color: var(--text-secondary);
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    /* MONUMENTAL VALUE READOUT */
-    .monument-readout-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 6px 0;
-    }
-
-    .monument-number {
-        font-size: 4.2rem;
-        font-weight: 900;
-        font-variant-numeric: tabular-nums;
-        line-height: 1;
-        letter-spacing: -2px;
-        color: var(--text-primary);
-        text-shadow: 0 0 30px var(--accent-emerald-glow);
-        cursor: pointer;
-        transition: transform 0.12s, color 0.2s;
-    }
-    .monument-number:active { transform: scale(1.05); }
-
-    .monument-number.negative-alert {
-        color: var(--accent-crimson);
-        text-shadow: 0 0 30px var(--accent-crimson-glow);
-    }
-
-    .monument-unit {
-        font-size: 0.88rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: var(--text-secondary);
-        margin-top: 4px;
-    }
-
-    /* MINI HEATMAP 4 SEMAINES */
-    .card-mini-heat {
-        background: rgba(0,0,0,0.25);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-sm);
-        padding: 8px 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-    .card-mini-heat-header {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.62rem;
-        color: var(--text-tertiary);
-        font-weight: 800;
-        text-transform: uppercase;
-    }
-
-    /* CONTRÔLEUR ISOLÉ // TOUCH-ACTION NONE STRICT */
-    .dial-controller {
-        background: var(--bg-panel);
-        border: 1px solid var(--border-medium);
-        border-radius: var(--radius-md);
-        padding: 8px 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        /* Isolation stricte anti-propagation sur le container */
-        touch-action: none !important;
-    }
-
-    .dial-track-container {
-        position: relative;
-        width: 100%;
-        height: 52px;
-        overflow: hidden;
-        cursor: ew-resize;
-        background: rgba(0,0,0,0.3);
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--border-subtle);
-        /* Bloque le scroll natif horizontal sur la réglette */
-        touch-action: none !important;
-    }
-
-    .dial-cursor {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 50%;
-        width: 3px;
-        background: var(--accent-emerald);
-        box-shadow: 0 0 12px var(--accent-emerald-glow);
-        transform: translateX(-50%);
-        z-index: 3;
-        pointer-events: none;
-    }
-    .dial-cursor.cursor-crimson {
-        background: var(--accent-crimson);
-        box-shadow: 0 0 12px var(--accent-crimson-glow);
-    }
-
-    .dial-tick-ribbon {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        position: absolute;
-        left: 50%;
-        pointer-events: none;
-        will-change: transform;
-    }
-
-    .dial-tick {
-        width: 20px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-    .dial-tick::after {
-        content: '';
-        display: block;
-        width: 2px;
-        height: 12px;
-        background: var(--border-medium);
-        border-radius: 1px;
-    }
-    .dial-tick.major::after {
-        height: 24px;
-        background: var(--text-primary);
-        width: 2.5px;
-    }
-
-    .dial-step-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        touch-action: manipulation;
-    }
-
-    .btn-step {
-        background: var(--bg-input);
-        border: 1px solid var(--border-subtle);
-        color: var(--text-primary);
-        font-size: 1.1rem;
-        font-weight: 900;
-        width: 50px;
-        height: 38px;
-        border-radius: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.1s, background 0.15s;
-        touch-action: none !important;
-    }
-    .btn-step:active {
-        transform: scale(0.92);
-        background: var(--accent-emerald);
-        color: #031208;
-    }
-
-    /* PAGINATION BULLETS */
-    .slider-dots-row {
-        display: flex;
-        justify-content: center;
-        gap: 6px;
-        padding-top: 4px;
-        flex-shrink: 0;
-    }
-    .slider-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 3px;
-        background: var(--border-medium);
-        transition: all 0.2s;
-    }
-    .slider-dot.active {
-        width: 18px;
-        background: var(--accent-emerald);
-    }
-
-    /* 2x2 EISENHOWER GRID */
+    /* MATRICE EISENHOWER */
     .matrix-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -666,12 +257,15 @@
         transition: border-color 0.2s;
     }
 
+    .quadrant:focus-within { border-color: var(--border-medium); }
+
     .quad-header {
         display: flex;
         flex-direction: column;
         margin-bottom: 8px;
         cursor: pointer;
     }
+
     #quad-q2 .quad-header, #quad-q4 .quad-header { text-align: right; }
 
     .quad-title {
@@ -708,7 +302,6 @@
     }
     .quad-tasks::-webkit-scrollbar { display: none; }
 
-    /* TASK PILLS */
     .task-pill {
         background: rgba(22, 36, 32, 0.9);
         border: 1px solid var(--border-subtle);
@@ -753,4 +346,2939 @@
     }
     .radio-circle:active { transform: scale(1.2); }
 
-    #quad-q1 .radio-circle 
+    #quad-q1 .radio-circle { color: var(--q1-color); }
+    #quad-q2 .radio-circle { color: var(--q2-color); }
+    #quad-q3 .radio-circle { color: var(--q3-color); }
+    #quad-q4 .radio-circle { color: var(--q4-color); }
+
+    .pill-center {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pill-title {
+        font-size: 0.77rem;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--text-primary);
+    }
+
+    .pill-meta {
+        font-size: 0.62rem;
+        color: var(--text-secondary);
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+
+    .age-badge {
+        font-size: 0.68rem;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--accent-crimson);
+        flex-shrink: 0;
+    }
+    .age-badge.fresh { color: var(--accent-emerald); }
+    .age-badge.warm { color: var(--accent-cyan); }
+    .age-badge.aging { color: var(--accent-amber); }
+
+    /* CONTROLES FLOTTANTS */
+    .floating-bar {
+        position: fixed;
+        bottom: 74px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 25;
+    }
+
+    .btn-magic {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(179, 136, 255, 0.25), rgba(0, 229, 255, 0.25));
+        border: 1px solid rgba(179, 136, 255, 0.5);
+        color: #fff;
+        font-size: 1.15rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        transition: transform 0.2s;
+    }
+    .btn-magic:active { transform: scale(0.9); }
+
+    .btn-videtete {
+        background: var(--accent-emerald);
+        color: #031208;
+        border: none;
+        border-radius: 26px;
+        padding: 11px 18px;
+        font-size: 0.88rem;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px var(--accent-emerald-glow);
+        transition: transform 0.15s;
+    }
+    .btn-videtete:active { transform: scale(0.95); }
+
+    .badge-inbox-count {
+        background: #031208;
+        color: var(--accent-emerald);
+        border-radius: 10px;
+        padding: 1px 6px;
+        font-size: 0.72rem;
+        font-weight: 800;
+    }
+
+    /* HEATMAP GLOBALE AVEC ALIGNEMENT CALENDAIRE STRICT (LUN-DIM) */
+    .global-heatmap-wrap {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .heat-period-toggle {
+        display: flex;
+        gap: 4px;
+        background: var(--bg-void);
+        padding: 2px;
+        border-radius: 8px;
+    }
+    .heat-period-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 0.68rem;
+        font-weight: 800;
+        padding: 4px 9px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .heat-period-btn.active {
+        background: var(--bg-card);
+        color: var(--accent-emerald);
+    }
+
+    .calendar-heatmap-layout {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+    .calendar-heatmap-layout::-webkit-scrollbar { display: none; }
+
+    .day-labels-col {
+        display: grid;
+        grid-template-rows: repeat(7, 13px);
+        gap: 3px;
+        font-size: 0.6rem;
+        font-weight: 800;
+        color: var(--text-tertiary);
+        line-height: 13px;
+        text-align: right;
+        padding-right: 2px;
+        flex-shrink: 0;
+    }
+
+    .global-iso-grid {
+        display: grid;
+        grid-template-rows: repeat(7, 13px);
+        grid-auto-flow: column;
+        grid-auto-columns: 13px;
+        gap: 3px;
+    }
+
+    .heat-cell {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+        background: var(--heat-0);
+        cursor: pointer;
+        transition: transform 0.12s;
+    }
+    .heat-cell:active { transform: scale(1.3); z-index: 5; }
+
+    .heat-cell.level-0 { background: var(--heat-0); }
+    .heat-cell.level-1 { background: var(--heat-1); }
+    .heat-cell.level-2 { background: var(--heat-2); }
+    .heat-cell.level-3 { background: var(--heat-3); }
+    .heat-cell.level-4 { background: var(--heat-4); box-shadow: 0 0 6px var(--accent-emerald-glow); }
+
+    .heat-cell.bad-1 { background: var(--heat-bad-1); }
+    .heat-cell.bad-2 { background: var(--heat-bad-2); }
+    .heat-cell.bad-3 { background: var(--heat-bad-3); }
+    .heat-cell.bad-4 { background: var(--heat-bad-4); box-shadow: 0 0 6px rgba(255, 61, 113, 0.45); }
+
+    .heat-cell.empty-cell {
+        background: transparent;
+        pointer-events: none;
+    }
+    .heat-cell.today-ring { outline: 1.5px solid #fff; outline-offset: 1px; }
+
+    /* CARROUSEL DE CARTES D'HABITUDES PLEIN ÉCRAN */
+    .habits-carousel-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 12px;
+        padding: 4px 2px 12px 2px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .habits-carousel-container::-webkit-scrollbar { display: none; }
+
+    .habit-full-card {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        position: relative;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .habit-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .habit-title-box {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+    .habit-category-badge {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--accent-cyan);
+    }
+    .habit-card-title {
+        font-size: 1.15rem;
+        font-weight: 900;
+        color: var(--text-primary);
+        letter-spacing: 0.3px;
+    }
+
+    .streak-badge {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(255, 171, 64, 0.15);
+        border: 1px solid rgba(255, 171, 64, 0.35);
+        color: var(--accent-amber);
+        padding: 4px 10px;
+        border-radius: 14px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+    .streak-badge.negative-type {
+        background: rgba(0, 230, 118, 0.12);
+        border-color: rgba(0, 230, 118, 0.3);
+        color: var(--accent-emerald);
+    }
+
+    /* INDICATEUR NUMÉRIQUE CENTRAL MONUMENTAL */
+    .monument-indicator-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0 4px 0;
+        cursor: pointer;
+    }
+    .monument-val {
+        font-size: 3.7rem;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -1.5px;
+        line-height: 1;
+        transition: transform 0.1s, color 0.15s;
+    }
+    .monument-val:active { transform: scale(0.95); }
+    .monument-unit {
+        font-size: 0.85rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--text-secondary);
+        margin-top: 5px;
+    }
+    .monument-subtext {
+        font-size: 0.7rem;
+        color: var(--text-tertiary);
+        margin-top: 3px;
+        font-weight: 600;
+    }
+
+    /* ROULETTE HAPTIQUE / BARILLET ISOLÉ DU SWIPE */
+    .dial-controller-box {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        touch-action: none;
+    }
+
+    .dial-viewport {
+        position: relative;
+        height: 54px;
+        background: rgba(0, 0, 0, 0.45);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        cursor: ew-resize;
+        touch-action: none !important;
+        border: 1px solid var(--border-medium);
+    }
+
+    .dial-hint-label {
+        position: absolute;
+        bottom: 3px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.56rem;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--text-tertiary);
+        pointer-events: none;
+        font-weight: 800;
+    }
+
+    .dial-center-line {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2.5px;
+        transform: translateX(-50%);
+        background: var(--accent-emerald);
+        box-shadow: 0 0 10px var(--accent-emerald-glow);
+        z-index: 4;
+        pointer-events: none;
+    }
+
+    .dial-track {
+        position: absolute;
+        top: 0;
+        bottom: 10px;
+        left: -140px;
+        right: -140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        will-change: transform;
+        pointer-events: none;
+    }
+
+    .dial-tick {
+        width: 14px;
+        height: 16px;
+        border-left: 1.5px solid var(--text-tertiary);
+        opacity: 0.55;
+        flex-shrink: 0;
+    }
+    .dial-tick.major {
+        height: 30px;
+        border-left: 2px solid var(--text-secondary);
+        opacity: 1;
+    }
+
+    .dial-actions-row {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stepper-btn {
+        flex: 1;
+        background: var(--bg-input);
+        border: 1px solid var(--border-medium);
+        color: var(--text-primary);
+        padding: 10px 0;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: 900;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        transition: transform 0.1s;
+    }
+    .stepper-btn:active { transform: scale(0.92); background: var(--bg-card-hover); }
+
+    .btn-done-toggle {
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 900;
+        font-size: 0.85rem;
+        cursor: pointer;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: transform 0.1s;
+    }
+    .btn-done-toggle.is-achieved {
+        background: var(--accent-emerald);
+        color: #04140c;
+        box-shadow: 0 0 14px var(--accent-emerald-glow);
+    }
+    .btn-done-toggle.is-breached {
+        background: rgba(255, 61, 113, 0.2);
+        color: var(--accent-crimson);
+        border: 1px solid var(--accent-crimson);
+    }
+    .btn-done-toggle.is-pending {
+        background: var(--bg-input);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-subtle);
+    }
+
+    /* MINI HEATMAP 4 SEMAINES */
+    .mini-heatmap-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: rgba(0, 0, 0, 0.22);
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+    .mini-heatmap-title {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--text-secondary);
+    }
+
+    /* INDICATEURS DE SLIDE */
+    .carousel-dots-row {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        padding-top: 2px;
+    }
+    .carousel-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--border-medium);
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+    .carousel-dot.active {
+        width: 22px;
+        border-radius: 6px;
+        background: var(--accent-emerald);
+        box-shadow: 0 0 8px var(--accent-emerald-glow);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: rgba(8, 14, 12, 0.95);
+        backdrop-filter: blur(14px);
+        border-top: 1px solid var(--border-subtle);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 30;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-tertiary);
+        font-size: 0.68rem;
+        font-weight: 700;
+        cursor: pointer;
+        flex: 1;
+        padding: 6px 0;
+        transition: color 0.2s, transform 0.1s;
+    }
+    .nav-btn:active { transform: scale(0.92); }
+    .nav-btn.active { color: var(--accent-emerald); }
+    .nav-btn .nav-icon { font-size: 1.25rem; }
+
+    /* STATS & CARDS */
+    .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .stat-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        padding: 12px 8px;
+        text-align: center;
+    }
+    .stat-box .val {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: var(--accent-emerald);
+        font-variant-numeric: tabular-nums;
+    }
+    .stat-box .lbl {
+        font-size: 0.63rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-top: 2px;
+    }
+
+    .section-title {
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 6px;
+    }
+
+    .full-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.1s;
+    }
+    .full-card:active { background: var(--bg-card-hover); transform: scale(0.98); }
+
+    /* MODALES */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 10, 8, 0.94);
+        backdrop-filter: blur(12px);
+        z-index: 50;
+        display: none;
+        flex-direction: column;
+        animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.open { display: flex; }
+
+    @keyframes slideUp {
+        from { transform: translateY(30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .btn-text {
+        background: none;
+        border: none;
+        color: var(--accent-emerald);
+        font-size: 0.95rem;
+        font-weight: 800;
+        cursor: pointer;
+        padding: 4px;
+    }
+
+    .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .form-group-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border-subtle);
+        gap: 10px;
+    }
+    .form-row:last-child { border-bottom: none; }
+
+    .form-input-text {
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        font-weight: 700;
+        outline: none;
+        width: 100%;
+        user-select: text;
+    }
+
+    .form-select {
+        background: transparent;
+        border: none;
+        color: var(--accent-emerald);
+        font-size: 0.9rem;
+        font-weight: 700;
+        outline: none;
+        text-align: right;
+        max-width: 65%;
+    }
+    .form-select option { background: var(--bg-panel); color: #fff; }
+
+    .btn-action-primary {
+        background: var(--accent-emerald);
+        color: #04140c;
+        border: none;
+        padding: 13px;
+        border-radius: 12px;
+        font-weight: 900;
+        font-size: 0.95rem;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.15s;
+    }
+    .btn-action-primary:active { transform: scale(0.97); }
+
+    .btn-action-danger {
+        background: rgba(255, 61, 113, 0.15);
+        color: var(--accent-crimson);
+        border: 1px solid rgba(255, 61, 113, 0.35);
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    /* POMODORO */
+    .timer-readout {
+        font-size: 4rem;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--accent-emerald);
+        letter-spacing: 2px;
+        margin: 20px 0;
+        text-shadow: 0 0 25px var(--accent-emerald-glow);
+    }
+
+    /* TOAST */
+    .toast-box {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--bg-card);
+        color: #fff;
+        border: 1px solid var(--accent-emerald);
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        z-index: 100;
+        display: none;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast-box"></div>
+
+<!-- EN-TÊTE PRINCIPAL -->
+<header class="app-header">
+    <div class="header-top">
+        <div class="brand-group">
+            <span class="brand-subtitle">SYSTÈME TACTIQUE // V3</span>
+            <h1 class="brand-title" id="pageMainTitle">
+                <span>VUE GLOBALE</span>
+                <span class="score-badge" id="tacticalScoreBadge">0 pts</span>
+            </h1>
+        </div>
+        <div class="header-actions">
+            <button class="btn-icon" onclick="toggleSearch()" title="Recherche temps réel">🔍</button>
+            <button class="btn-icon active" id="globalAggBtn" onclick="toggleGlobalAggregation()" title="Basculer Agrégation Globale">🔓</button>
+            <button class="btn-icon" onclick="openCategorySheet()" title="Gestionnaire de Catégories">🗂️</button>
+        </div>
+    </div>
+
+    <!-- RECHERCHE POP-IN -->
+    <div class="search-wrapper" id="searchWrapper">
+        <input type="text" id="globalSearchInput" class="search-input" placeholder="Filtrer tâches, dépendances, programmes..." oninput="handleGlobalSearch(this.value)">
+    </div>
+
+    <!-- BARRE DE CATÉGORIES -->
+    <div class="cat-bar" id="categoryBar"></div>
+</header>
+
+<!-- CONTENEUR DES ONGLETS -->
+<main class="view-container">
+
+    <!-- ONGLET 1 : AUJOURD'HUI -->
+    <section class="tab-view" id="tab-today">
+        <div class="stat-row" id="todayStatsRow"></div>
+
+        <div class="form-group">
+            <div class="section-title">⚡ EFFET DE LEVIER MAXIMUM (DÉBLOQUENT D'AUTRES TÂCHES)</div>
+            <div id="leverageTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="section-title">🎯 CIBLES DU JOUR (FAIRE / PLANIFIER)</div>
+            <div id="todayPrimaryList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="section-title">💀 ZONE CRITIQUE // PROCRASTINATION (+90 JOURS)</div>
+            <div id="rottingTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+    </section>
+
+    <!-- ONGLET 2 : HABITUDES & SÉRIES -->
+    <section class="tab-view" id="tab-routine">
+        <!-- HEATMAP GLOBALE CALENDRIER ISO (LUN-DIM) -->
+        <div class="global-heatmap-wrap">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.92rem; font-weight:800; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+                    📊 Discipline Calendaire
+                </span>
+                <div class="heat-period-toggle">
+                    <button class="heat-period-btn active" id="btnPeriod12" onclick="setGlobalHeatWeeks(12)">12 Sem.</button>
+                    <button class="heat-period-btn" id="btnPeriod4" onclick="setGlobalHeatWeeks(4)">4 Sem.</button>
+                </div>
+            </div>
+
+            <div class="calendar-heatmap-layout">
+                <div class="day-labels-col">
+                    <span>LUN</span>
+                    <span>MAR</span>
+                    <span>MER</span>
+                    <span>JEU</span>
+                    <span>VEN</span>
+                    <span>SAM</span>
+                    <span>DIM</span>
+                </div>
+                <div class="global-iso-grid" id="globalIsoGrid"></div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; color:var(--text-secondary); padding-top:4px; border-top:1px solid var(--border-subtle);">
+                <span id="globalHeatAverage">Moyenne : 0 act/j</span>
+                <div style="display:flex; gap:3px; align-items:center;">
+                    <span>Neutre</span>
+                    <div class="heat-cell level-0" style="width:10px;height:10px;"></div>
+                    <div class="heat-cell level-2" style="width:10px;height:10px;"></div>
+                    <div class="heat-cell level-4" style="width:10px;height:10px;"></div>
+                    <span style="margin-left:4px;">Cible</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- EN-TÊTE CARROUSEL -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+            <span class="section-title" id="habitCarouselCounterTitle">MES HABITUDES & SÉRIES</span>
+            <button class="btn-text" style="font-size:0.78rem;" onclick="openCreateHabitModal()">+ Nouvelle Routine</button>
+        </div>
+
+        <!-- CARROUSEL SWIPEABLE PLEIN ÉCRAN -->
+        <div class="habits-carousel-container" id="habitsCarousel"></div>
+        <div class="carousel-dots-row" id="carouselDots"></div>
+    </section>
+
+    <!-- ONGLET 3 : TEMPLE -->
+    <section class="tab-view" id="tab-temple">
+        <div class="stat-row" id="templeStatsRow"></div>
+
+        <div class="form-group">
+            <div class="section-title">🕸️ MATRICE DES DÉPENDANCES & BLOCAGES</div>
+            <div id="templeDependencyList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="section-title">💾 COFFRE-FORT LOCAL // BACKUP</div>
+            <div class="form-group-card" style="padding:14px; display:flex; flex-direction:column; gap:10px;">
+                <button class="btn-action-primary" onclick="exportDataJSON()">📤 Exporter Données Tactiques (.json)</button>
+                <label class="btn-action-primary" style="background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border-subtle); display:block;">
+                    📥 Importer Sauvegarde (.json)
+                    <input type="file" accept=".json" style="display:none" onchange="importDataJSON(event)">
+                </label>
+                <button class="btn-action-danger" onclick="resetToDemonstrationData()">Réinitialiser Données Démo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ONGLET 4 : MATRICE D'EISENHOWER 2x2 -->
+    <section class="tab-view active" id="tab-matrix">
+        <div class="matrix-grid">
+            <div class="quadrant" id="quad-q1">
+                <div class="quad-header" onclick="openQuadrantDetail('q1')">
+                    <div class="quad-title"><span>Faire</span> <span style="font-size:0.75rem;">⊕</span></div>
+                    <div class="quad-sub">Urgent & Important</div>
+                </div>
+                <div class="quad-tasks" id="matrixList-q1"></div>
+            </div>
+
+            <div class="quadrant" id="quad-q2">
+                <div class="quad-header" onclick="openQuadrantDetail('q2')">
+                    <div class="quad-title"><span>Planifier</span> <span style="font-size:0.75rem;">⊕</span></div>
+                    <div class="quad-sub">Important, pas urgent</div>
+                </div>
+                <div class="quad-tasks" id="matrixList-q2"></div>
+            </div>
+
+            <div class="quadrant" id="quad-q3">
+                <div class="quad-header" onclick="openQuadrantDetail('q3')">
+                    <div class="quad-title"><span>Déléguer</span> <span style="font-size:0.75rem;">⊕</span></div>
+                    <div class="quad-sub">Urgent, pas important</div>
+                </div>
+                <div class="quad-tasks" id="matrixList-q3"></div>
+            </div>
+
+            <div class="quadrant" id="quad-q4">
+                <div class="quad-header" onclick="openQuadrantDetail('q4')">
+                    <div class="quad-title"><span>Éliminer</span> <span style="font-size:0.75rem;">⊕</span></div>
+                    <div class="quad-sub">Ni urgent, ni important</div>
+                </div>
+                <div class="quad-tasks" id="matrixList-q4"></div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- CONTRÔLES FLOTTANTS -->
+<div class="floating-bar">
+    <button class="btn-magic" onclick="triggerTacticalFocus()" title="Action immédiate (Algorithme de priorité)">✨</button>
+    <button class="btn-videtete" onclick="openQuadrantDetail('inbox')">
+        📥 Vide-tête <span class="badge-inbox-count" id="inboxCounter">0</span>
+    </button>
+</div>
+
+<!-- BARRE DE NAVIGATION INFÉRIEURE -->
+<nav class="bottom-nav">
+    <div class="nav-btn" data-tab="today" onclick="switchNavTab('today')">
+        <span class="nav-icon">☀️</span>
+        <span>Aujourd'hui</span>
+    </div>
+    <div class="nav-btn" data-tab="routine" onclick="switchNavTab('routine')">
+        <span class="nav-icon">📈</span>
+        <span>Habitudes</span>
+    </div>
+    <div class="nav-btn" data-tab="temple" onclick="switchNavTab('temple')">
+        <span class="nav-icon">🏛️</span>
+        <span>Temple</span>
+    </div>
+    <div class="nav-btn active" data-tab="matrix" onclick="switchNavTab('matrix')">
+        <span class="nav-icon">🎛️</span>
+        <span>Matrice</span>
+    </div>
+</nav>
+
+<!-- MODAL 1 : ZOOM QUADRANT & VIDE-TÊTE -->
+<div class="modal-overlay" id="quadZoomModal">
+    <div class="modal-header">
+        <button class="btn-text" onclick="closeQuadrantDetail()">‹ Retour Matrice</button>
+        <span class="score-badge" id="zoomCatIndicator">GLOBAL</span>
+    </div>
+    <div class="modal-body">
+        <div style="text-align:center;">
+            <h2 id="zoomQuadHeading" style="margin:0; font-size:1.45rem; font-weight:900;">Planifier</h2>
+            <div id="zoomQuadSubheading" style="font-size:0.8rem; color:var(--text-secondary); margin-top:3px;">Important, pas urgent</div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+            <input type="text" id="quickTaskInput" class="search-input" placeholder="Ajouter une action tactique..." onkeydown="if(event.key==='Enter') submitQuickTask()">
+            <button class="btn-action-primary" style="padding:0 18px;" onclick="submitQuickTask()">OK</button>
+        </div>
+
+        <div id="zoomTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+</div>
+
+<!-- MODAL 2 : DÉTAILS DE TÂCHE -->
+<div class="modal-overlay" id="taskDetailModal">
+    <div class="modal-header">
+        <button class="btn-text" onclick="closeTaskDetail()">‹ Fermer</button>
+        <strong style="font-size:0.95rem;">Configuration Tactique</strong>
+        <button class="btn-text" style="color:var(--accent-crimson);" onclick="deleteActiveTask()">Suppr.</button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="section-title" id="subtaskCounterLabel">SOUS-TÂCHES (0/0)</div>
+            <div class="form-group-card">
+                <div class="form-row">
+                    <input type="text" id="newSubtaskTitle" class="form-input-text" placeholder="⊕ Ajouter une étape intermédiaire..." onkeydown="if(event.key==='Enter') addSubtaskToActive()">
+                    <button class="btn-text" onclick="addSubtaskToActive()">Ajouter</button>
+                </div>
+                <div id="activeSubtasksContainer"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="section-title">GÉNÉRAL</div>
+            <div class="form-group-card">
+                <div class="form-row">
+                    <input type="text" id="editTaskTitle" class="form-input-text" style="font-size:1.05rem;" onchange="updateTaskProp('title', this.value)">
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Quadrant</label>
+                    <select id="editTaskQuadrant" class="form-select" onchange="updateTaskProp('quadrant', this.value)">
+                        <option value="q1">Faire (Urgent & Important)</option>
+                        <option value="q2">Planifier (Important, pas urgent)</option>
+                        <option value="q3">Déléguer (Urgent, pas important)</option>
+                        <option value="q4">Éliminer (Ni urgent, ni important)</option>
+                        <option value="inbox">Vide-tête (Inbox)</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Niveau de Priorité</label>
+                    <select id="editTaskPriority" class="form-select" onchange="updateTaskProp('priority', this.value)">
+                        <option value="critique">Critique 🔥</option>
+                        <option value="haute">Haute ⚡</option>
+                        <option value="normale">Normale</option>
+                        <option value="basse">Basse</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="section-title">DÉPENDANCES BLOQUANTES</div>
+            <div class="form-group-card">
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Prérequis</label>
+                    <select id="dependencySelect" class="form-select" onchange="attachDependency(this.value)">
+                        <option value="">+ Ajouter un verrou...</option>
+                    </select>
+                </div>
+                <div id="activeDependenciesBox" style="padding:10px 14px; display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="section-title">MÉTADONNÉES</div>
+            <div class="form-group-card">
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Catégorie</label>
+                    <select id="editTaskCategory" class="form-select" onchange="updateTaskProp('category', this.value)"></select>
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Date de création</label>
+                    <input type="date" id="editTaskDate" class="form-select" onchange="updateTaskProp('createdAt', this.value)">
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Programme / Bootcamp</label>
+                    <input type="text" id="editTaskProgram" class="form-select" style="user-select:text;" onchange="updateTaskProp('program', this.value)">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 3 : CRÉATION / MODIFICATION D'UNE HABITUDE -->
+<div class="modal-overlay" id="habitModal">
+    <div class="modal-header">
+        <button class="btn-text" onclick="closeHabitModal()">‹ Fermer</button>
+        <strong style="font-size:0.95rem;" id="habitModalHeading">Nouvelle Routine</strong>
+        <button class="btn-text" style="color:var(--accent-crimson); display:none;" id="btnDeleteHabit" onclick="deleteCurrentHabit()">Suppr.</button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="section-title">PARAMÈTRES DE LA ROUTINE</div>
+            <div class="form-group-card">
+                <div class="form-row">
+                    <input type="text" id="habitTitleInput" class="form-input-text" placeholder="Intitulé (ex: Performance MES, Pompes, Zéro écart...)">
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Catégorie</label>
+                    <select id="habitCategorySelect" class="form-select"></select>
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Polarité</label>
+                    <select id="habitPolaritySelect" class="form-select">
+                        <option value="positive">Croissance / Bonne Habitude 📈</option>
+                        <option value="negative">Sobriété / Mauvaise Habitude à réduire 🛡️</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Mode de Suivi</label>
+                    <select id="habitValueTypeSelect" class="form-select" onchange="toggleHabitNumericFields(this.value)">
+                        <option value="numeric">Quantifiable (Roulette Haptique + Unité)</option>
+                        <option value="boolean">Binaire (Fait / Non fait)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="habitNumericConfigGroup">
+            <div class="section-title">UNITÉ & PRÉCISION DU BARILLET</div>
+            <div class="form-group-card">
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Unité personnalisée</label>
+                    <input type="text" id="habitUnitInput" class="form-select" style="text-align:right; user-select:text;" value="R" placeholder="ex: R, kg, reps, km, min, clopes">
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Seuil / Cible Quotidienne</label>
+                    <input type="number" step="any" id="habitTargetInput" class="form-select" style="text-align:right; user-select:text;" value="2">
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.88rem; font-weight:700;">Pas de la Roulette (Step)</label>
+                    <input type="number" step="any" id="habitStepInput" class="form-select" style="text-align:right; user-select:text;" value="0.25">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action-primary" onclick="saveHabitFromModal()">Enregistrer la Routine</button>
+    </div>
+</div>
+
+<!-- MODAL 4 : FOCUS TACTIQUE -->
+<div class="modal-overlay" id="focusModal">
+    <div class="modal-header">
+        <button class="btn-text" onclick="closeFocusModal()">‹ Quitter Focus</button>
+        <span class="score-badge">CONCENTRATION PROFONDE</span>
+    </div>
+    <div class="modal-body" id="focusBody" style="align-items:center; justify-content:center; text-align:center;"></div>
+</div>
+
+<script id="mainAppScript">
+/* ============================================================================
+   SYNCHRONISATION EN DIRECT À CHAQUE COMMIT GITHUB (AUTO-UPDATE SANS DÉLAI)
+============================================================================ */
+function simpleHash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h |= 0;
+    }
+    return String(h);
+}
+
+async function checkGitHubLiveCommit() {
+    if (!navigator.onLine || location.protocol === 'file:') return;
+    try {
+        const res = await fetch(`./index.html?_live=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) return;
+        const remoteHtml = await res.text();
+        const parser = new DOMParser();
+        const remoteDoc = parser.parseFromString(remoteHtml, 'text/html');
+
+        const remoteStyle = remoteDoc.getElementById('mainAppStyle')?.textContent.trim() || '';
+        const localStyle = document.getElementById('mainAppStyle')?.textContent.trim() || '';
+        const remoteScript = remoteDoc.getElementById('mainAppScript')?.textContent.trim() || '';
+        const localScript = document.getElementById('mainAppScript')?.textContent.trim() || '';
+
+        const remoteSig = simpleHash(remoteStyle + '||' + remoteScript);
+        const localSig = simpleHash(localStyle + '||' + localScript);
+
+        if (remoteSig !== localSig && sessionStorage.getItem('LAST_APPLIED_SIG') !== remoteSig) {
+            sessionStorage.setItem('LAST_APPLIED_SIG', remoteSig);
+            if ('caches' in window) {
+                const keys = await caches.keys();
+                for (const k of keys) {
+                    const c = await caches.open(k);
+                    const freshResp = new Response(remoteHtml, {
+                        headers: { 'Content-Type': 'text/html; charset=utf-8' }
+                    });
+                    await c.put('./', freshResp.clone());
+                    await c.put('./index.html', freshResp);
+                }
+            }
+            toast('⚡ Nouveau commit GitHub synchronisé !');
+            setTimeout(() => window.location.reload(), 500);
+        }
+    } catch (e) {
+        // Silencieux en mode hors-ligne
+    }
+}
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then((registration) => {
+            registration.update();
+            registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        toast('⚡ Mise à jour déployée !');
+                        setTimeout(() => window.location.reload(), 500);
+                    }
+                });
+            });
+        }).catch(() => {});
+
+        checkGitHubLiveCommit();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            checkGitHubLiveCommit();
+        }
+    });
+}
+
+if (navigator.storage && navigator.storage.persist) {
+    navigator.storage.persist().catch(() => {});
+}
+
+/* ============================================================================
+   AUDIO SYNTHESIZER & HAPTIQUE (100% Hors-ligne / Zero CDN)
+============================================================================ */
+const AudioEngine = {
+    ctx: null,
+    init() {
+        if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    },
+    click() {
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.04);
+    },
+    tickHaptic() {
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(640, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(190, this.ctx.currentTime + 0.016);
+        gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.016);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.016);
+    },
+    unlock() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            gain.gain.setValueAtTime(0.09, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.2);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + 0.2);
+        });
+    },
+    bell() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(587.33, now);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.5);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 2.5);
+    }
+};
+
+function haptic(ms = 12) {
+    if (navigator.vibrate) navigator.vibrate(ms);
+}
+
+/* ============================================================================
+   CALENDRIER ISO 8601 STRICT (LUNDI LIGNE 1 -> DIMANCHE LIGNE 7)
+============================================================================ */
+function toDateStr(d) {
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+const TODAY_STR = toDateStr(new Date());
+
+function getIsoDayOfWeek(date) {
+    const d = date.getDay();
+    return d === 0 ? 7 : d; // 1 = Lundi, 7 = Dimanche
+}
+
+function getStrictISOWindow(numWeeks) {
+    const today = new Date();
+    today.setHours(12, 0, 0, 0);
+    const currentIsoDay = getIsoDayOfWeek(today);
+
+    // Dimanche de la semaine en cours
+    const endOfCurrentWeek = new Date(today);
+    endOfCurrentWeek.setDate(today.getDate() + (7 - currentIsoDay));
+
+    // Lundi de la première semaine (numWeeks semaines en arrière)
+    const totalDays = numWeeks * 7;
+    const startOfWindow = new Date(endOfCurrentWeek);
+    startOfWindow.setDate(endOfCurrentWeek.getDate() - totalDays + 1);
+
+    const matrix = [];
+    const curr = new Date(startOfWindow);
+
+    for (let w = 0; w < numWeeks; w++) {
+        const week = [];
+        for (let d = 0; d < 7; d++) {
+            const dateStr = toDateStr(curr);
+            const isFuture = dateStr > TODAY_STR;
+            week.push({
+                dateStr,
+                isoDay: d + 1, // 1 (Lundi) à 7 (Dimanche)
+                isToday: dateStr === TODAY_STR,
+                isFuture
+            });
+            curr.setDate(curr.getDate() + 1);
+        }
+        matrix.push(week);
+    }
+    return matrix;
+}
+
+function calcDaysAgo(dateStr) {
+    if (!dateStr) return 0;
+    const past = new Date(dateStr);
+    const now = new Date();
+    const diff = Math.max(0, now - past);
+    return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+/* ============================================================================
+   DONNÉES INITIALES & PERSISTANCE COMPATIBLE TACTIQUE_OS_V3
+============================================================================ */
+const DB_KEY = 'TACTIQUE_OS_V3';
+
+const INITIAL_DB = {
+    currentCategory: 'GLOBAL',
+    aggregateGlobal: true,
+    categories: ['GLOBAL', 'Trading', 'Université', 'Moto & Terrain', 'Bivouac'],
+    habits: [
+        {
+            id: 'h_trading',
+            title: 'Performance Quotidienne MES',
+            category: 'Trading',
+            polarity: 'positive',
+            valueType: 'numeric',
+            unit: 'R',
+            targetValue: 2.0,
+            step: 0.25,
+            history: generateMockNumericHistory(84, 2.0, 0.25)
+        },
+        {
+            id: 'h_matrice',
+            title: 'Scan & Priorisation Eisenhower',
+            category: 'GLOBAL',
+            polarity: 'positive',
+            valueType: 'boolean',
+            unit: 'validation',
+            targetValue: 1,
+            step: 1,
+            history: generateMockBoolHistory(84, 0.82)
+        },
+        {
+            id: 'h_flashcards',
+            title: 'Répétition Espacée (Flashcards)',
+            category: 'Université',
+            polarity: 'positive',
+            valueType: 'numeric',
+            unit: 'cartes',
+            targetValue: 50,
+            step: 5,
+            history: generateMockNumericHistory(84, 50, 5)
+        },
+        {
+            id: 'h_sport',
+            title: 'Entraînement Physique & Intensité',
+            category: 'Moto & Terrain',
+            polarity: 'positive',
+            valueType: 'numeric',
+            unit: 'min',
+            targetValue: 45,
+            step: 5,
+            history: generateMockNumericHistory(84, 45, 5)
+        },
+        {
+            id: 'h_overtrading',
+            title: 'Zéro Overtrading / Sobriété',
+            category: 'Trading',
+            polarity: 'negative',
+            valueType: 'numeric',
+            unit: 'écarts',
+            targetValue: 0,
+            step: 1,
+            history: generateMockSobrietyHistory(28)
+        }
+    ],
+    tasks: [
+        {
+            id: 't_chasse',
+            title: 'Permis chasse',
+            quadrant: 'q2',
+            category: 'GLOBAL',
+            priority: 'normale',
+            program: 'Général',
+            createdAt: getOffsetDateISO(176),
+            completed: false,
+            subtasks: [],
+            blockedBy: [],
+            notes: ''
+        },
+        {
+            id: 't_moto',
+            title: 'Permis moto',
+            quadrant: 'q2',
+            category: 'Moto & Terrain',
+            priority: 'haute',
+            program: 'A2',
+            createdAt: getOffsetDateISO(156),
+            completed: false,
+            subtasks: [
+                { id: 's1', title: 'Plateau lent & chrono', done: false },
+                { id: 's2', title: 'Circulation en agglomération', done: false },
+                { id: 's3', title: 'Choix de la monture (Hornet / MT-07 / Duke)', done: false }
+            ],
+            blockedBy: [],
+            notes: 'Code validé en mai'
+        },
+        {
+            id: 't_panier',
+            title: 'Panier',
+            quadrant: 'q3',
+            category: 'GLOBAL',
+            priority: 'normale',
+            program: 'Général',
+            createdAt: getOffsetDateISO(150),
+            completed: false,
+            subtasks: [
+                { id: 'sp1', title: 'Module A', done: false },
+                { id: 'sp2', title: 'Module B', done: false },
+                { id: 'sp3', title: 'Module C', done: false },
+                { id: 'sp4', title: 'Module D', done: false },
+                { id: 'sp5', title: 'Module E', done: false }
+            ],
+            blockedBy: [],
+            notes: ''
+        },
+        {
+            id: 't_crapahuter',
+            title: 'Crapahuter',
+            quadrant: 'q4',
+            category: 'Bivouac',
+            priority: 'normale',
+            program: 'Sentier des Roches',
+            createdAt: getOffsetDateISO(128),
+            completed: false,
+            subtasks: [],
+            blockedBy: ['t_moto'],
+            notes: 'Nécessite la validation du permis moto pour le transport'
+        }
+    ]
+};
+
+function getOffsetDateISO(days) {
+    const d = new Date();
+    d.setDate(d.getDate() - days);
+    return toDateStr(d);
+}
+
+function generateMockBoolHistory(days, prob) {
+    const hist = {};
+    const now = new Date();
+    for (let i = days; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        if (Math.random() < prob) hist[toDateStr(d)] = true;
+    }
+    return hist;
+}
+
+function generateMockNumericHistory(days, target, step) {
+    const hist = {};
+    const now = new Date();
+    for (let i = days; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        if (Math.random() < 0.72) {
+            const mult = Math.max(1, Math.round((Math.random() * 1.35 * target) / step));
+            hist[toDateStr(d)] = parseFloat((mult * step).toFixed(2));
+        }
+    }
+    return hist;
+}
+
+function generateMockSobrietyHistory(days) {
+    const hist = {};
+    const now = new Date();
+    for (let i = days; i >= 1; i--) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        hist[toDateStr(d)] = Math.random() < 0.85 ? 0 : 1;
+    }
+    return hist;
+}
+
+let db = loadDatabase();
+let globalHeatWeeks = 12;
+let activeCarouselIndex = 0;
+let editingHabitId = null;
+let activeZoomQuadrant = null;
+let activeTaskId = null;
+let focusTimer = null;
+let focusSeconds = 1500;
+let searchQuery = '';
+
+function loadDatabase() {
+    try {
+        const raw = localStorage.getItem(DB_KEY);
+        if (!raw) return JSON.parse(JSON.stringify(INITIAL_DB));
+        const parsed = JSON.parse(raw);
+
+        if (parsed.habits) {
+            parsed.habits.forEach(h => {
+                if (!h.polarity) h.polarity = 'positive';
+                if (!h.valueType) h.valueType = 'boolean';
+                if (!h.unit) h.unit = h.valueType === 'boolean' ? 'fait' : 'R';
+                if (h.targetValue === undefined) h.targetValue = h.polarity === 'negative' ? 0 : 1;
+                if (!h.step) h.step = 1;
+                if (!h.history) h.history = {};
+            });
+        }
+        return Object.assign(JSON.parse(JSON.stringify(INITIAL_DB)), parsed);
+    } catch (e) {
+        return JSON.parse(JSON.stringify(INITIAL_DB));
+    }
+}
+
+function persist() {
+    localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
+
+function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.style.display = 'block';
+    clearTimeout(window._tTimer);
+    window._tTimer = setTimeout(() => { el.style.display = 'none'; }, 2200);
+}
+
+/* ============================================================================
+   LOGIQUE MÉTIER DES HABITUDES (AVEC GESTION PROPRE DES JOURS NON RENSEIGNÉS)
+============================================================================ */
+function hasHabitEntry(habit, dateStr) {
+    return Boolean(habit.history && habit.history[dateStr] !== undefined && habit.history[dateStr] !== false);
+}
+
+function getHabitVal(habit, dateStr) {
+    if (!habit.history || habit.history[dateStr] === undefined) return 0;
+    const v = habit.history[dateStr];
+    if (v === true) return 1;
+    if (v === false) return 0;
+    if (typeof v === 'number') return v;
+    return 0;
+}
+
+function isHabitAchieved(habit, dateStr) {
+    if (!habit.history || habit.history[dateStr] === undefined) return false;
+    const raw = habit.history[dateStr];
+
+    if (habit.valueType === 'boolean') {
+        return Boolean(raw);
+    }
+    const val = typeof raw === 'number' ? raw : 0;
+    if (habit.polarity === 'negative') {
+        return val <= habit.targetValue;
+    }
+    return val >= habit.targetValue;
+}
+
+function calcHabitStreak(habit) {
+    let streak = 0;
+    const now = new Date();
+    for (let i = 0; i < 365; i++) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        const ds = toDateStr(d);
+        if (isHabitAchieved(habit, ds)) {
+            streak++;
+        } else {
+            if (i === 0) continue;
+            break;
+        }
+    }
+    return streak;
+}
+
+function calcHabit7DayAvg(habit) {
+    let sum = 0;
+    const now = new Date();
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        sum += getHabitVal(habit, toDateStr(d));
+    }
+    return parseFloat((sum / 7).toFixed(1));
+}
+
+function calcTacticalScore() {
+    const doneTasks = db.tasks.filter(t => t.completed).length;
+    let habitSuccess = 0;
+    db.habits.forEach(h => {
+        if (h.history) {
+            Object.keys(h.history).forEach(ds => {
+                if (isHabitAchieved(h, ds)) habitSuccess++;
+            });
+        }
+    });
+    return (doneTasks * 10) + (habitSuccess * 2);
+}
+
+/* ============================================================================
+   RENDU PRINCIPAL & SYNCHRONISATION DES COMPOSANTS
+============================================================================ */
+function renderApp() {
+    persist();
+    renderHeader();
+    renderMatrix();
+    renderTodayView();
+    renderHabitsView();
+    renderTempleView();
+    if (activeZoomQuadrant) renderZoomList();
+}
+
+function renderHeader() {
+    document.getElementById('pageMainTitle').firstElementChild.textContent =
+        db.currentCategory === 'GLOBAL' ? 'VUE GLOBALE' : db.currentCategory.toUpperCase();
+
+    document.getElementById('tacticalScoreBadge').textContent = `${calcTacticalScore()} pts`;
+
+    const aggBtn = document.getElementById('globalAggBtn');
+    aggBtn.textContent = db.aggregateGlobal ? '🔓' : '🔒';
+    aggBtn.classList.toggle('active', db.aggregateGlobal);
+
+    const bar = document.getElementById('categoryBar');
+    bar.innerHTML = '';
+
+    db.categories.forEach(cat => {
+        const pill = document.createElement('div');
+        pill.className = 'cat-pill' + (db.currentCategory === cat ? ' active' : '');
+        const pendingCount = db.tasks.filter(t => {
+            if (t.completed || t.quadrant === 'inbox') return false;
+            return (cat === 'GLOBAL' && db.aggregateGlobal) ? true : t.category === cat;
+        }).length;
+
+        pill.innerHTML = `<span>${cat}</span> <span style="opacity:0.65; font-size:0.68rem;">${pendingCount}</span>`;
+        pill.onclick = () => {
+            AudioEngine.click();
+            haptic(10);
+            db.currentCategory = cat;
+            activeCarouselIndex = 0;
+            renderApp();
+        };
+        bar.appendChild(pill);
+    });
+
+    const addBtn = document.createElement('div');
+    addBtn.className = 'cat-pill add-cat';
+    addBtn.textContent = '+ Catégorie';
+    addBtn.onclick = createCategoryPrompt;
+    bar.appendChild(addBtn);
+
+    const inboxCount = db.tasks.filter(t => t.quadrant === 'inbox' && !t.completed).length;
+    document.getElementById('inboxCounter').textContent = inboxCount;
+}
+
+/* ============================================================================
+   HABITUDES : HEATMAP ISO 8601, CARROUSEL & BARILLET HAPTIQUE SANS CONFLIT
+============================================================================ */
+function setGlobalHeatWeeks(weeks) {
+    AudioEngine.click();
+    haptic(10);
+    globalHeatWeeks = weeks;
+    document.getElementById('btnPeriod12').classList.toggle('active', weeks === 12);
+    document.getElementById('btnPeriod4').classList.toggle('active', weeks === 4);
+    renderGlobalIsoHeatmap();
+}
+
+function getFilteredHabits() {
+    if (db.currentCategory === 'GLOBAL' && db.aggregateGlobal) {
+        return db.habits;
+    }
+    return db.habits.filter(h => h.category === db.currentCategory);
+}
+
+function renderHabitsView() {
+    renderGlobalIsoHeatmap();
+    renderHabitsCarousel();
+}
+
+function renderGlobalIsoHeatmap() {
+    const grid = document.getElementById('globalIsoGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const weeksMatrix = getStrictISOWindow(globalHeatWeeks);
+    const habits = getFilteredHabits();
+
+    let totalActionPoints = 0;
+    let totalEligibleDays = 0;
+
+    weeksMatrix.forEach(week => {
+        week.forEach(cell => {
+            const el = document.createElement('div');
+            el.className = 'heat-cell';
+
+            if (cell.isFuture) {
+                el.classList.add('empty-cell');
+                grid.appendChild(el);
+                return;
+            }
+
+            totalEligibleDays++;
+            let achievedCount = 0;
+            let breachCount = 0;
+
+            habits.forEach(h => {
+                if (isHabitAchieved(h, cell.dateStr)) {
+                    achievedCount++;
+                } else if (h.polarity === 'negative' && h.history && h.history[cell.dateStr] > h.targetValue) {
+                    breachCount++;
+                }
+            });
+
+            totalActionPoints += achievedCount;
+
+            if (achievedCount === 0 && breachCount > 0) {
+                el.classList.add('bad-3');
+            } else {
+                const ratio = habits.length ? (achievedCount / habits.length) : 0;
+                if (ratio === 0) el.classList.add('level-0');
+                else if (ratio < 0.35) el.classList.add('level-1');
+                else if (ratio < 0.70) el.classList.add('level-2');
+                else if (ratio < 0.99) el.classList.add('level-3');
+                else el.classList.add('level-4');
+            }
+
+            if (cell.isToday) el.classList.add('today-ring');
+            el.title = `${cell.dateStr} : ${achievedCount}/${habits.length} cible(s) atteinte(s)`;
+            grid.appendChild(el);
+        });
+    });
+
+    const avg = totalEligibleDays ? (totalActionPoints / totalEligibleDays).toFixed(1) : 0;
+    document.getElementById('globalHeatAverage').textContent = `Rigueur : ${avg} act/j (${habits.length} routines)`;
+}
+
+function getCardDynamicVisuals(habit) {
+    const hasToday = habit.history && habit.history[TODAY_STR] !== undefined;
+    const currentVal = getHabitVal(habit, TODAY_STR);
+    const achieved = isHabitAchieved(habit, TODAY_STR);
+    const streak = calcHabitStreak(habit);
+    const avg7 = calcHabit7DayAvg(habit);
+
+    let valColor = 'var(--text-primary)';
+    let displayVal = currentVal;
+    let displayUnit = habit.unit;
+    let btnClass = 'is-pending';
+    let btnLabel = 'Valider Cible';
+
+    if (habit.valueType === 'boolean') {
+        displayVal = achieved ? '✓' : '—';
+        displayUnit = achieved ? 'ACCOMPLI' : 'EN ATTENTE';
+        valColor = achieved ? 'var(--accent-emerald)' : 'var(--text-tertiary)';
+        btnClass = achieved ? 'is-achieved' : 'is-pending';
+        btnLabel = achieved ? '✓ Routine Validée Aujourd\'hui' : 'Marquer comme fait';
+    } else if (habit.polarity === 'positive') {
+        if (achieved) {
+            valColor = 'var(--accent-emerald)';
+            btnClass = 'is-achieved';
+            btnLabel = '✓ Cible Atteinte';
+        } else if (currentVal > 0) {
+            valColor = 'var(--accent-cyan)';
+            btnClass = 'is-pending';
+            btnLabel = 'Atteindre Cible';
+        }
+    } else {
+        // Polarité négative (Sobriété)
+        if (!hasToday) {
+            displayVal = '0';
+            valColor = 'var(--text-secondary)';
+            btnClass = 'is-pending';
+            btnLabel = '🛡️ Valider 0 Écart';
+        } else if (currentVal <= habit.targetValue) {
+            valColor = 'var(--accent-emerald)';
+            btnClass = 'is-achieved';
+            btnLabel = '🛡️ Sobriété Validée';
+        } else {
+            valColor = 'var(--accent-crimson)';
+            btnClass = 'is-breached';
+            btnLabel = `⚠️ ${currentVal} ${habit.unit}`;
+        }
+    }
+
+    return { currentVal, achieved, streak, avg7, valColor, displayVal, displayUnit, btnClass, btnLabel };
+}
+
+// Mise à jour chirurgicale SANS détruire le carrousel ni interrompre le geste sur le barillet
+function updateHabitCardDOMInPlace(habitId) {
+    const habit = db.habits.find(h => h.id === habitId);
+    if (!habit) return;
+
+    persist();
+    const v = getCardDynamicVisuals(habit);
+
+    const valEl = document.getElementById(`monumentVal_${habit.id}`);
+    const unitEl = document.getElementById(`monumentUnit_${habit.id}`);
+    const subEl = document.getElementById(`monumentSub_${habit.id}`);
+    const streakEl = document.getElementById(`streakBadge_${habit.id}`);
+    const btnEl = document.getElementById(`btnToggle_${habit.id}`);
+
+    if (valEl) {
+        valEl.textContent = v.displayVal;
+        valEl.style.color = v.valColor;
+    }
+    if (unitEl) unitEl.textContent = v.displayUnit;
+    if (subEl) subEl.textContent = `Cible : ${habit.targetValue} ${habit.unit} · Pas : ${habit.step} · Moy. 7j : ${v.avg7}`;
+    if (streakEl) streakEl.innerHTML = `${habit.polarity === 'negative' ? '🛡️' : '🔥'} ${v.streak}j`;
+    if (btnEl) {
+        btnEl.className = `btn-done-toggle ${v.btnClass}`;
+        btnEl.textContent = v.btnLabel;
+    }
+
+    renderMiniIsoGrid(`miniGrid_${habit.id}`, habit);
+    renderGlobalIsoHeatmap();
+    document.getElementById('tacticalScoreBadge').textContent = `${calcTacticalScore()} pts`;
+}
+
+function renderHabitsCarousel() {
+    const carousel = document.getElementById('habitsCarousel');
+    const dots = document.getElementById('carouselDots');
+    if (!carousel || !dots) return;
+
+    carousel.innerHTML = '';
+    dots.innerHTML = '';
+
+    const habits = getFilteredHabits();
+    document.getElementById('habitCarouselCounterTitle').textContent =
+        `MES HABITUDES (${habits.length})`;
+
+    if (habits.length === 0) {
+        carousel.innerHTML = `<div style="padding:40px; text-align:center; color:var(--text-tertiary); width:100%;">Aucune routine dans cette catégorie.</div>`;
+        return;
+    }
+
+    if (activeCarouselIndex >= habits.length) activeCarouselIndex = 0;
+
+    habits.forEach((habit, idx) => {
+        const v = getCardDynamicVisuals(habit);
+
+        const card = document.createElement('div');
+        card.className = 'habit-full-card';
+
+        const header = document.createElement('div');
+        header.className = 'habit-card-header';
+        header.innerHTML = `
+            <div class="habit-title-box">
+                <span class="habit-category-badge">${escapeHtml(habit.category)} · ${habit.polarity === 'positive' ? 'CROISSANCE' : 'SOBRIÉTÉ'}</span>
+                <span class="habit-card-title">${escapeHtml(habit.title)}</span>
+            </div>
+            <div class="streak-badge ${habit.polarity === 'negative' ? 'negative-type' : ''}" id="streakBadge_${habit.id}">
+                ${habit.polarity === 'negative' ? '🛡️' : '🔥'} ${v.streak}j
+            </div>
+        `;
+
+        const monument = document.createElement('div');
+        monument.className = 'monument-indicator-wrap';
+        monument.innerHTML = `
+            <div class="monument-val" id="monumentVal_${habit.id}" style="color:${v.valColor};">${v.displayVal}</div>
+            <div class="monument-unit" id="monumentUnit_${habit.id}">${escapeHtml(v.displayUnit)}</div>
+            <div class="monument-subtext" id="monumentSub_${habit.id}">Cible : ${habit.targetValue} ${escapeHtml(habit.unit)} · Pas : ${habit.step} · Moy. 7j : ${v.avg7}</div>
+        `;
+        monument.onclick = () => promptDirectHabitValue(habit.id);
+
+        const dialBox = document.createElement('div');
+        dialBox.className = 'dial-controller-box';
+
+        if (habit.valueType === 'numeric') {
+            dialBox.innerHTML = `
+                <div class="dial-viewport" id="dialViewport_${habit.id}">
+                    <div class="dial-center-line"></div>
+                    <div class="dial-track" id="dialTrack_${habit.id}"></div>
+                    <div class="dial-hint-label">‹ GLISSER LA ROULETTE HAPTIQUE (${habit.step} ${escapeHtml(habit.unit)}) ›</div>
+                </div>
+                <div class="dial-actions-row">
+                    <button class="stepper-btn" id="btnMinus_${habit.id}">−</button>
+                    <button class="btn-done-toggle ${v.btnClass}" id="btnToggle_${habit.id}" onclick="toggleHabitDailyCompletion('${habit.id}')">
+                        ${v.btnLabel}
+                    </button>
+                    <button class="stepper-btn" id="btnPlus_${habit.id}">+</button>
+                </div>
+            `;
+        } else {
+            dialBox.innerHTML = `
+                <button class="btn-done-toggle ${v.btnClass}" id="btnToggle_${habit.id}" style="width:100%; justify-content:center; padding:14px;" onclick="toggleHabitDailyCompletion('${habit.id}')">
+                    ${v.btnLabel}
+                </button>
+            `;
+        }
+
+        const miniWrap = document.createElement('div');
+        miniWrap.className = 'mini-heatmap-wrap';
+        miniWrap.innerHTML = `
+            <div class="mini-heatmap-title">
+                <span>Calendrier 4 Semaines (Lun - Dim)</span>
+                <span>Touchez une case pour éditer</span>
+            </div>
+            <div class="calendar-heatmap-layout" style="gap:6px;">
+                <div class="day-labels-col" style="font-size:0.55rem; line-height:11px; grid-template-rows:repeat(7, 11px); gap:2px;">
+                    <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                </div>
+                <div class="global-iso-grid" style="grid-template-rows:repeat(7, 11px); grid-auto-columns:11px; gap:2px;" id="miniGrid_${habit.id}"></div>
+            </div>
+        `;
+
+        const cardFooter = document.createElement('div');
+        cardFooter.style.display = 'flex';
+        cardFooter.style.justifyContent = 'space-between';
+        cardFooter.style.fontSize = '0.74rem';
+        cardFooter.style.color = 'var(--text-secondary)';
+        cardFooter.innerHTML = `
+            <span style="cursor:pointer; font-weight:700;" onclick="openEditHabitModal('${habit.id}')">⚙️ Configurer unité / cible</span>
+            <span style="color:var(--accent-crimson); cursor:pointer; font-weight:700;" onclick="deleteHabit('${habit.id}')">Supprimer</span>
+        `;
+
+        card.appendChild(header);
+        card.appendChild(monument);
+        card.appendChild(dialBox);
+        card.appendChild(miniWrap);
+        card.appendChild(cardFooter);
+        carousel.appendChild(card);
+
+        renderMiniIsoGrid(`miniGrid_${habit.id}`, habit);
+
+        if (habit.valueType === 'numeric') {
+            setupHapticDial(habit, carousel);
+        }
+
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (idx === activeCarouselIndex ? ' active' : '');
+        dot.onclick = () => {
+            carousel.scrollTo({ left: idx * carousel.offsetWidth, behavior: 'smooth' });
+        };
+        dots.appendChild(dot);
+    });
+
+    // Restaure la carte active sans saut
+    requestAnimationFrame(() => {
+        if (activeCarouselIndex > 0 && carousel.offsetWidth > 0) {
+            carousel.scrollLeft = activeCarouselIndex * carousel.offsetWidth;
+        }
+    });
+
+    carousel.onscroll = () => {
+        if (!carousel.offsetWidth) return;
+        const activeIdx = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+        activeCarouselIndex = activeIdx;
+        Array.from(dots.children).forEach((d, i) => {
+            d.classList.toggle('active', i === activeIdx);
+        });
+    };
+}
+
+function renderMiniIsoGrid(containerId, habit) {
+    const box = document.getElementById(containerId);
+    if (!box) return;
+    box.innerHTML = '';
+    const matrix = getStrictISOWindow(4);
+
+    matrix.forEach(week => {
+        week.forEach(cell => {
+            const el = document.createElement('div');
+            el.className = 'heat-cell';
+            el.style.width = '11px';
+            el.style.height = '11px';
+
+            if (cell.isFuture) {
+                el.classList.add('empty-cell');
+                box.appendChild(el);
+                return;
+            }
+
+            const hasEntry = habit.history && habit.history[cell.dateStr] !== undefined;
+            const val = getHabitVal(habit, cell.dateStr);
+
+            if (!hasEntry) {
+                el.classList.add('level-0');
+            } else if (habit.valueType === 'boolean') {
+                el.classList.add(val ? 'level-4' : 'level-0');
+            } else if (habit.polarity === 'positive') {
+                if (val <= 0) el.classList.add('level-0');
+                else if (val < habit.targetValue * 0.5) el.classList.add('level-1');
+                else if (val < habit.targetValue) el.classList.add('level-2');
+                else el.classList.add('level-4');
+            } else {
+                // Polarité négative (Sobriété)
+                if (val <= habit.targetValue) el.classList.add('level-4');
+                else if (val <= habit.targetValue + habit.step) el.classList.add('bad-2');
+                else el.classList.add('bad-4');
+            }
+
+            if (cell.isToday) el.classList.add('today-ring');
+            el.title = `${cell.dateStr} : ${hasEntry ? val + ' ' + habit.unit : 'Non renseigné'}`;
+            el.onclick = () => {
+                AudioEngine.click();
+                haptic(15);
+                toggleHabitDaySpecific(habit.id, cell.dateStr);
+            };
+            box.appendChild(el);
+        });
+    });
+}
+
+/* ============================================================================
+   ROULETTE HAPTIQUE ISOLÉE (AUCUN REBUILD DU CARROUSEL, ZÉRO SWIPE CONFLIT)
+============================================================================ */
+function setupHapticDial(habit, carouselElement) {
+    const vp = document.getElementById(`dialViewport_${habit.id}`);
+    const track = document.getElementById(`dialTrack_${habit.id}`);
+    const btnMinus = document.getElementById(`btnMinus_${habit.id}`);
+    const btnPlus = document.getElementById(`btnPlus_${habit.id}`);
+
+    if (!vp || !track) return;
+
+    track.innerHTML = '';
+    for (let i = 0; i < 65; i++) {
+        const tick = document.createElement('div');
+        tick.className = 'dial-tick' + (i % 5 === 0 ? ' major' : '');
+        track.appendChild(tick);
+    }
+
+    let isDragging = false;
+    let lastTickX = 0;
+    let visualOffset = 0;
+    const tickSpacingPx = 14;
+
+    // Bloque les événements tactiles natifs pour empêcher Chrome/Safari mobile de swiper la carte
+    const blockTouchScroll = (e) => {
+        e.stopPropagation();
+        if (e.cancelable) e.preventDefault();
+    };
+    vp.addEventListener('touchstart', blockTouchScroll, { passive: false });
+    vp.addEventListener('touchmove', blockTouchScroll, { passive: false });
+
+    vp.onpointerdown = (e) => {
+        e.stopPropagation();
+        isDragging = true;
+        lastTickX = e.clientX;
+        try { vp.setPointerCapture(e.pointerId); } catch (err) {}
+        carouselElement.style.overflowX = 'hidden';
+    };
+
+    vp.onpointermove = (e) => {
+        if (!isDragging) return;
+        e.stopPropagation();
+
+        const deltaX = e.clientX - lastTickX;
+        if (Math.abs(deltaX) >= tickSpacingPx) {
+            const ticksMoved = Math.trunc(deltaX / tickSpacingPx);
+            const stepDelta = ticksMoved * habit.step;
+
+            stepHabitValue(habit.id, stepDelta);
+            AudioEngine.tickHaptic();
+            haptic(7);
+
+            lastTickX += ticksMoved * tickSpacingPx;
+            visualOffset = (visualOffset + ticksMoved * tickSpacingPx) % (tickSpacingPx * 5);
+            track.style.transform = `translateX(${visualOffset}px)`;
+        }
+    };
+
+    const stopDrag = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        try { vp.releasePointerCapture(e.pointerId); } catch (err) {}
+        carouselElement.style.overflowX = 'auto';
+    };
+
+    vp.onpointerup = stopDrag;
+    vp.onpointercancel = stopDrag;
+
+    attachStepperLongPress(btnMinus, () => {
+        stepHabitValue(habit.id, -habit.step);
+        AudioEngine.tickHaptic();
+        haptic(7);
+    });
+
+    attachStepperLongPress(btnPlus, () => {
+        stepHabitValue(habit.id, habit.step);
+        AudioEngine.tickHaptic();
+        haptic(7);
+    });
+}
+
+function attachStepperLongPress(btn, action) {
+    if (!btn) return;
+    let timer = null;
+    let interval = null;
+
+    const start = (e) => {
+        e.stopPropagation();
+        if (e.cancelable) e.preventDefault();
+        action();
+        timer = setTimeout(() => {
+            interval = setInterval(action, 75);
+        }, 300);
+    };
+
+    const stop = () => {
+        clearTimeout(timer);
+        clearInterval(interval);
+    };
+
+    btn.onpointerdown = start;
+    btn.onpointerup = stop;
+    btn.onpointerleave = stop;
+    btn.onpointercancel = stop;
+}
+
+function stepHabitValue(habitId, delta) {
+    const habit = db.habits.find(h => h.id === habitId);
+    if (!habit) return;
+    if (!habit.history) habit.history = {};
+
+    const cur = getHabitVal(habit, TODAY_STR);
+    let next = cur + delta;
+
+    if (String(habit.step).includes('.')) {
+        const decimals = String(habit.step).split('.')[1].length;
+        next = parseFloat(next.toFixed(decimals));
+    } else {
+        next = Math.round(next);
+    }
+
+    // Pour une habitude négative (ex: cigarettes/écarts), le plancher est 0.
+    // Pour le trading (unité R), on autorise les R-multiples négatifs.
+    if (habit.polarity === 'negative' || habit.unit.toLowerCase() !== 'r') {
+        next = Math.max(0, next);
+    }
+
+    habit.history[TODAY_STR] = next;
+    updateHabitCardDOMInPlace(habit.id);
+}
+
+function toggleHabitDailyCompletion(habitId) {
+    const habit = db.habits.find(h => h.id === habitId);
+    if (!habit) return;
+    if (!habit.history) habit.history = {};
+
+    if (habit.valueType === 'boolean') {
+        if (habit.history[TODAY_STR]) {
+            delete habit.history[TODAY_STR];
+        } else {
+            habit.history[TODAY_STR] = true;
+        }
+    } else if (habit.polarity === 'negative') {
+        if (habit.history[TODAY_STR] === undefined) {
+            habit.history[TODAY_STR] = habit.targetValue;
+        } else {
+            delete habit.history[TODAY_STR];
+        }
+    } else {
+        const cur = getHabitVal(habit, TODAY_STR);
+        if (cur >= habit.targetValue) {
+            delete habit.history[TODAY_STR];
+        } else {
+            habit.history[TODAY_STR] = habit.targetValue;
+        }
+    }
+
+    if (isHabitAchieved(habit, TODAY_STR)) {
+        AudioEngine.unlock();
+        haptic([20, 50]);
+        toast('🎯 Cible du jour validée !');
+    } else {
+        AudioEngine.click();
+        haptic(15);
+    }
+    updateHabitCardDOMInPlace(habit.id);
+}
+
+function toggleHabitDaySpecific(habitId, dateStr) {
+    const habit = db.habits.find(h => h.id === habitId);
+    if (!habit) return;
+    if (!habit.history) habit.history = {};
+
+    if (habit.valueType === 'boolean') {
+        if (habit.history[dateStr]) delete habit.history[dateStr];
+        else habit.history[dateStr] = true;
+    } else if (habit.polarity === 'negative') {
+        if (habit.history[dateStr] === undefined) {
+            habit.history[dateStr] = habit.targetValue;
+        } else if (habit.history[dateStr] <= habit.targetValue) {
+            habit.history[dateStr] = habit.targetValue + habit.step;
+        } else {
+            delete habit.history[dateStr];
+        }
+    } else {
+        const cur = getHabitVal(habit, dateStr);
+        if (habit.history[dateStr] === undefined) {
+            habit.history[dateStr] = habit.targetValue;
+        } else if (cur >= habit.targetValue) {
+            delete habit.history[dateStr];
+        } else {
+            habit.history[dateStr] = habit.targetValue;
+        }
+    }
+    updateHabitCardDOMInPlace(habit.id);
+}
+
+function promptDirectHabitValue(habitId) {
+    const habit = db.habits.find(h => h.id === habitId);
+    if (!habit || habit.valueType === 'boolean') return;
+    const cur = getHabitVal(habit, TODAY_STR);
+    const entered = prompt(`Saisir la valeur exacte pour "${habit.title}" (${habit.unit}) :`, cur);
+    if (entered === null) return;
+    if (entered.trim() === '') {
+        delete habit.history[TODAY_STR];
+        updateHabitCardDOMInPlace(habit.id);
+        return;
+    }
+    const num = parseFloat(entered.replace(',', '.'));
+    if (!isNaN(num)) {
+        if (!habit.history) habit.history = {};
+        habit.history[TODAY_STR] = num;
+        updateHabitCardDOMInPlace(habit.id);
+    }
+}
+
+/* ============================================================================
+   GESTION DES MODALES D'HABITUDES
+============================================================================ */
+function openCreateHabitModal() {
+    editingHabitId = null;
+    document.getElementById('habitModalHeading').textContent = 'Nouvelle Routine';
+    document.getElementById('btnDeleteHabit').style.display = 'none';
+
+    document.getElementById('habitTitleInput').value = '';
+    document.getElementById('habitUnitInput').value = 'R';
+    document.getElementById('habitTargetInput').value = '2';
+    document.getElementById('habitStepInput').value = '0.25';
+    document.getElementById('habitPolaritySelect').value = 'positive';
+    document.getElementById('habitValueTypeSelect').value = 'numeric';
+    toggleHabitNumericFields('numeric');
+
+    const catSelect = document.getElementById('habitCategorySelect');
+    catSelect.innerHTML = '';
+    db.categories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        if (c === db.currentCategory) opt.selected = true;
+        catSelect.appendChild(opt);
+    });
+
+    document.getElementById('habitModal').classList.add('open');
+}
+
+function openEditHabitModal(habitId) {
+    editingHabitId = habitId;
+    const h = db.habits.find(x => x.id === habitId);
+    if (!h) return;
+
+    document.getElementById('habitModalHeading').textContent = 'Paramètres Routine';
+    document.getElementById('btnDeleteHabit').style.display = 'block';
+
+    document.getElementById('habitTitleInput').value = h.title;
+    document.getElementById('habitPolaritySelect').value = h.polarity;
+    document.getElementById('habitValueTypeSelect').value = h.valueType;
+    document.getElementById('habitUnitInput').value = h.unit;
+    document.getElementById('habitTargetInput').value = h.targetValue;
+    document.getElementById('habitStepInput').value = h.step;
+    toggleHabitNumericFields(h.valueType);
+
+    const catSelect = document.getElementById('habitCategorySelect');
+    catSelect.innerHTML = '';
+    db.categories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        if (c === h.category) opt.selected = true;
+        catSelect.appendChild(opt);
+    });
+
+    document.getElementById('habitModal').classList.add('open');
+}
+
+function toggleHabitNumericFields(valType) {
+    document.getElementById('habitNumericConfigGroup').style.display =
+        valType === 'numeric' ? 'flex' : 'none';
+}
+
+function saveHabitFromModal() {
+    const title = document.getElementById('habitTitleInput').value.trim();
+    if (!title) return;
+
+    const category = document.getElementById('habitCategorySelect').value;
+    const polarity = document.getElementById('habitPolaritySelect').value;
+    const valueType = document.getElementById('habitValueTypeSelect').value;
+    const unit = document.getElementById('habitUnitInput').value.trim() || (valueType === 'boolean' ? 'fait' : 'R');
+    const rawTarget = parseFloat(document.getElementById('habitTargetInput').value);
+    const targetValue = isNaN(rawTarget) ? (polarity === 'negative' ? 0 : 1) : rawTarget;
+    const rawStep = parseFloat(document.getElementById('habitStepInput').value);
+    const step = isNaN(rawStep) || rawStep <= 0 ? 1 : rawStep;
+
+    if (editingHabitId) {
+        const h = db.habits.find(x => x.id === editingHabitId);
+        if (h) {
+            h.title = title;
+            h.category = category;
+            h.polarity = polarity;
+            h.valueType = valueType;
+            h.unit = unit;
+            h.targetValue = targetValue;
+            h.step = step;
+        }
+    } else {
+        db.habits.push({
+            id: 'h_' + Date.now(),
+            title,
+            category,
+            polarity,
+            valueType,
+            unit,
+            targetValue,
+            step,
+            history: {}
+        });
+        activeCarouselIndex = getFilteredHabits().length - 1;
+    }
+
+    closeHabitModal();
+    renderApp();
+}
+
+function deleteCurrentHabit() {
+    if (!editingHabitId) return;
+    deleteHabit(editingHabitId);
+    closeHabitModal();
+}
+
+function deleteHabit(habitId) {
+    if (!confirm('Supprimer définitivement cette habitude et toute sa heatmap ?')) return;
+    db.habits = db.habits.filter(h => h.id !== habitId);
+    activeCarouselIndex = Math.max(0, activeCarouselIndex - 1);
+    renderApp();
+}
+
+function closeHabitModal() {
+    editingHabitId = null;
+    document.getElementById('habitModal').classList.remove('open');
+}
+
+/* ============================================================================
+   AUJOURD'HUI & TEMPLE (ORIGINAUX CONSERVÉS)
+============================================================================ */
+function countUnlockedBy(taskId) {
+    return db.tasks.filter(t => !t.completed && t.blockedBy && t.blockedBy.includes(taskId)).length;
+}
+
+function getUnfinishedBlockers(task) {
+    if (!task.blockedBy || !task.blockedBy.length) return [];
+    return task.blockedBy
+        .map(id => db.tasks.find(t => t.id === id))
+        .filter(t => t && !t.completed);
+}
+
+function isBlocked(task) {
+    return getUnfinishedBlockers(task).length > 0;
+}
+
+const QUAD_CONFIG = {
+    q1: { title: 'Faire', sub: 'Urgent & Important', color: 'var(--q1-color)', weight: 50 },
+    q2: { title: 'Planifier', sub: 'Important, pas urgent', color: 'var(--q2-color)', weight: 35 },
+    q3: { title: 'Déléguer', sub: 'Urgent, pas important', color: 'var(--q3-color)', weight: 20 },
+    q4: { title: 'Éliminer', sub: 'Ni urgent, ni important', color: 'var(--q4-color)', weight: 10 },
+    inbox: { title: 'Vide-tête', sub: 'Idées brutes à trier', color: 'var(--accent-emerald)', weight: 5 }
+};
+
+function renderTodayView() {
+    const activeTasks = db.tasks.filter(t => !t.completed && t.quadrant !== 'inbox');
+    const leverageTasks = activeTasks.filter(t => countUnlockedBy(t.id) > 0 && !isBlocked(t));
+    const rotting = activeTasks.filter(t => calcDaysAgo(t.createdAt) >= 90);
+
+    document.getElementById('todayStatsRow').innerHTML = `
+        <div class="stat-box"><div class="val">${activeTasks.length}</div><div class="lbl">Tâches</div></div>
+        <div class="stat-box"><div class="val" style="color:var(--accent-cyan);">${leverageTasks.length}</div><div class="lbl">Leviers ⚡</div></div>
+        <div class="stat-box"><div class="val" style="color:var(--accent-crimson);">${rotting.length}</div><div class="lbl">Rotting 💀</div></div>
+    `;
+
+    const fillList = (elId, list, emptyMsg) => {
+        const box = document.getElementById(elId);
+        box.innerHTML = '';
+        if (list.length === 0) {
+            box.innerHTML = `<div style="font-size:0.78rem; color:var(--text-tertiary); padding:6px 0;">${emptyMsg}</div>`;
+            return;
+        }
+        list.forEach(t => {
+            const age = calcDaysAgo(t.createdAt);
+            const unlocks = countUnlockedBy(t.id);
+            const card = document.createElement('div');
+            card.className = 'full-card';
+            card.innerHTML = `
+                <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')"></div>
+                <div style="flex:1;">
+                    <div style="font-weight:800; font-size:0.9rem;">${escapeHtml(t.title)}</div>
+                    <div style="font-size:0.7rem; color:var(--text-secondary); margin-top:2px;">
+                        ${QUAD_CONFIG[t.quadrant].title} · ${t.category} ${unlocks ? `· ⚡ Débloque ${unlocks}` : ''}
+                    </div>
+                </div>
+                <span class="age-badge">${age}j</span>
+            `;
+            card.onclick = () => openTaskDetail(t.id);
+            box.appendChild(card);
+        });
+    };
+
+    fillList('leverageTasksList', leverageTasks, 'Aucun goulot d\'étranglement actif.');
+    fillList('todayPrimaryList', activeTasks.filter(t => (t.quadrant === 'q1' || t.quadrant === 'q2') && !isBlocked(t)).slice(0, 5), 'Aucune tâche prioritaire en attente.');
+    fillList('rottingTasksList', rotting, 'Aucune tâche en stagnation extrême (+90 jours).');
+}
+
+function renderTempleView() {
+    const active = db.tasks.filter(t => !t.completed);
+    const avgAge = active.length
+        ? Math.round(active.reduce((acc, t) => acc + calcDaysAgo(t.createdAt), 0) / active.length)
+        : 0;
+    const blockedCount = active.filter(t => isBlocked(t)).length;
+
+    document.getElementById('templeStatsRow').innerHTML = `
+        <div class="stat-box"><div class="val">${avgAge}j</div><div class="lbl">Âge Moyen</div></div>
+        <div class="stat-box"><div class="val" style="color:var(--accent-crimson);">${blockedCount}</div><div class="lbl">Verrouillées</div></div>
+        <div class="stat-box"><div class="val" style="color:var(--accent-purple);">${db.categories.length}</div><div class="lbl">Catégories</div></div>
+    `;
+
+    const depBox = document.getElementById('templeDependencyList');
+    depBox.innerHTML = '';
+    const lockedTasks = db.tasks.filter(t => t.blockedBy && t.blockedBy.length > 0);
+
+    if (lockedTasks.length === 0) {
+        depBox.innerHTML = '<div style="font-size:0.78rem; color:var(--text-tertiary);">Aucun lien de dépendance paramétré.</div>';
+        return;
+    }
+
+    lockedTasks.forEach(t => {
+        const blockers = t.blockedBy.map(id => db.tasks.find(x => x.id === id)).filter(Boolean);
+        const card = document.createElement('div');
+        card.className = 'full-card';
+        card.innerHTML = `
+            <div style="flex:1;">
+                <div style="font-size:0.75rem; color:var(--accent-emerald); font-weight:700;">
+                    ${blockers.map(b => `${b.completed ? '✓' : '🔒'} ${escapeHtml(b.title)}`).join(' + ')}
+                </div>
+                <div style="font-size:0.88rem; font-weight:800; margin-top:4px;">
+                    ↳ Débloque : ${escapeHtml(t.title)} (${t.category})
+                </div>
+            </div>
+        `;
+        card.onclick = () => openTaskDetail(t.id);
+        depBox.appendChild(card);
+    });
+}
+
+/* ============================================================================
+   MATRICE D'EISENHOWER & DÉTAILS (ORIGINAUX CONSERVÉS)
+============================================================================ */
+function getFilteredTasksForQuadrant(quadId) {
+    return db.tasks
+        .filter(t => {
+            if (t.quadrant !== quadId) return false;
+            if (db.currentCategory !== 'GLOBAL' || !db.aggregateGlobal) {
+                if (t.category !== db.currentCategory) return false;
+            }
+            if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                const matchTitle = t.title.toLowerCase().includes(q);
+                const matchProg = (t.program || '').toLowerCase().includes(q);
+                const matchCat = t.category.toLowerCase().includes(q);
+                if (!matchTitle && !matchProg && !matchCat) return false;
+            }
+            return true;
+        })
+        .sort((a, b) => {
+            if (a.completed !== b.completed) return a.completed ? 1 : -1;
+            const aBlock = isBlocked(a) ? 1 : 0;
+            const bBlock = isBlocked(b) ? 1 : 0;
+            if (aBlock !== bBlock) return aBlock - bBlock;
+            return calcDaysAgo(b.createdAt) - calcDaysAgo(a.createdAt);
+        });
+}
+
+function renderMatrix() {
+    ['q1', 'q2', 'q3', 'q4'].forEach(qid => {
+        const list = document.getElementById(`matrixList-${qid}`);
+        list.innerHTML = '';
+        const tasks = getFilteredTasksForQuadrant(qid);
+
+        tasks.forEach(t => {
+            const blocked = isBlocked(t);
+            const age = calcDaysAgo(t.createdAt);
+            const leverage = countUnlockedBy(t.id);
+            const subDone = (t.subtasks || []).filter(s => s.done).length;
+            const subTotal = (t.subtasks || []).length;
+
+            const pill = document.createElement('div');
+            pill.className = 'task-pill' + (blocked ? ' blocked' : '') + (t.completed ? ' completed' : '');
+
+            const check = document.createElement('div');
+            check.className = 'radio-circle';
+            check.innerHTML = blocked ? '🔒' : (t.completed ? '✓' : '');
+            check.onclick = (e) => {
+                e.stopPropagation();
+                toggleTaskDone(t.id);
+            };
+
+            const center = document.createElement('div');
+            center.className = 'pill-center';
+
+            let meta = [];
+            if (subTotal > 0) meta.push(`☰ ${subDone}/${subTotal}`);
+            if (leverage > 0) meta.push(`⚡${leverage}`);
+            if (db.currentCategory === 'GLOBAL' && t.category !== 'GLOBAL') meta.push(t.category);
+
+            center.innerHTML = `
+                <div class="pill-title">${escapeHtml(t.title)}</div>
+                ${meta.length ? `<div class="pill-meta">${meta.join(' · ')}</div>` : ''}
+            `;
+
+            const ageBadge = document.createElement('span');
+            ageBadge.className = 'age-badge ' + (age < 14 ? 'fresh' : (age < 60 ? 'warm' : (age < 90 ? 'aging' : '')));
+            ageBadge.textContent = `${age}j`;
+
+            pill.appendChild(check);
+            pill.appendChild(center);
+            pill.appendChild(ageBadge);
+
+            pill.onclick = () => openTaskDetail(t.id);
+            list.appendChild(pill);
+        });
+    });
+}
+
+function openTaskDetail(taskId) {
+    activeTaskId = taskId;
+    const t = db.tasks.find(x => x.id === taskId);
+    if (!t) return;
+    AudioEngine.click();
+
+    document.getElementById('editTaskTitle').value = t.title;
+    document.getElementById('editTaskQuadrant').value = t.quadrant;
+    document.getElementById('editTaskPriority').value = t.priority || 'normale';
+    document.getElementById('editTaskDate').value = t.createdAt;
+    document.getElementById('editTaskProgram').value = t.program || '';
+
+    const catSelect = document.getElementById('editTaskCategory');
+    catSelect.innerHTML = '';
+    db.categories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        if (c === t.category) opt.selected = true;
+        catSelect.appendChild(opt);
+    });
+
+    renderSubtasksSection(t);
+    renderDependenciesSection(t);
+
+    document.getElementById('taskDetailModal').classList.add('open');
+}
+
+function closeTaskDetail() {
+    activeTaskId = null;
+    document.getElementById('taskDetailModal').classList.remove('open');
+    renderApp();
+}
+
+function updateTaskProp(prop, val) {
+    const t = db.tasks.find(x => x.id === activeTaskId);
+    if (!t) return;
+    t[prop] = val;
+    renderApp();
+}
+
+function deleteActiveTask() {
+    if (!confirm('Supprimer définitivement cette tâche tactique ?')) return;
+    db.tasks = db.tasks.filter(t => t.id !== activeTaskId);
+    db.tasks.forEach(t => {
+        if (t.blockedBy) t.blockedBy = t.blockedBy.filter(id => id !== activeTaskId);
+    });
+    closeTaskDetail();
+}
+
+function renderSubtasksSection(t) {
+    const subs = t.subtasks || [];
+    const done = subs.filter(s => s.done).length;
+    document.getElementById('subtaskCounterLabel').textContent = `SOUS-TÂCHES (${done}/${subs.length})`;
+
+    const box = document.getElementById('activeSubtasksContainer');
+    box.innerHTML = '';
+    subs.forEach((s, idx) => {
+        const row = document.createElement('div');
+        row.className = 'form-row';
+        row.innerHTML = `
+            <input type="checkbox" style="width:18px; height:18px; accent-color:var(--accent-emerald);" ${s.done ? 'checked' : ''} onchange="toggleSubtaskDone(${idx})">
+            <span style="flex:1; font-size:0.88rem; font-weight:600; ${s.done ? 'text-decoration:line-through; color:var(--text-tertiary);' : ''}">${escapeHtml(s.title)}</span>
+            <button class="btn-text" style="color:var(--accent-crimson);" onclick="removeSubtask(${idx})">✕</button>
+        `;
+        box.appendChild(row);
+    });
+}
+
+function addSubtaskToActive() {
+    const input = document.getElementById('newSubtaskTitle');
+    const txt = input.value.trim();
+    if (!txt || !activeTaskId) return;
+    const t = db.tasks.find(x => x.id === activeTaskId);
+    if (!t.subtasks) t.subtasks = [];
+    t.subtasks.push({ id: 'st_' + Date.now(), title: txt, done: false });
+    input.value = '';
+    renderSubtasksSection(t);
+    renderApp();
+}
+
+function toggleSubtaskDone(idx) {
+    const t = db.tasks.find(x => x.id === activeTaskId);
+    t.subtasks[idx].done = !t.subtasks[idx].done;
+    AudioEngine.click();
+    renderSubtasksSection(t);
+    renderApp();
+}
+
+function removeSubtask(idx) {
+    const t = db.tasks.find(x => x.id === activeTaskId);
+    t.subtasks.splice(idx, 1);
+    renderSubtasksSection(t);
+    renderApp();
+}
+
+function renderDependenciesSection(t) {
+    const select = document.getElementById('dependencySelect');
+    select.innerHTML = '<option value="">+ Ajouter un verrou...</option>';
+
+    db.tasks
+        .filter(x => x.id !== t.id && (!t.blockedBy || !t.blockedBy.includes(x.id)))
+        .forEach(cand => {
+            const opt = document.createElement('option');
+            opt.value = cand.id;
+            opt.textContent = `[${cand.category}] ${cand.title}`;
+            select.appendChild(opt);
+        });
+
+    const box = document.getElementById('activeDependenciesBox');
+    box.innerHTML = '';
+    if (!t.blockedBy || t.blockedBy.length === 0) {
+        box.innerHTML = '<div style="font-size:0.75rem; color:var(--text-tertiary);">Aucun verrou bloquant.</div>';
+        return;
+    }
+
+    t.blockedBy.forEach(bid => {
+        const blocker = db.tasks.find(x => x.id === bid);
+        if (!blocker) return;
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+        row.style.background = 'rgba(255,255,255,0.04)';
+        row.style.padding = '8px 12px';
+        row.style.borderRadius = '8px';
+        row.innerHTML = `
+            <span style="font-size:0.8rem; font-weight:700; color:${blocker.completed ? 'var(--accent-emerald)' : 'var(--accent-crimson)'};">
+                ${blocker.completed ? '✓ Résolu' : '🔒 Bloqué'} : ${escapeHtml(blocker.title)}
+            </span>
+            <button class="btn-text" style="color:var(--accent-crimson);" onclick="removeDependency('${bid}')">✕</button>
+        `;
+        box.appendChild(row);
+    });
+}
+
+function attachDependency(blockerId) {
+    if (!blockerId || !activeTaskId) return;
+    const t = db.tasks.find(x => x.id === activeTaskId);
+    const blocker = db.tasks.find(x => x.id === blockerId);
+    if (blocker.blockedBy && blocker.blockedBy.includes(t.id)) {
+        toast('⚠️ Boucle circulaire interdite !');
+        return;
+    }
+    if (!t.blockedBy) t.blockedBy = [];
+    t.blockedBy.push(blockerId);
+    renderDependenciesSection(t);
+    renderApp();
+}
+
+function removeDependency(bid) {
+    const t = db.tasks.find(x => x.id === activeTaskId);
+    t.blockedBy = (t.blockedBy || []).filter(id => id !== bid);
+    renderDependenciesSection(t);
+    renderApp();
+}
+
+function toggleTaskDone(taskId) {
+    const t = db.tasks.find(x => x.id === taskId);
+    if (!t) return;
+
+    const blockers = getUnfinishedBlockers(t);
+    if (!t.completed && blockers.length > 0) {
+        AudioEngine.click();
+        haptic(50);
+        toast(`🔒 Bloqué par : ${blockers.map(b => b.title).join(', ')}`);
+        return;
+    }
+
+    t.completed = !t.completed;
+    if (t.completed) {
+        AudioEngine.unlock();
+        haptic([20, 50, 30]);
+        const unlocked = countUnlockedBy(t.id);
+        if (unlocked > 0) toast(`⚡ Tâche abattue ! ${unlocked} tâche(s) débloquée(s).`);
+    } else {
+        AudioEngine.click();
+        haptic(15);
+    }
+    renderApp();
+}
+
+function openQuadrantDetail(qid) {
+    activeZoomQuadrant = qid;
+    const meta = QUAD_CONFIG[qid];
+    document.getElementById('zoomQuadHeading').textContent = meta.title;
+    document.getElementById('zoomQuadHeading').style.color = meta.color;
+    document.getElementById('zoomQuadSubheading').textContent = meta.sub;
+    document.getElementById('zoomCatIndicator').textContent = db.currentCategory;
+    renderZoomList();
+    document.getElementById('quadZoomModal').classList.add('open');
+    setTimeout(() => document.getElementById('quickTaskInput').focus(), 120);
+}
+
+function closeQuadrantDetail() {
+    activeZoomQuadrant = null;
+    document.getElementById('quadZoomModal').classList.remove('open');
+}
+
+function submitQuickTask() {
+    const input = document.getElementById('quickTaskInput');
+    const val = input.value.trim();
+    if (!val || !activeZoomQuadrant) return;
+    AudioEngine.click();
+
+    db.tasks.unshift({
+        id: 't_' + Date.now(),
+        title: val,
+        quadrant: activeZoomQuadrant,
+        category: db.currentCategory,
+        priority: activeZoomQuadrant === 'q1' ? 'haute' : 'normale',
+        program: 'Général',
+        createdAt: TODAY_STR,
+        completed: false,
+        subtasks: [],
+        blockedBy: [],
+        notes: ''
+    });
+
+    input.value = '';
+    renderApp();
+}
+
+function renderZoomList() {
+    const box = document.getElementById('zoomTasksList');
+    box.innerHTML = '';
+    const tasks = activeZoomQuadrant === 'inbox'
+        ? db.tasks.filter(t => t.quadrant === 'inbox')
+        : getFilteredTasksForQuadrant(activeZoomQuadrant);
+
+    if (tasks.length === 0) {
+        box.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-tertiary);">Aucune tâche dans ce quadrant.</div>`;
+        return;
+    }
+
+    tasks.forEach(t => {
+        const age = calcDaysAgo(t.createdAt);
+        const card = document.createElement('div');
+        card.className = 'full-card';
+        card.style.opacity = t.completed ? '0.45' : '1';
+        card.innerHTML = `
+            <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')">
+                ${t.completed ? '✓' : ''}
+            </div>
+            <div style="flex:1;">
+                <div style="font-weight:800; font-size:0.92rem;">${escapeHtml(t.title)}</div>
+                <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;">
+                    ${t.category} · Créé il y a ${age}j
+                </div>
+            </div>
+            <span class="age-badge">${age}j</span>
+        `;
+        card.onclick = () => openTaskDetail(t.id);
+        box.appendChild(card);
+    });
+}
+
+function triggerTacticalFocus() {
+    const candidates = db.tasks.filter(t => !t.completed && !isBlocked(t) && t.quadrant !== 'inbox');
+    const body = document.getElementById('focusBody');
+
+    if (candidates.length === 0) {
+        body.innerHTML = `<h3>Aucune tâche exécutable immédiatement.</h3><p style="color:var(--text-secondary);">Toutes tes tâches sont bloquées ou achevées.</p>`;
+        document.getElementById('focusModal').classList.add('open');
+        return;
+    }
+
+    const scored = candidates.map(t => {
+        const qScore = QUAD_CONFIG[t.quadrant].weight;
+        const pScore = t.priority === 'critique' ? 40 : (t.priority === 'haute' ? 25 : 10);
+        const levScore = countUnlockedBy(t.id) * 30;
+        const ageScore = Math.min(40, calcDaysAgo(t.createdAt) * 0.5);
+        return { task: t, total: qScore + pScore + levScore + ageScore };
+    }).sort((a, b) => b.total - a.total);
+
+    const target = scored[0].task;
+    const unlocks = countUnlockedBy(target.id);
+    focusSeconds = 25 * 60;
+    clearInterval(focusTimer);
+    focusTimer = null;
+
+    body.innerHTML = `
+        <span class="score-badge" style="color:var(--accent-emerald); border-color:var(--accent-emerald);">OBJECTIF PRINCIPAL</span>
+        <h2 style="font-size:1.6rem; margin:12px 0 4px 0; font-weight:900;">${escapeHtml(target.title)}</h2>
+        <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;">
+            ${QUAD_CONFIG[target.quadrant].title} · ${target.category} ${unlocks ? `· ⚡ Débloque ${unlocks} tâche(s)` : ''}
+        </div>
+        <div class="timer-readout" id="focusClock">25:00</div>
+        <div style="display:flex; gap:10px; width:100%; max-width:320px;">
+            <button class="btn-action-primary" style="flex:1;" onclick="toggleTimer()">▶ Démarrer</button>
+            <button class="btn-action-primary" style="flex:1; background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border-medium);" onclick="toggleTaskDone('${target.id}'); closeFocusModal();">✓ Fait</button>
+        </div>
+    `;
+    document.getElementById('focusModal').classList.add('open');
+}
+
+function toggleTimer() {
+    const clock = document.getElementById('focusClock');
+    if (focusTimer) {
+        clearInterval(focusTimer);
+        focusTimer = null;
+        return;
+    }
+    AudioEngine.click();
+    focusTimer = setInterval(() => {
+        focusSeconds--;
+        if (focusSeconds <= 0) {
+            clearInterval(focusTimer);
+            AudioEngine.bell();
+            toast('🔔 Session Focus accomplie !');
+            return;
+        }
+        const m = String(Math.floor(focusSeconds / 60)).padStart(2, '0');
+        const s = String(focusSeconds % 60).padStart(2, '0');
+        if (clock) clock.textContent = `${m}:${s}`;
+    }, 1000);
+}
+
+function closeFocusModal() {
+    clearInterval(focusTimer);
+    focusTimer = null;
+    document.getElementById('focusModal').classList.remove('open');
+}
+
+/* ============================================================================
+   UTILITAIRES GLOBAUX
+============================================================================ */
+function toggleGlobalAggregation() {
+    db.aggregateGlobal = !db.aggregateGlobal;
+    toast(db.aggregateGlobal ? '🔓 Vue Globale : Toutes catégories agrégées' : '🔒 Vue Globale : Catégorie GLOBAL uniquement');
+    renderApp();
+}
+
+function createCategoryPrompt() {
+    const name = prompt('Nom de la catégorie :');
+    if (!name || !name.trim()) return;
+    const clean = name.trim();
+    if (!db.categories.includes(clean)) db.categories.push(clean);
+    db.currentCategory = clean;
+    renderApp();
+}
+
+function openCategorySheet() {
+    if (db.currentCategory === 'GLOBAL') {
+        createCategoryPrompt();
+        return;
+    }
+    const act = prompt(`Catégorie : "${db.currentCategory}"\n1. Renommer\n2. Supprimer\n3. Nouvelle catégorie`);
+    if (act === '1') {
+        const ren = prompt('Nouveau nom :', db.currentCategory);
+        if (ren && ren.trim()) {
+            const clean = ren.trim();
+            db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = clean; });
+            db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = clean; });
+            const idx = db.categories.indexOf(db.currentCategory);
+            if (idx > -1) db.categories[idx] = clean;
+            db.currentCategory = clean;
+            renderApp();
+        }
+    } else if (act === '2') {
+        if (confirm(`Supprimer "${db.currentCategory}" ? Les éléments seront rebasculés dans GLOBAL.`)) {
+            db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = 'GLOBAL'; });
+            db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = 'GLOBAL'; });
+            db.categories = db.categories.filter(c => c !== db.currentCategory);
+            db.currentCategory = 'GLOBAL';
+            renderApp();
+        }
+    } else if (act === '3') {
+        createCategoryPrompt();
+    }
+}
+
+function toggleSearch() {
+    const wrap = document.getElementById('searchWrapper');
+    wrap.classList.toggle('open');
+    if (wrap.classList.contains('open')) {
+        document.getElementById('globalSearchInput').focus();
+    } else {
+        searchQuery = '';
+        renderApp();
+    }
+}
+
+function handleGlobalSearch(val) {
+    searchQuery = val.trim();
+    renderMatrix();
+}
+
+function switchNavTab(tabName) {
+    AudioEngine.click();
+    haptic(10);
+    document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+    document.querySelector(`.nav-btn[data-tab="${tabName}"]`).classList.add('active');
+    renderApp();
+}
+
+function exportDataJSON() {
+    const str = JSON.stringify(db, null, 2);
+    const blob = new Blob([str], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `tactique-os-${TODAY_STR}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Sauvegarde exportée avec succès !');
+}
+
+function importDataJSON(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = (evt) => {
+        try {
+            const data = JSON.parse(evt.target.result);
+            if (data && Array.isArray(data.tasks)) {
+                db = data;
+                renderApp();
+                toast('Données importées avec succès !');
+            }
+        } catch (err) {
+            alert('Fichier JSON invalide.');
+        }
+    };
+    r.readAsText(file);
+}
+
+function resetToDemonstrationData() {
+    if (!confirm('Écraser les données locales par la configuration de démonstration ?')) return;
+    db = JSON.parse(JSON.stringify(INITIAL_DB));
+    renderApp();
+}
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderApp();
+});
+</script>
+</body>
+</html>
