@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -33,6 +34,7 @@
         --accent-cyan: #00e5ff;
         --accent-amber: #ffab40;
         --accent-crimson: #ff3d71;
+        --accent-crimson-glow: rgba(255, 61, 113, 0.28);
         --accent-purple: #b388ff;
 
         --q1-color: #ff3d71; /* Faire */
@@ -40,15 +42,21 @@
         --q3-color: #ffab40; /* Déléguer */
         --q4-color: #90a4ae; /* Éliminer */
         
-        --heat-0: #13221e;
-        --heat-1: #0a402a;
+        --heat-0: #12211c;
+        --heat-1: #0b452e;
         --heat-2: #056a3f;
         --heat-3: #009d57;
         --heat-4: #00e676;
 
+        --heat-neg-0: #12211c;
+        --heat-neg-1: #3b2814;
+        --heat-neg-2: #613612;
+        --heat-neg-3: #942525;
+        --heat-neg-4: #ff3d71;
+
         --radius-sm: 8px;
         --radius-md: 14px;
-        --radius-lg: 20px;
+        --radius-lg: 22px;
     }
 
     * {
@@ -80,7 +88,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        background: rgba(7, 13, 11, 0.85);
+        background: rgba(7, 13, 11, 0.88);
         backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--border-subtle);
         z-index: 20;
@@ -156,7 +164,7 @@
         box-shadow: 0 0 10px var(--accent-emerald-glow);
     }
 
-    /* SEARCH BAR POP-IN */
+    /* SEARCH BAR */
     .search-wrapper {
         display: none;
         padding: 2px 0 6px 0;
@@ -232,6 +240,409 @@
     .tab-view::-webkit-scrollbar { display: none; }
     .tab-view.active { display: flex; }
 
+    /* ONGLET HABITUDES SPÉCIFIQUE (IMMERSION PLEIN ÉCRAN) */
+    #tab-routine {
+        padding: 10px 0 80px 0;
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+    }
+    #tab-routine.active { display: flex; }
+
+    /* MACRO HEATMAP CONTAINER (ISO 8601) */
+    .macro-heat-section {
+        padding: 0 14px;
+        flex-shrink: 0;
+    }
+
+    .macro-heat-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .macro-heat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .macro-heat-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .scope-toggle-group {
+        display: flex;
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 2px;
+    }
+
+    .scope-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-tertiary);
+        font-size: 0.65rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 9px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .scope-btn.active {
+        background: var(--accent-emerald);
+        color: #031208;
+    }
+
+    /* GRILLE STRICTE ISO 8601 : 7 LIGNES STRICTES (LUN -> DIM) */
+    .iso-heat-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .iso-day-labels {
+        display: grid;
+        grid-template-rows: repeat(7, 12px);
+        gap: 3px;
+        font-size: 0.58rem;
+        font-weight: 800;
+        color: var(--text-tertiary);
+        line-height: 12px;
+        text-align: right;
+        padding-right: 2px;
+    }
+
+    .iso-grid {
+        display: grid;
+        grid-template-rows: repeat(7, 12px);
+        grid-auto-flow: column;
+        grid-auto-columns: 12px;
+        gap: 3px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+    }
+    .iso-grid::-webkit-scrollbar { display: none; }
+
+    .iso-cell {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        background: var(--heat-0);
+        cursor: pointer;
+        transition: transform 0.12s;
+    }
+    .iso-cell:active { transform: scale(1.4); z-index: 5; }
+    .iso-cell.ghost {
+        background: transparent;
+        border: 1px dashed rgba(255, 255, 255, 0.05);
+        pointer-events: none;
+    }
+    .iso-cell.today-ring {
+        outline: 1.5px solid #fff;
+        outline-offset: 1px;
+    }
+
+    /* HEATMAP NIVEAUX POSITIFS */
+    .iso-cell.p-0 { background: var(--heat-0); }
+    .iso-cell.p-1 { background: var(--heat-1); }
+    .iso-cell.p-2 { background: var(--heat-2); }
+    .iso-cell.p-3 { background: var(--heat-3); }
+    .iso-cell.p-4 { background: var(--heat-4); box-shadow: 0 0 6px var(--accent-emerald-glow); }
+
+    /* HEATMAP NIVEAUX NÉGATIFS */
+    .iso-cell.n-0 { background: var(--heat-neg-0); }
+    .iso-cell.n-1 { background: var(--heat-neg-1); }
+    .iso-cell.n-2 { background: var(--heat-neg-2); }
+    .iso-cell.n-3 { background: var(--heat-neg-3); }
+    .iso-cell.n-4 { background: var(--heat-neg-4); box-shadow: 0 0 6px var(--accent-crimson-glow); }
+
+    /* CAROUSEL SWIPEABLE PLEIN ÉCRAN */
+    .habit-slider-container {
+        flex: 1;
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding: 6px 14px 10px 14px;
+        scrollbar-width: none;
+    }
+    .habit-slider-container::-webkit-scrollbar { display: none; }
+
+    /* Classe injectée dynamiquement pour bloquer le swipe de carte pendant la roulette */
+    .habit-slider-container.locked-for-dial {
+        overflow-x: hidden !important;
+        scroll-snap-type: none !important;
+    }
+
+    .habit-full-card {
+        flex: 0 0 calc(100vw - 28px);
+        scroll-snap-align: center;
+        background: var(--bg-card);
+        border: 1px solid var(--border-medium);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .habit-full-card.type-negative {
+        border-color: rgba(255, 61, 113, 0.3);
+    }
+
+    .habit-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .habit-card-title-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .habit-card-title {
+        font-size: 1.25rem;
+        font-weight: 900;
+        letter-spacing: 0.3px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .habit-card-tag {
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-tertiary);
+        letter-spacing: 1px;
+    }
+
+    .habit-card-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .habit-kpi-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 6px;
+    }
+
+    .kpi-chip {
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 8px;
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* MONUMENTAL VALUE READOUT */
+    .monument-readout-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 6px 0;
+    }
+
+    .monument-number {
+        font-size: 4.2rem;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        letter-spacing: -2px;
+        color: var(--text-primary);
+        text-shadow: 0 0 30px var(--accent-emerald-glow);
+        cursor: pointer;
+        transition: transform 0.12s, color 0.2s;
+    }
+    .monument-number:active { transform: scale(1.05); }
+
+    .monument-number.negative-alert {
+        color: var(--accent-crimson);
+        text-shadow: 0 0 30px var(--accent-crimson-glow);
+    }
+
+    .monument-unit {
+        font-size: 0.88rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+    }
+
+    /* MINI HEATMAP 4 SEMAINES */
+    .card-mini-heat {
+        background: rgba(0,0,0,0.25);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .card-mini-heat-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.62rem;
+        color: var(--text-tertiary);
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    /* CONTRÔLEUR ISOLÉ // TOUCH-ACTION NONE STRICT */
+    .dial-controller {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-medium);
+        border-radius: var(--radius-md);
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        /* Isolation stricte anti-propagation sur le container */
+        touch-action: none !important;
+    }
+
+    .dial-track-container {
+        position: relative;
+        width: 100%;
+        height: 52px;
+        overflow: hidden;
+        cursor: ew-resize;
+        background: rgba(0,0,0,0.3);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border-subtle);
+        /* Bloque le scroll natif horizontal sur la réglette */
+        touch-action: none !important;
+    }
+
+    .dial-cursor {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 3px;
+        background: var(--accent-emerald);
+        box-shadow: 0 0 12px var(--accent-emerald-glow);
+        transform: translateX(-50%);
+        z-index: 3;
+        pointer-events: none;
+    }
+    .dial-cursor.cursor-crimson {
+        background: var(--accent-crimson);
+        box-shadow: 0 0 12px var(--accent-crimson-glow);
+    }
+
+    .dial-tick-ribbon {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        position: absolute;
+        left: 50%;
+        pointer-events: none;
+        will-change: transform;
+    }
+
+    .dial-tick {
+        width: 20px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .dial-tick::after {
+        content: '';
+        display: block;
+        width: 2px;
+        height: 12px;
+        background: var(--border-medium);
+        border-radius: 1px;
+    }
+    .dial-tick.major::after {
+        height: 24px;
+        background: var(--text-primary);
+        width: 2.5px;
+    }
+
+    .dial-step-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        touch-action: manipulation;
+    }
+
+    .btn-step {
+        background: var(--bg-input);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 900;
+        width: 50px;
+        height: 38px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.1s, background 0.15s;
+        touch-action: none !important;
+    }
+    .btn-step:active {
+        transform: scale(0.92);
+        background: var(--accent-emerald);
+        color: #031208;
+    }
+
+    /* PAGINATION BULLETS */
+    .slider-dots-row {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        padding-top: 4px;
+        flex-shrink: 0;
+    }
+    .slider-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 3px;
+        background: var(--border-medium);
+        transition: all 0.2s;
+    }
+    .slider-dot.active {
+        width: 18px;
+        background: var(--accent-emerald);
+    }
+
     /* 2x2 EISENHOWER GRID */
     .matrix-grid {
         display: grid;
@@ -255,15 +666,12 @@
         transition: border-color 0.2s;
     }
 
-    .quadrant:focus-within { border-color: var(--border-medium); }
-
     .quad-header {
         display: flex;
         flex-direction: column;
         margin-bottom: 8px;
         cursor: pointer;
     }
-
     #quad-q2 .quad-header, #quad-q4 .quad-header { text-align: right; }
 
     .quad-title {
@@ -300,7 +708,7 @@
     }
     .quad-tasks::-webkit-scrollbar { display: none; }
 
-    /* TASK PILL IN MATRIX */
+    /* TASK PILLS */
     .task-pill {
         background: rgba(22, 36, 32, 0.9);
         border: 1px solid var(--border-subtle);
@@ -345,1802 +753,4 @@
     }
     .radio-circle:active { transform: scale(1.2); }
 
-    #quad-q1 .radio-circle { color: var(--q1-color); }
-    #quad-q2 .radio-circle { color: var(--q2-color); }
-    #quad-q3 .radio-circle { color: var(--q3-color); }
-    #quad-q4 .radio-circle { color: var(--q4-color); }
-
-    .pill-center {
-        flex: 1;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .pill-title {
-        font-size: 0.77rem;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: var(--text-primary);
-    }
-
-    .pill-meta {
-        font-size: 0.62rem;
-        color: var(--text-secondary);
-        display: flex;
-        gap: 5px;
-        align-items: center;
-    }
-
-    .age-badge {
-        font-size: 0.68rem;
-        font-weight: 900;
-        font-variant-numeric: tabular-nums;
-        color: var(--accent-crimson);
-        flex-shrink: 0;
-    }
-    .age-badge.fresh { color: var(--accent-emerald); }
-    .age-badge.warm { color: var(--accent-cyan); }
-    .age-badge.aging { color: var(--accent-amber); }
-
-    /* FLOATING CONTROLS */
-    .floating-bar {
-        position: fixed;
-        bottom: 74px;
-        right: 16px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        z-index: 25;
-    }
-
-    .btn-magic {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(179, 136, 255, 0.25), rgba(0, 229, 255, 0.25));
-        border: 1px solid rgba(179, 136, 255, 0.5);
-        color: #fff;
-        font-size: 1.15rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(8px);
-        transition: transform 0.2s;
-    }
-    .btn-magic:active { transform: scale(0.9); }
-
-    .btn-videtete {
-        background: var(--accent-emerald);
-        color: #031208;
-        border: none;
-        border-radius: 26px;
-        padding: 11px 18px;
-        font-size: 0.88rem;
-        font-weight: 900;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        box-shadow: 0 6px 20px var(--accent-emerald-glow);
-        transition: transform 0.15s;
-    }
-    .btn-videtete:active { transform: scale(0.95); }
-
-    .badge-inbox-count {
-        background: #031208;
-        color: var(--accent-emerald);
-        border-radius: 10px;
-        padding: 1px 6px;
-        font-size: 0.72rem;
-        font-weight: 800;
-    }
-
-    /* HEATMAP STYLES */
-    .heat-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-md);
-        padding: 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .heat-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .heat-title {
-        font-size: 0.95rem;
-        font-weight: 800;
-        color: var(--text-primary);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .streak-pill {
-        background: rgba(255, 171, 64, 0.15);
-        border: 1px solid rgba(255, 171, 64, 0.35);
-        color: var(--accent-amber);
-        padding: 3px 8px;
-        border-radius: 12px;
-        font-size: 0.72rem;
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .heat-grid-container {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        overflow-x: auto;
-        padding: 4px 0;
-        scrollbar-width: none;
-    }
-    .heat-grid-container::-webkit-scrollbar { display: none; }
-
-    .habit-heatmap-grid {
-        display: grid;
-        grid-template-rows: repeat(7, 12px);
-        grid-auto-flow: column;
-        grid-auto-columns: 12px;
-        gap: 3px;
-    }
-
-    .heat-cell {
-        width: 12px;
-        height: 12px;
-        border-radius: 3px;
-        background: var(--heat-0);
-        cursor: pointer;
-        transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .heat-cell:active { transform: scale(1.4); z-index: 5; }
-
-    .heat-cell.level-0 { background: var(--heat-0); }
-    .heat-cell.level-1 { background: var(--heat-1); }
-    .heat-cell.level-2 { background: var(--heat-2); }
-    .heat-cell.level-3 { background: var(--heat-3); }
-    .heat-cell.level-4 { background: var(--heat-4); box-shadow: 0 0 6px var(--accent-emerald-glow); }
-    .heat-cell.today-ring { outline: 1.5px solid #fff; outline-offset: 1px; }
-
-    .heat-stats-row {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.72rem;
-        color: var(--text-secondary);
-        font-weight: 600;
-        padding-top: 4px;
-        border-top: 1px solid var(--border-subtle);
-    }
-
-    /* GLOBAL CONSISTENCY HEATMAP */
-    .global-heatmap-wrap {
-        background: var(--bg-panel);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-md);
-        padding: 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .global-matrix {
-        display: grid;
-        grid-template-rows: repeat(7, 11px);
-        grid-auto-flow: column;
-        grid-auto-columns: 11px;
-        gap: 3px;
-        overflow-x: auto;
-        padding-bottom: 4px;
-    }
-
-    /* BOTTOM NAV */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 64px;
-        background: rgba(8, 14, 12, 0.95);
-        backdrop-filter: blur(14px);
-        border-top: 1px solid var(--border-subtle);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        z-index: 30;
-        padding-bottom: env(safe-area-inset-bottom);
-    }
-
-    .nav-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        color: var(--text-tertiary);
-        font-size: 0.68rem;
-        font-weight: 700;
-        cursor: pointer;
-        flex: 1;
-        padding: 6px 0;
-        transition: color 0.2s, transform 0.1s;
-    }
-    .nav-btn:active { transform: scale(0.92); }
-    .nav-btn.active { color: var(--accent-emerald); }
-    .nav-btn .nav-icon { font-size: 1.25rem; }
-
-    /* CARDS & STATS */
-    .stat-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-    }
-
-    .stat-box {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-sm);
-        padding: 12px 8px;
-        text-align: center;
-    }
-    .stat-box .val {
-        font-size: 1.35rem;
-        font-weight: 900;
-        color: var(--accent-emerald);
-        font-variant-numeric: tabular-nums;
-    }
-    .stat-box .lbl {
-        font-size: 0.63rem;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        margin-top: 2px;
-    }
-
-    .section-title {
-        font-size: 0.68rem;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        color: var(--text-secondary);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 6px;
-    }
-
-    .full-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-md);
-        padding: 12px 14px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-        transition: background 0.15s, transform 0.1s;
-    }
-    .full-card:active { background: var(--bg-card-hover); transform: scale(0.98); }
-
-    /* MODALS & DRAWERS */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(5, 10, 8, 0.94);
-        backdrop-filter: blur(12px);
-        z-index: 50;
-        display: none;
-        flex-direction: column;
-        animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .modal-overlay.open { display: flex; }
-
-    @keyframes slideUp {
-        from { transform: translateY(30px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    .modal-header {
-        padding: 14px 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .btn-text {
-        background: none;
-        border: none;
-        color: var(--accent-emerald);
-        font-size: 0.95rem;
-        font-weight: 800;
-        cursor: pointer;
-        padding: 4px;
-    }
-
-    .modal-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-    .form-group-card {
-        background: var(--bg-panel);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-md);
-        overflow: hidden;
-    }
-    .form-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 14px;
-        border-bottom: 1px solid var(--border-subtle);
-        gap: 10px;
-    }
-    .form-row:last-child { border-bottom: none; }
-
-    .form-input-text {
-        background: transparent;
-        border: none;
-        color: var(--text-primary);
-        font-size: 0.95rem;
-        font-weight: 700;
-        outline: none;
-        width: 100%;
-        user-select: text;
-    }
-
-    .form-select {
-        background: transparent;
-        border: none;
-        color: var(--accent-emerald);
-        font-size: 0.9rem;
-        font-weight: 700;
-        outline: none;
-        text-align: right;
-        max-width: 65%;
-    }
-    .form-select option { background: var(--bg-panel); color: #fff; }
-
-    .btn-action-primary {
-        background: var(--accent-emerald);
-        color: #04140c;
-        border: none;
-        padding: 13px;
-        border-radius: 12px;
-        font-weight: 900;
-        font-size: 0.95rem;
-        cursor: pointer;
-        text-align: center;
-        transition: transform 0.15s;
-    }
-    .btn-action-primary:active { transform: scale(0.97); }
-
-    .btn-action-danger {
-        background: rgba(255, 61, 113, 0.15);
-        color: var(--accent-crimson);
-        border: 1px solid rgba(255, 61, 113, 0.35);
-        padding: 12px;
-        border-radius: 12px;
-        font-weight: 800;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    /* POMODORO */
-    .timer-readout {
-        font-size: 4rem;
-        font-weight: 900;
-        font-variant-numeric: tabular-nums;
-        color: var(--accent-emerald);
-        letter-spacing: 2px;
-        margin: 20px 0;
-        text-shadow: 0 0 25px var(--accent-emerald-glow);
-    }
-
-    /* TOAST */
-    .toast-box {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--bg-card);
-        color: #fff;
-        border: 1px solid var(--accent-emerald);
-        padding: 10px 20px;
-        border-radius: 30px;
-        font-size: 0.82rem;
-        font-weight: 800;
-        z-index: 100;
-        display: none;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-    }
-</style>
-</head>
-<body>
-
-<div id="toast" class="toast-box"></div>
-
-<!-- EN-TÊTE PRINCIPAL -->
-<header class="app-header">
-    <div class="header-top">
-        <div class="brand-group">
-            <span class="brand-subtitle">SYSTÈME TACTIQUE // V3</span>
-            <h1 class="brand-title" id="pageMainTitle">
-                <span>VUE GLOBALE</span>
-                <span class="score-badge" id="tacticalScoreBadge">0 pts</span>
-            </h1>
-        </div>
-        <div class="header-actions">
-            <button class="btn-icon" onclick="toggleSearch()" title="Recherche temps réel">🔍</button>
-            <button class="btn-icon active" id="globalAggBtn" onclick="toggleGlobalAggregation()" title="Basculer Agrégation Globale">🔓</button>
-            <button class="btn-icon" onclick="openCategorySheet()" title="Gestionnaire de Catégories">🗂️</button>
-        </div>
-    </div>
-
-    <!-- RECHERCHE POP-IN -->
-    <div class="search-wrapper" id="searchWrapper">
-        <input type="text" id="globalSearchInput" class="search-input" placeholder="Filtrer tâches, dépendances, programmes..." oninput="handleGlobalSearch(this.value)">
-    </div>
-
-    <!-- BARRE DE CATÉGORIES -->
-    <div class="cat-bar" id="categoryBar"></div>
-</header>
-
-<!-- CONTENEUR DES ONGLETS -->
-<main class="view-container">
-
-    <!-- ONGLET 1 : AUJOURD'HUI (COMMAND CENTER) -->
-    <section class="tab-view" id="tab-today">
-        <div class="stat-row" id="todayStatsRow"></div>
-
-        <div class="form-group">
-            <div class="section-title">⚡ EFFET DE LEVIER MAXIMUM (DÉBLOQUENT D'AUTRES TÂCHES)</div>
-            <div id="leverageTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">🎯 CIBLES DU JOUR (FAIRE / PLANIFIER)</div>
-            <div id="todayPrimaryList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">💀 ZONE CRITIQUE // PROCRASTINATION (+90 JOURS)</div>
-            <div id="rottingTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-    </section>
-
-    <!-- ONGLET 2 : ROUTINE & HEATMAPS DYNAMIQUES -->
-    <section class="tab-view" id="tab-routine">
-        <div class="global-heatmap-wrap">
-            <div class="heat-header">
-                <span class="heat-title">📊 Rigueur Tactique (12 Semaines)</span>
-                <span id="globalHeatAverage" style="font-size:0.75rem; color:var(--accent-emerald); font-weight:800;">0 act/j</span>
-            </div>
-            <div class="global-matrix" id="globalConsistencyGrid"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; color:var(--text-secondary);">
-                <span>- Moins</span>
-                <div style="display:flex; gap:3px;">
-                    <div class="heat-cell level-0"></div>
-                    <div class="heat-cell level-1"></div>
-                    <div class="heat-cell level-2"></div>
-                    <div class="heat-cell level-3"></div>
-                    <div class="heat-cell level-4"></div>
-                </div>
-                <span>+ Plus</span>
-            </div>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span class="section-title">MES HABITUDES & SÉRIES</span>
-            <button class="btn-text" style="font-size:0.78rem;" onclick="createNewHabitPrompt()">+ Nouvelle Routine</button>
-        </div>
-
-        <div id="habitsListContainer" style="display:flex; flex-direction:column; gap:12px;"></div>
-    </section>
-
-    <!-- ONGLET 3 : TEMPLE & ARBRE DE DÉPENDANCES -->
-    <section class="tab-view" id="tab-temple">
-        <div class="stat-row" id="templeStatsRow"></div>
-
-        <div class="form-group">
-            <div class="section-title">🕸️ MATRICE DES DÉPENDANCES & BLOCAGES</div>
-            <div id="templeDependencyList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">💾 COFFRE-FORT LOCAL // BACKUP</div>
-            <div class="form-group-card" style="padding:14px; display:flex; flex-direction:column; gap:10px;">
-                <button class="btn-action-primary" onclick="exportDataJSON()">📤 Exporter Données Tactiques (.json)</button>
-                <label class="btn-action-primary" style="background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border-subtle); display:block;">
-                    📥 Importer Sauvegarde (.json)
-                    <input type="file" accept=".json" style="display:none" onchange="importDataJSON(event)">
-                </label>
-                <button class="btn-action-danger" onclick="resetToDemonstrationData()">Réinitialiser Données Démo</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ONGLET 4 : MATRICE D'EISENHOWER 2x2 -->
-    <section class="tab-view active" id="tab-matrix">
-        <div class="matrix-grid">
-            <div class="quadrant" id="quad-q1">
-                <div class="quad-header" onclick="openQuadrantDetail('q1')">
-                    <div class="quad-title"><span>Faire</span> <span style="font-size:0.75rem;">⊕</span></div>
-                    <div class="quad-sub">Urgent & Important</div>
-                </div>
-                <div class="quad-tasks" id="matrixList-q1"></div>
-            </div>
-
-            <div class="quadrant" id="quad-q2">
-                <div class="quad-header" onclick="openQuadrantDetail('q2')">
-                    <div class="quad-title"><span>Planifier</span> <span style="font-size:0.75rem;">⊕</span></div>
-                    <div class="quad-sub">Important, pas urgent</div>
-                </div>
-                <div class="quad-tasks" id="matrixList-q2"></div>
-            </div>
-
-            <div class="quadrant" id="quad-q3">
-                <div class="quad-header" onclick="openQuadrantDetail('q3')">
-                    <div class="quad-title"><span>Déléguer</span> <span style="font-size:0.75rem;">⊕</span></div>
-                    <div class="quad-sub">Urgent, pas important</div>
-                </div>
-                <div class="quad-tasks" id="matrixList-q3"></div>
-            </div>
-
-            <div class="quadrant" id="quad-q4">
-                <div class="quad-header" onclick="openQuadrantDetail('q4')">
-                    <div class="quad-title"><span>Éliminer</span> <span style="font-size:0.75rem;">⊕</span></div>
-                    <div class="quad-sub">Ni urgent, ni important</div>
-                </div>
-                <div class="quad-tasks" id="matrixList-q4"></div>
-            </div>
-        </div>
-    </section>
-
-</main>
-
-<!-- CONTRÔLES FLOTTANTS -->
-<div class="floating-bar">
-    <button class="btn-magic" onclick="triggerTacticalFocus()" title="Action immédiate (Algorithme de priorité)">✨</button>
-    <button class="btn-videtete" onclick="openQuadrantDetail('inbox')">
-        📥 Vide-tête <span class="badge-inbox-count" id="inboxCounter">0</span>
-    </button>
-</div>
-
-<!-- BARRE DE NAVIGATION INFÉRIEURE -->
-<nav class="bottom-nav">
-    <div class="nav-btn" data-tab="today" onclick="switchNavTab('today')">
-        <span class="nav-icon">☀️</span>
-        <span>Aujourd'hui</span>
-    </div>
-    <div class="nav-btn" data-tab="routine" onclick="switchNavTab('routine')">
-        <span class="nav-icon">📈</span>
-        <span>Habitudes</span>
-    </div>
-    <div class="nav-btn" data-tab="temple" onclick="switchNavTab('temple')">
-        <span class="nav-icon">🏛️</span>
-        <span>Temple</span>
-    </div>
-    <div class="nav-btn active" data-tab="matrix" onclick="switchNavTab('matrix')">
-        <span class="nav-icon">🎛️</span>
-        <span>Matrice</span>
-    </div>
-</nav>
-
-<!-- MODAL 1 : ZOOM QUADRANT & VIDE-TÊTE -->
-<div class="modal-overlay" id="quadZoomModal">
-    <div class="modal-header">
-        <button class="btn-text" onclick="closeQuadrantDetail()">‹ Retour Matrice</button>
-        <span class="score-badge" id="zoomCatIndicator">GLOBAL</span>
-    </div>
-    <div class="modal-body">
-        <div style="text-align:center;">
-            <h2 id="zoomQuadHeading" style="margin:0; font-size:1.45rem; font-weight:900;">Planifier</h2>
-            <div id="zoomQuadSubheading" style="font-size:0.8rem; color:var(--text-secondary); margin-top:3px;">Important, pas urgent</div>
-        </div>
-
-        <div style="display:flex; gap:8px;">
-            <input type="text" id="quickTaskInput" class="search-input" placeholder="Ajouter une action tactique..." onkeydown="if(event.key==='Enter') submitQuickTask()">
-            <button class="btn-action-primary" style="padding:0 18px;" onclick="submitQuickTask()">OK</button>
-        </div>
-
-        <div id="zoomTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
-    </div>
-</div>
-
-<!-- MODAL 2 : DÉTAILS DE TÂCHE -->
-<div class="modal-overlay" id="taskDetailModal">
-    <div class="modal-header">
-        <button class="btn-text" onclick="closeTaskDetail()">‹ Fermer</button>
-        <strong style="font-size:0.95rem;">Configuration Tactique</strong>
-        <button class="btn-text" style="color:var(--accent-crimson);" onclick="deleteActiveTask()">Suppr.</button>
-    </div>
-    <div class="modal-body">
-        <div class="form-group">
-            <div class="section-title" id="subtaskCounterLabel">SOUS-TÂCHES (0/0)</div>
-            <div class="form-group-card">
-                <div class="form-row">
-                    <input type="text" id="newSubtaskTitle" class="form-input-text" placeholder="⊕ Ajouter une étape intermédiaire..." onkeydown="if(event.key==='Enter') addSubtaskToActive()">
-                    <button class="btn-text" onclick="addSubtaskToActive()">Ajouter</button>
-                </div>
-                <div id="activeSubtasksContainer"></div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">GÉNÉRAL</div>
-            <div class="form-group-card">
-                <div class="form-row">
-                    <input type="text" id="editTaskTitle" class="form-input-text" style="font-size:1.05rem;" onchange="updateTaskProp('title', this.value)">
-                </div>
-                <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Quadrant</label>
-                    <select id="editTaskQuadrant" class="form-select" onchange="updateTaskProp('quadrant', this.value)">
-                        <option value="q1">Faire (Urgent & Important)</option>
-                        <option value="q2">Planifier (Important, pas urgent)</option>
-                        <option value="q3">Déléguer (Urgent, pas important)</option>
-                        <option value="q4">Éliminer (Ni urgent, ni important)</option>
-                        <option value="inbox">Vide-tête (Inbox)</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Niveau de Priorité</label>
-                    <select id="editTaskPriority" class="form-select" onchange="updateTaskProp('priority', this.value)">
-                        <option value="critique">Critique 🔥</option>
-                        <option value="haute">Haute ⚡</option>
-                        <option value="normale">Normale</option>
-                        <option value="basse">Basse</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">DÉPENDANCES BLOQUANTES</div>
-            <div class="form-group-card">
-                <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Prérequis</label>
-                    <select id="dependencySelect" class="form-select" onchange="attachDependency(this.value)">
-                        <option value="">+ Ajouter un verrou...</option>
-                    </select>
-                </div>
-                <div id="activeDependenciesBox" style="padding:10px 14px; display:flex; flex-direction:column; gap:6px;"></div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">MÉTADONNÉES</div>
-            <div class="form-group-card">
-                <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Catégorie</label>
-                    <select id="editTaskCategory" class="form-select" onchange="updateTaskProp('category', this.value)"></select>
-                </div>
-                <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Date de création</label>
-                    <input type="date" id="editTaskDate" class="form-select" onchange="updateTaskProp('createdAt', this.value)">
-                </div>
-                <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Programme / Bootcamp</label>
-                    <input type="text" id="editTaskProgram" class="form-select" style="user-select:text;" onchange="updateTaskProp('program', this.value)">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL 3 : FOCUS TACTIQUE -->
-<div class="modal-overlay" id="focusModal">
-    <div class="modal-header">
-        <button class="btn-text" onclick="closeFocusModal()">‹ Quitter Focus</button>
-        <span class="score-badge">CONCENTRATION PROFONDE</span>
-    </div>
-    <div class="modal-body" id="focusBody" style="align-items:center; justify-content:center; text-align:center;">
-    </div>
-</div>
-
-<script>
-/* ============================================================================
-   ENREGISTREMENT DU SERVICE WORKER & PERSISTANCE DU STOCKAGE PWA
-============================================================================ */
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker enregistré avec succès :', reg.scope))
-            .catch(err => console.error('Échec enregistrement Service Worker :', err));
-    });
-}
-
-if (navigator.storage && navigator.storage.persist) {
-    navigator.storage.persist().then(persistent => {
-        if (persistent) console.log('Stockage persistant garanti.');
-    });
-}
-
-/* ============================================================================
-   AUDIO SYNTHESIZER & HAPTIQUE (100% Hors-ligne / Zero CDN)
-============================================================================ */
-const AudioEngine = {
-    ctx: null,
-    init() {
-        if (!this.ctx) {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (AudioCtx) this.ctx = new AudioCtx();
-        }
-        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
-    },
-    click() {
-        this.init();
-        if (!this.ctx) return;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.04);
-        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.04);
-    },
-    unlock() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-            gain.gain.setValueAtTime(0.09, now + idx * 0.06);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.2);
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            osc.start(now + idx * 0.06);
-            osc.stop(now + idx * 0.06 + 0.2);
-        });
-    },
-    bell() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(587.33, now);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.5);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 2.5);
-    }
-};
-
-function haptic(ms = 15) {
-    if (navigator.vibrate) navigator.vibrate(ms);
-}
-
-/* ============================================================================
-   GESTION DU TEMPS & DATES GLISSANTES
-============================================================================ */
-function toDateStr(d) {
-    const pad = n => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-}
-
-const TODAY_STR = toDateStr(new Date());
-
-function getRollingDates(daysBack) {
-    const dates = [];
-    const now = new Date();
-    for (let i = daysBack - 1; i >= 0; i--) {
-        const d = new Date(now);
-        d.setDate(d.getDate() - i);
-        dates.push(toDateStr(d));
-    }
-    return dates;
-}
-
-function calcDaysAgo(dateStr) {
-    if (!dateStr) return 0;
-    const past = new Date(dateStr);
-    const now = new Date();
-    const diff = Math.max(0, now - past);
-    return Math.floor(diff / (1000 * 60 * 60 * 24));
-}
-
-/* ============================================================================
-   DONNÉES INITIALES & PERSISTANCE
-============================================================================ */
-const DB_KEY = 'TACTIQUE_OS_V3';
-
-const INITIAL_DB = {
-    currentCategory: 'GLOBAL',
-    aggregateGlobal: true,
-    categories: ['GLOBAL', 'Trading', 'Université', 'Moto & Terrain', 'Bivouac'],
-    habits: [
-        {
-            id: 'h_matrice',
-            title: 'Scan & Priorisation Eisenhower',
-            category: 'GLOBAL',
-            history: generateMockHistory(28, 0.85)
-        },
-        {
-            id: 'h_flashcards',
-            title: 'Répétition espacée (Flashcards)',
-            category: 'Université',
-            history: generateMockHistory(28, 0.70)
-        },
-        {
-            id: 'h_sport',
-            title: 'Entraînement physique & Mobilité',
-            category: 'Moto & Terrain',
-            history: generateMockHistory(28, 0.60)
-        }
-    ],
-    tasks: [
-        {
-            id: 't_chasse',
-            title: 'Permis chasse',
-            quadrant: 'q2',
-            category: 'GLOBAL',
-            priority: 'normale',
-            program: 'Général',
-            createdAt: getOffsetDateISO(176),
-            completed: false,
-            subtasks: [],
-            blockedBy: [],
-            notes: ''
-        },
-        {
-            id: 't_moto',
-            title: 'Permis moto',
-            quadrant: 'q2',
-            category: 'Moto & Terrain',
-            priority: 'haute',
-            program: 'A2',
-            createdAt: getOffsetDateISO(156),
-            completed: false,
-            subtasks: [
-                { id: 's1', title: 'Plateau lent & chrono', done: false },
-                { id: 's2', title: 'Circulation en agglomération', done: false },
-                { id: 's3', title: 'Choix de la monture (Hornet / MT-07 / Duke)', done: false }
-            ],
-            blockedBy: [],
-            notes: 'Code validé en mai'
-        },
-        {
-            id: 't_panier',
-            title: 'Panier',
-            quadrant: 'q3',
-            category: 'GLOBAL',
-            priority: 'normale',
-            program: 'Général',
-            createdAt: getOffsetDateISO(150),
-            completed: false,
-            subtasks: [
-                { id: 'sp1', title: 'Module A', done: false },
-                { id: 'sp2', title: 'Module B', done: false },
-                { id: 'sp3', title: 'Module C', done: false },
-                { id: 'sp4', title: 'Module D', done: false },
-                { id: 'sp5', title: 'Module E', done: false }
-            ],
-            blockedBy: [],
-            notes: ''
-        },
-        {
-            id: 't_crapahuter',
-            title: 'Crapahuter',
-            quadrant: 'q4',
-            category: 'Bivouac',
-            priority: 'normale',
-            program: 'Sentier des Roches',
-            createdAt: getOffsetDateISO(128),
-            completed: false,
-            subtasks: [],
-            blockedBy: ['t_moto'],
-            notes: 'Nécessite la validation du permis moto pour le transport'
-        }
-    ]
-};
-
-function getOffsetDateISO(days) {
-    const d = new Date();
-    d.setDate(d.getDate() - days);
-    return toDateStr(d);
-}
-
-function generateMockHistory(days, probability) {
-    const hist = {};
-    const dates = getRollingDates(days);
-    dates.forEach(ds => {
-        if (Math.random() < probability) hist[ds] = true;
-    });
-    return hist;
-}
-
-let db = loadDatabase();
-let activeZoomQuadrant = null;
-let activeTaskId = null;
-let focusTimer = null;
-let focusSeconds = 1500;
-let searchQuery = '';
-
-function loadDatabase() {
-    try {
-        const raw = localStorage.getItem(DB_KEY);
-        if (!raw) return JSON.parse(JSON.stringify(INITIAL_DB));
-        const parsed = JSON.parse(raw);
-        return Object.assign(JSON.parse(JSON.stringify(INITIAL_DB)), parsed);
-    } catch (e) {
-        return JSON.parse(JSON.stringify(INITIAL_DB));
-    }
-}
-
-function persist() {
-    localStorage.setItem(DB_KEY, JSON.stringify(db));
-}
-
-function toast(msg) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.style.display = 'block';
-    clearTimeout(window._tTimer);
-    window._tTimer = setTimeout(() => { el.style.display = 'none'; }, 2200);
-}
-
-/* ============================================================================
-   CALCULS ET LOGIQUE MÉTIER
-============================================================================ */
-const QUAD_CONFIG = {
-    q1: { title: 'Faire', sub: 'Urgent & Important', color: 'var(--q1-color)', weight: 50 },
-    q2: { title: 'Planifier', sub: 'Important, pas urgent', color: 'var(--q2-color)', weight: 35 },
-    q3: { title: 'Déléguer', sub: 'Urgent, pas important', color: 'var(--q3-color)', weight: 20 },
-    q4: { title: 'Éliminer', sub: 'Ni urgent, ni important', color: 'var(--q4-color)', weight: 10 },
-    inbox: { title: 'Vide-tête', sub: 'Idées brutes à trier', color: 'var(--accent-emerald)', weight: 5 }
-};
-
-function getUnfinishedBlockers(task) {
-    if (!task.blockedBy || !task.blockedBy.length) return [];
-    return task.blockedBy
-        .map(id => db.tasks.find(t => t.id === id))
-        .filter(t => t && !t.completed);
-}
-
-function isBlocked(task) {
-    return getUnfinishedBlockers(task).length > 0;
-}
-
-function countUnlockedBy(taskId) {
-    return db.tasks.filter(t => !t.completed && t.blockedBy && t.blockedBy.includes(taskId)).length;
-}
-
-function calcStreak(habit) {
-    let streak = 0;
-    const now = new Date();
-    for (let i = 0; i < 365; i++) {
-        const d = new Date(now);
-        d.setDate(d.getDate() - i);
-        const ds = toDateStr(d);
-        if (habit.history && habit.history[ds]) {
-            streak++;
-        } else {
-            if (i === 0) continue;
-            break;
-        }
-    }
-    return streak;
-}
-
-function calcHabitAdherence(habit, days = 30) {
-    const dates = getRollingDates(days);
-    const count = dates.filter(ds => habit.history && habit.history[ds]).length;
-    return Math.round((count / days) * 100);
-}
-
-function calcTacticalScore() {
-    const doneTasks = db.tasks.filter(t => t.completed).length;
-    const habitTicks = db.habits.reduce((acc, h) => {
-        return acc + Object.keys(h.history || {}).length;
-    }, 0);
-    return (doneTasks * 10) + (habitTicks * 2);
-}
-
-/* ============================================================================
-   RENDU PRINCIPAL & UI
-============================================================================ */
-function renderApp() {
-    persist();
-    renderHeader();
-    renderMatrix();
-    renderTodayView();
-    renderHabitsView();
-    renderTempleView();
-    if (activeZoomQuadrant) renderZoomList();
-}
-
-function renderHeader() {
-    document.getElementById('pageMainTitle').firstElementChild.textContent =
-        db.currentCategory === 'GLOBAL' ? 'VUE GLOBALE' : db.currentCategory.toUpperCase();
-
-    document.getElementById('tacticalScoreBadge').textContent = `${calcTacticalScore()} pts`;
-
-    const aggBtn = document.getElementById('globalAggBtn');
-    aggBtn.textContent = db.aggregateGlobal ? '🔓' : '🔒';
-    aggBtn.classList.toggle('active', db.aggregateGlobal);
-
-    const bar = document.getElementById('categoryBar');
-    bar.innerHTML = '';
-
-    db.categories.forEach(cat => {
-        const pill = document.createElement('div');
-        pill.className = 'cat-pill' + (db.currentCategory === cat ? ' active' : '');
-        const pendingCount = db.tasks.filter(t => {
-            if (t.completed || t.quadrant === 'inbox') return false;
-            return (cat === 'GLOBAL' && db.aggregateGlobal) ? true : t.category === cat;
-        }).length;
-
-        pill.innerHTML = `<span>${cat}</span> <span style="opacity:0.65; font-size:0.68rem;">${pendingCount}</span>`;
-        pill.onclick = () => {
-            AudioEngine.click();
-            haptic(10);
-            db.currentCategory = cat;
-            renderApp();
-        };
-        bar.appendChild(pill);
-    });
-
-    const addBtn = document.createElement('div');
-    addBtn.className = 'cat-pill add-cat';
-    addBtn.textContent = '+ Catégorie';
-    addBtn.onclick = createCategoryPrompt;
-    bar.appendChild(addBtn);
-
-    const inboxCount = db.tasks.filter(t => t.quadrant === 'inbox' && !t.completed).length;
-    document.getElementById('inboxCounter').textContent = inboxCount;
-}
-
-function getFilteredTasksForQuadrant(quadId) {
-    return db.tasks
-        .filter(t => {
-            if (t.quadrant !== quadId) return false;
-            if (db.currentCategory !== 'GLOBAL' || !db.aggregateGlobal) {
-                if (t.category !== db.currentCategory) return false;
-            }
-            if (searchQuery) {
-                const q = searchQuery.toLowerCase();
-                const matchTitle = t.title.toLowerCase().includes(q);
-                const matchProg = (t.program || '').toLowerCase().includes(q);
-                const matchCat = t.category.toLowerCase().includes(q);
-                if (!matchTitle && !matchProg && !matchCat) return false;
-            }
-            return true;
-        })
-        .sort((a, b) => {
-            if (a.completed !== b.completed) return a.completed ? 1 : -1;
-            const aBlock = isBlocked(a) ? 1 : 0;
-            const bBlock = isBlocked(b) ? 1 : 0;
-            if (aBlock !== bBlock) return aBlock - bBlock;
-            return calcDaysAgo(b.createdAt) - calcDaysAgo(a.createdAt);
-        });
-}
-
-function renderMatrix() {
-    ['q1', 'q2', 'q3', 'q4'].forEach(qid => {
-        const list = document.getElementById(`matrixList-${qid}`);
-        list.innerHTML = '';
-        const tasks = getFilteredTasksForQuadrant(qid);
-
-        tasks.forEach(t => {
-            const blocked = isBlocked(t);
-            const age = calcDaysAgo(t.createdAt);
-            const leverage = countUnlockedBy(t.id);
-            const subDone = (t.subtasks || []).filter(s => s.done).length;
-            const subTotal = (t.subtasks || []).length;
-
-            const pill = document.createElement('div');
-            pill.className = 'task-pill' + (blocked ? ' blocked' : '') + (t.completed ? ' completed' : '');
-
-            const check = document.createElement('div');
-            check.className = 'radio-circle';
-            check.innerHTML = blocked ? '🔒' : (t.completed ? '✓' : '');
-            check.onclick = (e) => {
-                e.stopPropagation();
-                toggleTaskDone(t.id);
-            };
-
-            const center = document.createElement('div');
-            center.className = 'pill-center';
-
-            let meta = [];
-            if (subTotal > 0) meta.push(`☰ ${subDone}/${subTotal}`);
-            if (leverage > 0) meta.push(`⚡${leverage}`);
-            if (db.currentCategory === 'GLOBAL' && t.category !== 'GLOBAL') meta.push(t.category);
-
-            center.innerHTML = `
-                <div class="pill-title">${escapeHtml(t.title)}</div>
-                ${meta.length ? `<div class="pill-meta">${meta.join(' · ')}</div>` : ''}
-            `;
-
-            const ageBadge = document.createElement('span');
-            ageBadge.className = 'age-badge ' + (age < 14 ? 'fresh' : (age < 60 ? 'warm' : (age < 90 ? 'aging' : '')));
-            ageBadge.textContent = `${age}j`;
-
-            pill.appendChild(check);
-            pill.appendChild(center);
-            pill.appendChild(ageBadge);
-
-            pill.onclick = () => openTaskDetail(t.id);
-            list.appendChild(pill);
-        });
-    });
-}
-
-function renderHabitsView() {
-    const globalGrid = document.getElementById('globalConsistencyGrid');
-    globalGrid.innerHTML = '';
-    const rolling84 = getRollingDates(84);
-    let totalActions = 0;
-
-    rolling84.forEach(ds => {
-        let dayHits = 0;
-        db.habits.forEach(h => {
-            if (h.history && h.history[ds]) dayHits++;
-        });
-        totalActions += dayHits;
-
-        const cell = document.createElement('div');
-        cell.className = 'heat-cell';
-        if (dayHits === 0) cell.classList.add('level-0');
-        else if (dayHits === 1) cell.classList.add('level-1');
-        else if (dayHits === 2) cell.classList.add('level-2');
-        else if (dayHits === 3) cell.classList.add('level-3');
-        else cell.classList.add('level-4');
-
-        if (ds === TODAY_STR) cell.classList.add('today-ring');
-        cell.title = `${ds} : ${dayHits} action(s)`;
-        globalGrid.appendChild(cell);
-    });
-
-    const avg = (totalActions / 84).toFixed(1);
-    document.getElementById('globalHeatAverage').textContent = `Moyenne : ${avg} act/j`;
-
-    const container = document.getElementById('habitsListContainer');
-    container.innerHTML = '';
-
-    db.habits.forEach(habit => {
-        const streak = calcStreak(habit);
-        const adherence = calcHabitAdherence(habit, 28);
-        const isDoneToday = Boolean(habit.history && habit.history[TODAY_STR]);
-
-        const card = document.createElement('div');
-        card.className = 'heat-card';
-
-        const head = document.createElement('div');
-        head.className = 'heat-header';
-        head.innerHTML = `
-            <div class="heat-title">
-                <input type="checkbox" style="width:18px; height:18px; accent-color:var(--accent-emerald);" ${isDoneToday ? 'checked' : ''} onchange="toggleHabitDay('${habit.id}', '${TODAY_STR}')">
-                <span style="${isDoneToday ? 'color:var(--accent-emerald); font-weight:900;' : ''}">${escapeHtml(habit.title)}</span>
-            </div>
-            <div class="streak-pill">🔥 ${streak}j</div>
-        `;
-
-        const gridBox = document.createElement('div');
-        gridBox.className = 'heat-grid-container';
-
-        const matrix = document.createElement('div');
-        matrix.className = 'habit-heatmap-grid';
-
-        const dates28 = getRollingDates(28);
-        dates28.forEach(ds => {
-            const cell = document.createElement('div');
-            const done = Boolean(habit.history && habit.history[ds]);
-            cell.className = 'heat-cell ' + (done ? 'level-4' : 'level-0');
-            if (ds === TODAY_STR) cell.classList.add('today-ring');
-            cell.title = `${ds} : ${done ? 'Validé' : 'Non fait'}`;
-            cell.onclick = () => {
-                toggleHabitDay(habit.id, ds);
-            };
-            matrix.appendChild(cell);
-        });
-        gridBox.appendChild(matrix);
-
-        const foot = document.createElement('div');
-        foot.className = 'heat-stats-row';
-        foot.innerHTML = `
-            <span>Régularité 28j : <strong>${adherence}%</strong></span>
-            <span>Catégorie : <strong>${habit.category}</strong></span>
-            <span style="color:var(--accent-crimson); cursor:pointer;" onclick="deleteHabit('${habit.id}')">Supprimer</span>
-        `;
-
-        card.appendChild(head);
-        card.appendChild(gridBox);
-        card.appendChild(foot);
-        container.appendChild(card);
-    });
-}
-
-function toggleHabitDay(habitId, dateStr) {
-    const habit = db.habits.find(h => h.id === habitId);
-    if (!habit) return;
-    AudioEngine.click();
-    haptic(20);
-    if (!habit.history) habit.history = {};
-    if (habit.history[dateStr]) {
-        delete habit.history[dateStr];
-    } else {
-        habit.history[dateStr] = true;
-    }
-    renderApp();
-}
-
-function createNewHabitPrompt() {
-    const title = prompt('Nom de la nouvelle routine / habitude :');
-    if (!title || !title.trim()) return;
-    db.habits.push({
-        id: 'h_' + Date.now(),
-        title: title.trim(),
-        category: db.currentCategory,
-        history: {}
-    });
-    toast('Habitude initialisée !');
-    renderApp();
-}
-
-function deleteHabit(habitId) {
-    if (!confirm('Supprimer cette habitude et toute sa heatmap ?')) return;
-    db.habits = db.habits.filter(h => h.id !== habitId);
-    renderApp();
-}
-
-function renderTodayView() {
-    const activeTasks = db.tasks.filter(t => !t.completed && t.quadrant !== 'inbox');
-    const leverageTasks = activeTasks.filter(t => countUnlockedBy(t.id) > 0 && !isBlocked(t));
-    const rotting = activeTasks.filter(t => calcDaysAgo(t.createdAt) >= 90);
-
-    document.getElementById('todayStatsRow').innerHTML = `
-        <div class="stat-box"><div class="val">${activeTasks.length}</div><div class="lbl">Tâches</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-cyan);">${leverageTasks.length}</div><div class="lbl">Leviers ⚡</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-crimson);">${rotting.length}</div><div class="lbl">Rotting 💀</div></div>
-    `;
-
-    const fillList = (elId, list, emptyMsg) => {
-        const box = document.getElementById(elId);
-        box.innerHTML = '';
-        if (list.length === 0) {
-            box.innerHTML = `<div style="font-size:0.78rem; color:var(--text-tertiary); padding:6px 0;">${emptyMsg}</div>`;
-            return;
-        }
-        list.forEach(t => {
-            const age = calcDaysAgo(t.createdAt);
-            const unlocks = countUnlockedBy(t.id);
-            const card = document.createElement('div');
-            card.className = 'full-card';
-            card.innerHTML = `
-                <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')"></div>
-                <div style="flex:1;">
-                    <div style="font-weight:800; font-size:0.9rem;">${escapeHtml(t.title)}</div>
-                    <div style="font-size:0.7rem; color:var(--text-secondary); margin-top:2px;">
-                        ${QUAD_CONFIG[t.quadrant].title} · ${t.category} ${unlocks ? `· ⚡ Débloque ${unlocks}` : ''}
-                    </div>
-                </div>
-                <span class="age-badge">${age}j</span>
-            `;
-            card.onclick = () => openTaskDetail(t.id);
-            box.appendChild(card);
-        });
-    };
-
-    fillList('leverageTasksList', leverageTasks, 'Aucun goulot d\'étranglement actif.');
-    fillList('todayPrimaryList', activeTasks.filter(t => (t.quadrant === 'q1' || t.quadrant === 'q2') && !isBlocked(t)).slice(0, 5), 'Aucune tâche prioritaire en attente.');
-    fillList('rottingTasksList', rotting, 'Aucune tâche en stagnation extrême (+90 jours).');
-}
-
-function renderTempleView() {
-    const active = db.tasks.filter(t => !t.completed);
-    const avgAge = active.length
-        ? Math.round(active.reduce((acc, t) => acc + calcDaysAgo(t.createdAt), 0) / active.length)
-        : 0;
-    const blockedCount = active.filter(t => isBlocked(t)).length;
-
-    document.getElementById('templeStatsRow').innerHTML = `
-        <div class="stat-box"><div class="val">${avgAge}j</div><div class="lbl">Âge Moyen</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-crimson);">${blockedCount}</div><div class="lbl">Verrouillées</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-purple);">${db.categories.length}</div><div class="lbl">Catégories</div></div>
-    `;
-
-    const depBox = document.getElementById('templeDependencyList');
-    depBox.innerHTML = '';
-    const lockedTasks = db.tasks.filter(t => t.blockedBy && t.blockedBy.length > 0);
-
-    if (lockedTasks.length === 0) {
-        depBox.innerHTML = '<div style="font-size:0.78rem; color:var(--text-tertiary);">Aucun lien de dépendance paramétré.</div>';
-        return;
-    }
-
-    lockedTasks.forEach(t => {
-        const blockers = t.blockedBy.map(id => db.tasks.find(x => x.id === id)).filter(Boolean);
-        const card = document.createElement('div');
-        card.className = 'full-card';
-        card.innerHTML = `
-            <div style="flex:1;">
-                <div style="font-size:0.75rem; color:var(--accent-emerald); font-weight:700;">
-                    ${blockers.map(b => `${b.completed ? '✓' : '🔒'} ${escapeHtml(b.title)}`).join(' + ')}
-                </div>
-                <div style="font-size:0.88rem; font-weight:800; margin-top:4px;">
-                    ↳ Débloque : ${escapeHtml(t.title)} (${t.category})
-                </div>
-            </div>
-        `;
-        card.onclick = () => openTaskDetail(t.id);
-        depBox.appendChild(card);
-    });
-}
-
-function openTaskDetail(taskId) {
-    activeTaskId = taskId;
-    const t = db.tasks.find(x => x.id === taskId);
-    if (!t) return;
-    AudioEngine.click();
-
-    document.getElementById('editTaskTitle').value = t.title;
-    document.getElementById('editTaskQuadrant').value = t.quadrant;
-    document.getElementById('editTaskPriority').value = t.priority || 'normale';
-    document.getElementById('editTaskDate').value = t.createdAt;
-    document.getElementById('editTaskProgram').value = t.program || '';
-
-    const catSelect = document.getElementById('editTaskCategory');
-    catSelect.innerHTML = '';
-    db.categories.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        if (c === t.category) opt.selected = true;
-        catSelect.appendChild(opt);
-    });
-
-    renderSubtasksSection(t);
-    renderDependenciesSection(t);
-
-    document.getElementById('taskDetailModal').classList.add('open');
-}
-
-function closeTaskDetail() {
-    activeTaskId = null;
-    document.getElementById('taskDetailModal').classList.remove('open');
-    renderApp();
-}
-
-function updateTaskProp(prop, val) {
-    const t = db.tasks.find(x => x.id === activeTaskId);
-    if (!t) return;
-    t[prop] = val;
-    renderApp();
-}
-
-function deleteActiveTask() {
-    if (!confirm('Supprimer définitivement cette tâche tactique ?')) return;
-    db.tasks = db.tasks.filter(t => t.id !== activeTaskId);
-    db.tasks.forEach(t => {
-        if (t.blockedBy) t.blockedBy = t.blockedBy.filter(id => id !== activeTaskId);
-    });
-    closeTaskDetail();
-}
-
-function renderSubtasksSection(t) {
-    const subs = t.subtasks || [];
-    const done = subs.filter(s => s.done).length;
-    document.getElementById('subtaskCounterLabel').textContent = `SOUS-TÂCHES (${done}/${subs.length})`;
-
-    const box = document.getElementById('activeSubtasksContainer');
-    box.innerHTML = '';
-    subs.forEach((s, idx) => {
-        const row = document.createElement('div');
-        row.className = 'form-row';
-        row.innerHTML = `
-            <input type="checkbox" style="width:18px; height:18px; accent-color:var(--accent-emerald);" ${s.done ? 'checked' : ''} onchange="toggleSubtaskDone(${idx})">
-            <span style="flex:1; font-size:0.88rem; font-weight:600; ${s.done ? 'text-decoration:line-through; color:var(--text-tertiary);' : ''}">${escapeHtml(s.title)}</span>
-            <button class="btn-text" style="color:var(--accent-crimson);" onclick="removeSubtask(${idx})">✕</button>
-        `;
-        box.appendChild(row);
-    });
-}
-
-function addSubtaskToActive() {
-    const input = document.getElementById('newSubtaskTitle');
-    const txt = input.value.trim();
-    if (!txt || !activeTaskId) return;
-    const t = db.tasks.find(x => x.id === activeTaskId);
-    if (!t.subtasks) t.subtasks = [];
-    t.subtasks.push({ id: 'st_' + Date.now(), title: txt, done: false });
-    input.value = '';
-    renderSubtasksSection(t);
-    renderApp();
-}
-
-function toggleSubtaskDone(idx) {
-    const t = db.tasks.find(x => x.id === activeTaskId);
-    t.subtasks[idx].done = !t.subtasks[idx].done;
-    AudioEngine.click();
-    renderSubtasksSection(t);
-    renderApp();
-}
-
-function removeSubtask(idx) {
-    const t = db.tasks.find(x => x.id === activeTaskId);
-    t.subtasks.splice(idx, 1);
-    renderSubtasksSection(t);
-    renderApp();
-}
-
-function renderDependenciesSection(t) {
-    const select = document.getElementById('dependencySelect');
-    select.innerHTML = '<option value="">+ Ajouter un verrou...</option>';
-
-    db.tasks
-        .filter(x => x.id !== t.id && (!t.blockedBy || !t.blockedBy.includes(x.id)))
-        .forEach(cand => {
-            const opt = document.createElement('option');
-            opt.value = cand.id;
-            opt.textContent = `[${cand.category}] ${cand.title}`;
-            select.appendChild(opt);
-        });
-
-    const box = document.getElementById('activeDependenciesBox');
-    box.innerHTML = '';
-    if (!t.blockedBy || t.blockedBy.length === 0) {
-        box.innerHTML = '<div style="font-size:0.75rem; color:var(--text-tertiary);">Aucun verrou bloquant.</div>';
-        return;
-    }
-
-    t.blockedBy.forEach(bid => {
-        const blocker = db.tasks.find(x => x.id === bid);
-        if (!blocker) return;
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.justifyContent = 'space-between';
-        row.style.alignItems = 'center';
-        row.style.background = 'rgba(255,255,255,0.04)';
-        row.style.padding = '8px 12px';
-        row.style.borderRadius = '8px';
-        row.innerHTML = `
-            <span style="font-size:0.8rem; font-weight:700; color:${blocker.completed ? 'var(--accent-emerald)' : 'var(--accent-crimson)'};">
-                ${blocker.completed ? '✓ Résolu' : '🔒 Bloqué'} : ${escapeHtml(blocker.title)}
-            </span>
-            <button class="btn-text" style="color:var(--accent-crimson);" onclick="removeDependency('${bid}')">✕</button>
-        `;
-        box.appendChild(row);
-    });
-}
-
-function attachDependency(blockerId) {
-    if (!blockerId || !activeTaskId) return;
-    const t = db.tasks.find(x => x.id === activeTaskId);
-    const blocker = db.tasks.find(x => x.id === blockerId);
-    if (blocker.blockedBy && blocker.blockedBy.includes(t.id)) {
-        toast('⚠️ Boucle circulaire interdite !');
-        return;
-    }
-    if (!t.blockedBy) t.blockedBy = [];
-    t.blockedBy.push(blockerId);
-    renderDependenciesSection(t);
-    renderApp();
-}
-
-function removeDependency(bid) {
-    const t = db.tasks.find(x => x.id === activeTaskId);
-    t.blockedBy = (t.blockedBy || []).filter(id => id !== bid);
-    renderDependenciesSection(t);
-    renderApp();
-}
-
-function toggleTaskDone(taskId) {
-    const t = db.tasks.find(x => x.id === taskId);
-    if (!t) return;
-
-    const blockers = getUnfinishedBlockers(t);
-    if (!t.completed && blockers.length > 0) {
-        AudioEngine.click();
-        haptic(50);
-        toast(`🔒 Bloqué par : ${blockers.map(b => b.title).join(', ')}`);
-        return;
-    }
-
-    t.completed = !t.completed;
-    if (t.completed) {
-        AudioEngine.unlock();
-        haptic([20, 50, 30]);
-        const unlocked = countUnlockedBy(t.id);
-        if (unlocked > 0) toast(`⚡ Tâche abattue ! ${unlocked} tâche(s) débloquée(s).`);
-    } else {
-        AudioEngine.click();
-        haptic(15);
-    }
-    renderApp();
-}
-
-function openQuadrantDetail(qid) {
-    activeZoomQuadrant = qid;
-    const meta = QUAD_CONFIG[qid];
-    document.getElementById('zoomQuadHeading').textContent = meta.title;
-    document.getElementById('zoomQuadHeading').style.color = meta.color;
-    document.getElementById('zoomQuadSubheading').textContent = meta.sub;
-    document.getElementById('zoomCatIndicator').textContent = db.currentCategory;
-    renderZoomList();
-    document.getElementById('quadZoomModal').classList.add('open');
-    setTimeout(() => document.getElementById('quickTaskInput').focus(), 120);
-}
-
-function closeQuadrantDetail() {
-    activeZoomQuadrant = null;
-    document.getElementById('quadZoomModal').classList.remove('open');
-}
-
-function submitQuickTask() {
-    const input = document.getElementById('quickTaskInput');
-    const val = input.value.trim();
-    if (!val || !activeZoomQuadrant) return;
-    AudioEngine.click();
-
-    db.tasks.unshift({
-        id: 't_' + Date.now(),
-        title: val,
-        quadrant: activeZoomQuadrant,
-        category: db.currentCategory,
-        priority: activeZoomQuadrant === 'q1' ? 'haute' : 'normale',
-        program: 'Général',
-        createdAt: TODAY_STR,
-        completed: false,
-        subtasks: [],
-        blockedBy: [],
-        notes: ''
-    });
-
-    input.value = '';
-    renderApp();
-}
-
-function renderZoomList() {
-    const box = document.getElementById('zoomTasksList');
-    box.innerHTML = '';
-    const tasks = activeZoomQuadrant === 'inbox'
-        ? db.tasks.filter(t => t.quadrant === 'inbox')
-        : getFilteredTasksForQuadrant(activeZoomQuadrant);
-
-    if (tasks.length === 0) {
-        box.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-tertiary);">Aucune tâche dans ce quadrant.</div>`;
-        return;
-    }
-
-    tasks.forEach(t => {
-        const age = calcDaysAgo(t.createdAt);
-        const card = document.createElement('div');
-        card.className = 'full-card';
-        card.style.opacity = t.completed ? '0.45' : '1';
-        card.innerHTML = `
-            <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')">
-                ${t.completed ? '✓' : ''}
-            </div>
-            <div style="flex:1;">
-                <div style="font-weight:800; font-size:0.92rem;">${escapeHtml(t.title)}</div>
-                <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;">
-                    ${t.category} · Créé il y a ${age}j
-                </div>
-            </div>
-            <span class="age-badge">${age}j</span>
-        `;
-        card.onclick = () => openTaskDetail(t.id);
-        box.appendChild(card);
-    });
-}
-
-function triggerTacticalFocus() {
-    const candidates = db.tasks.filter(t => !t.completed && !isBlocked(t) && t.quadrant !== 'inbox');
-    const body = document.getElementById('focusBody');
-
-    if (candidates.length === 0) {
-        body.innerHTML = `<h3>Aucune tâche exécutable immédiatement.</h3><p style="color:var(--text-secondary);">Toutes tes tâches sont bloquées ou achevées.</p>`;
-        document.getElementById('focusModal').classList.add('open');
-        return;
-    }
-
-    const scored = candidates.map(t => {
-        const qScore = QUAD_CONFIG[t.quadrant].weight;
-        const pScore = t.priority === 'critique' ? 40 : (t.priority === 'haute' ? 25 : 10);
-        const levScore = countUnlockedBy(t.id) * 30;
-        const ageScore = Math.min(40, calcDaysAgo(t.createdAt) * 0.5);
-        return { task: t, total: qScore + pScore + levScore + ageScore };
-    }).sort((a, b) => b.total - a.total);
-
-    const target = scored[0].task;
-    const unlocks = countUnlockedBy(target.id);
-    focusSeconds = 25 * 60;
-    clearInterval(focusTimer);
-    focusTimer = null;
-
-    body.innerHTML = `
-        <span class="score-badge" style="color:var(--accent-emerald); border-color:var(--accent-emerald);">OBJECTIF PRINCIPAL</span>
-        <h2 style="font-size:1.6rem; margin:12px 0 4px 0; font-weight:900;">${escapeHtml(target.title)}</h2>
-        <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;">
-            ${QUAD_CONFIG[target.quadrant].title} · ${target.category} ${unlocks ? `· ⚡ Débloque ${unlocks} tâche(s)` : ''}
-        </div>
-        <div class="timer-readout" id="focusClock">25:00</div>
-        <div style="display:flex; gap:10px; width:100%; max-width:320px;">
-            <button class="btn-action-primary" style="flex:1;" onclick="toggleTimer()">▶ Démarrer</button>
-            <button class="btn-action-primary" style="flex:1; background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border-medium);" onclick="toggleTaskDone('${target.id}'); closeFocusModal();">✓ Fait</button>
-        </div>
-    `;
-    document.getElementById('focusModal').classList.add('open');
-}
-
-function toggleTimer() {
-    const clock = document.getElementById('focusClock');
-    if (focusTimer) {
-        clearInterval(focusTimer);
-        focusTimer = null;
-        return;
-    }
-    AudioEngine.click();
-    focusTimer = setInterval(() => {
-        focusSeconds--;
-        if (focusSeconds <= 0) {
-            clearInterval(focusTimer);
-            AudioEngine.bell();
-            toast('🔔 Session Focus accomplie !');
-            return;
-        }
-        const m = String(Math.floor(focusSeconds / 60)).padStart(2, '0');
-        const s = String(focusSeconds % 60).padStart(2, '0');
-        if (clock) clock.textContent = `${m}:${s}`;
-    }, 1000);
-}
-
-function closeFocusModal() {
-    clearInterval(focusTimer);
-    focusTimer = null;
-    document.getElementById('focusModal').classList.remove('open');
-}
-
-function toggleGlobalAggregation() {
-    db.aggregateGlobal = !db.aggregateGlobal;
-    toast(db.aggregateGlobal ? '🔓 Vue Globale : Toutes catégories agrégées' : '🔒 Vue Globale : Catégorie GLOBAL uniquement');
-    renderApp();
-}
-
-function createCategoryPrompt() {
-    const name = prompt('Nom de la catégorie :');
-    if (!name || !name.trim()) return;
-    const clean = name.trim();
-    if (!db.categories.includes(clean)) db.categories.push(clean);
-    db.currentCategory = clean;
-    renderApp();
-}
-
-function openCategorySheet() {
-    if (db.currentCategory === 'GLOBAL') {
-        createCategoryPrompt();
-        return;
-    }
-    const act = prompt(`Catégorie : "${db.currentCategory}"\n1. Renommer\n2. Supprimer\n3. Nouvelle catégorie`);
-    if (act === '1') {
-        const ren = prompt('Nouveau nom :', db.currentCategory);
-        if (ren && ren.trim()) {
-            const clean = ren.trim();
-            db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = clean; });
-            db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = clean; });
-            const idx = db.categories.indexOf(db.currentCategory);
-            if (idx > -1) db.categories[idx] = clean;
-            db.currentCategory = clean;
-            renderApp();
-        }
-    } else if (act === '2') {
-        if (confirm(`Supprimer "${db.currentCategory}" ? Les éléments seront rebasculés dans GLOBAL.`)) {
-            db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = 'GLOBAL'; });
-            db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = 'GLOBAL'; });
-            db.categories = db.categories.filter(c => c !== db.currentCategory);
-            db.currentCategory = 'GLOBAL';
-            renderApp();
-        }
-    } else if (act === '3') {
-        createCategoryPrompt();
-    }
-}
-
-function toggleSearch() {
-    const wrap = document.getElementById('searchWrapper');
-    wrap.classList.toggle('open');
-    if (wrap.classList.contains('open')) {
-        document.getElementById('globalSearchInput').focus();
-    } else {
-        searchQuery = '';
-        renderApp();
-    }
-}
-
-function handleGlobalSearch(val) {
-    searchQuery = val.trim();
-    renderMatrix();
-}
-
-function switchNavTab(tabName) {
-    AudioEngine.click();
-    haptic(10);
-    document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-    document.getElementById(`tab-${tabName}`).classList.add('active');
-    document.querySelector(`.nav-btn[data-tab="${tabName}"]`).classList.add('active');
-    renderApp();
-}
-
-function exportDataJSON() {
-    const str = JSON.stringify(db, null, 2);
-    const blob = new Blob([str], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `tactique-os-${TODAY_STR}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast('Sauvegarde exportée avec succès !');
-}
-
-function importDataJSON(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const r = new FileReader();
-    r.onload = (evt) => {
-        try {
-            const data = JSON.parse(evt.target.result);
-            if (data && Array.isArray(data.tasks)) {
-                db = data;
-                renderApp();
-                toast('Données importées avec succès !');
-            }
-        } catch (err) {
-            alert('Fichier JSON invalide.');
-        }
-    };
-    r.readAsText(file);
-}
-
-function resetToDemonstrationData() {
-    if (!confirm('Écraser les données locales par la configuration de démonstration ?')) return;
-    db = JSON.parse(JSON.stringify(INITIAL_DB));
-    renderApp();
-}
-
-function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    }[c]));
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    renderApp();
-});
-</script>
-</body>
-</html>
+    #quad-q1 .radio-circle 
