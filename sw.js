@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tactique-cache-v3'; // À changer à chaque update majeure
+const CACHE_NAME = 'tactique-live-cache';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -7,7 +7,7 @@ const ASSETS_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Prend le contrôle immédiatement sans attendre la fermeture de l'app
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
   );
@@ -21,29 +21,32 @@ self.addEventListener('activate', (event) => {
       )
     )
   );
-  self.clients.claim(); // Applique le nouveau cache immédiatement aux clients ouverts
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
-  // Pour la page principale HTML : priorité réseau, fallback sur le cache
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, response.clone());
-            return response;
-          });
-        })
-        .catch(() => caches.match('./index.html'))
-    );
-    return;
-  }
+  if (event.request.method !== 'GET') return;
 
-  // Pour les autres ressources (icônes, etc.) : priorité cache
+  // Priorité Réseau (sans cache HTTP) pour récupérer chaque nouveau commit GitHub en direct
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
+    fetch(event.request, { cache: 'no-store' })
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Fallback hors-ligne (Mode Avion)
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+        });
+      })
   );
 });
