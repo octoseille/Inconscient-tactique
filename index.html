@@ -196,11 +196,6 @@
         box-shadow: 0 0 10px var(--accent-emerald-glow);
     }
 
-    .cat-pill.add-cat {
-        border-style: dashed;
-        color: var(--accent-emerald);
-    }
-
     /* CONTENEUR PRINCIPAL */
     .view-container {
         flex: 1;
@@ -229,7 +224,7 @@
         gap: 8px;
     }
 
-    /* MATRICE EISENHOWER */
+    /* MATRICE EISENHOWER & DRAG-AND-DROP */
     .matrix-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -242,14 +237,24 @@
 
     .quadrant {
         background: rgba(18, 29, 25, 0.75);
-        border: 1px solid var(--border-subtle);
+        border: 1.5px solid var(--border-subtle);
         border-radius: var(--radius-md);
         padding: 10px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
         backdrop-filter: blur(8px);
+        transition: border-color 0.15s, background-color 0.15s, transform 0.15s;
     }
+
+    .quadrant.drop-target-active {
+        background: rgba(0, 230, 118, 0.09);
+        transform: scale(0.99);
+    }
+    #quad-q1.drop-target-active { border-color: var(--q1-color); box-shadow: inset 0 0 16px rgba(255, 61, 113, 0.25); }
+    #quad-q2.drop-target-active { border-color: var(--q2-color); box-shadow: inset 0 0 16px rgba(0, 229, 255, 0.25); }
+    #quad-q3.drop-target-active { border-color: var(--q3-color); box-shadow: inset 0 0 16px rgba(255, 171, 64, 0.25); }
+    #quad-q4.drop-target-active { border-color: var(--q4-color); box-shadow: inset 0 0 16px rgba(144, 164, 174, 0.25); }
 
     .quad-header {
         display: flex;
@@ -293,7 +298,7 @@
     .quad-tasks::-webkit-scrollbar { display: none; }
 
     .task-pill {
-        background: rgba(22, 36, 32, 0.9);
+        background: rgba(22, 36, 32, 0.92);
         border: 1px solid var(--border-subtle);
         border-radius: 18px;
         padding: 6px 10px;
@@ -302,8 +307,13 @@
         gap: 8px;
         cursor: pointer;
         min-height: 36px;
+        transition: opacity 0.15s, transform 0.12s;
+        touch-action: pan-y;
     }
-    .task-pill:active { transform: scale(0.97); }
+    .task-pill.dragging-source {
+        opacity: 0.25 !important;
+        transform: scale(0.95);
+    }
 
     #quad-q1 .task-pill { border-color: rgba(255, 61, 113, 0.4); }
     #quad-q2 .task-pill { border-color: rgba(0, 229, 255, 0.35); }
@@ -318,6 +328,25 @@
     .task-pill.completed {
         opacity: 0.32;
         text-decoration: line-through;
+    }
+
+    .drag-ghost-pill {
+        position: fixed;
+        z-index: 999;
+        pointer-events: none;
+        background: var(--bg-card);
+        border: 1.5px solid var(--accent-emerald);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75), 0 0 14px var(--accent-emerald-glow);
+        border-radius: 20px;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #fff;
+        transform: translate(-50%, -120%) scale(1.06);
+        white-space: nowrap;
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .radio-circle {
@@ -373,7 +402,7 @@
     .age-badge.warm { color: var(--accent-cyan); }
     .age-badge.aging { color: var(--accent-amber); }
 
-    /* CONTRÔLES FLOTTANTS (UNIQUEMENT SUR LA MATRICE) */
+    /* CONTRÔLES FLOTTANTS */
     .floating-bar {
         position: fixed;
         bottom: 72px;
@@ -382,11 +411,8 @@
         align-items: center;
         gap: 8px;
         z-index: 25;
-        transition: opacity 0.15s, transform 0.15s;
     }
-    .floating-bar.hidden {
-        display: none !important;
-    }
+    .floating-bar.hidden { display: none !important; }
 
     .btn-magic {
         width: 42px;
@@ -403,12 +429,11 @@
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
     }
-    .btn-magic:active { transform: scale(0.92); }
 
     .btn-videtete {
         background: var(--accent-emerald);
         color: #031208;
-        border: none;
+        border: 2px solid transparent;
         border-radius: 24px;
         padding: 10px 16px;
         font-size: 0.84rem;
@@ -418,8 +443,12 @@
         gap: 7px;
         cursor: pointer;
         box-shadow: 0 6px 18px var(--accent-emerald-glow);
+        transition: transform 0.15s, border-color 0.15s;
     }
-    .btn-videtete:active { transform: scale(0.95); }
+    .btn-videtete.drop-target-active {
+        transform: scale(1.12);
+        border-color: #fff;
+    }
 
     .badge-inbox-count {
         background: #031208;
@@ -505,9 +534,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.6rem;
+        font-size: 0.58rem;
         font-weight: 800;
-        color: rgba(255, 255, 255, 0.78);
+        color: rgba(255, 255, 255, 0.8);
         touch-action: manipulation;
     }
 
@@ -518,8 +547,8 @@
     .heat-cell.level-4 { background: var(--heat-4); color: #03140a; font-weight: 900; }
 
     .heat-cell.bad-1 { background: var(--heat-bad-1); }
-    .heat-cell.bad-2 { background: var(--heat-bad-2); }
-    .heat-cell.bad-3 { background: var(--heat-bad-3); }
+    .heat-cell.bad-2 { background: var(--heat-bad-2); color: #fff; }
+    .heat-cell.bad-3 { background: var(--heat-bad-3); color: #fff; }
     .heat-cell.bad-4 { background: var(--heat-bad-4); color: #fff; font-weight: 900; }
 
     .heat-cell.empty-cell {
@@ -535,7 +564,6 @@
         z-index: 4;
     }
 
-    /* BARRE INTERMÉDIAIRE HABITUDES + POINTS DE CARROUSEL */
     .routine-bar-row {
         display: flex;
         justify-content: space-between;
@@ -677,7 +705,7 @@
     }
 
     .monument-val {
-        font-size: 2.75rem;
+        font-size: 2.7rem;
         font-weight: 900;
         font-variant-numeric: tabular-nums;
         letter-spacing: -1px;
@@ -697,7 +725,7 @@
         font-weight: 600;
     }
 
-    /* ROULETTE HAPTIQUE / BARILLET COMPACT ISOLÉ */
+    /* ROULETTE HAPTIQUE COMPACTE ISOLÉE */
     .dial-controller-box {
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
@@ -811,7 +839,7 @@
         border: 1px solid var(--border-subtle);
     }
 
-    /* MINI HEATMAP 4 SEMAINES ÉLASTIQUE (S'ADAPTE SANS JAMAIS DÉBORDER) */
+    /* MINI HEATMAP 4 SEMAINES ÉLASTIQUE */
     .mini-heatmap-wrap {
         flex: 1;
         min-height: 0;
@@ -868,7 +896,6 @@
         gap: 3px;
     }
 
-    /* INDICATEURS DE SLIDE */
     .carousel-dots-row {
         display: flex;
         justify-content: center;
@@ -889,7 +916,7 @@
         background: var(--accent-emerald);
     }
 
-    /* GRAPHE DE DÉPENDANCES VISUEL (ONGLET RÉSEAU) */
+    /* ONGLET RÉSEAU : CLUSTERS INDÉPENDANTS & ALGORITHME SUGIYAMA */
     .quick-link-card {
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
@@ -918,19 +945,47 @@
         min-width: 0;
     }
 
-    .network-stage {
-        position: relative;
-        background: rgba(12, 20, 18, 0.7);
-        border: 1px solid var(--border-subtle);
+    /* BARRE D'INSPECTION D'UN NOEUD SÉLECTIONNÉ */
+    .node-inspector-bar {
+        display: none;
+        background: var(--bg-card);
+        border: 1px solid var(--accent-cyan);
         border-radius: var(--radius-md);
-        padding: 18px 12px;
-        min-height: 300px;
+        padding: 10px 12px;
+        flex-direction: column;
+        gap: 8px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+    }
+    .node-inspector-bar.open { display: flex; }
+
+    .network-clusters-wrap {
         display: flex;
         flex-direction: column;
-        gap: 36px;
-        overflow-x: auto;
+        gap: 14px;
     }
-    .network-svg-layer {
+
+    .network-cluster-card {
+        position: relative;
+        background: rgba(14, 23, 20, 0.82);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 16px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 38px;
+        overflow: hidden;
+    }
+    .cluster-label {
+        position: absolute;
+        top: 6px;
+        left: 10px;
+        font-size: 0.55rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+    }
+    .cluster-svg-layer {
         position: absolute;
         inset: 0;
         width: 100%;
@@ -938,55 +993,82 @@
         pointer-events: none;
         z-index: 1;
     }
-    .network-tier {
+    .cluster-tier {
         display: flex;
+        flex-wrap: nowrap;
         justify-content: space-around;
         align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
+        gap: 8px;
         position: relative;
         z-index: 2;
+        width: 100%;
     }
     .graph-node {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 155px;
         background: var(--bg-card);
         border: 1.5px solid var(--border-medium);
-        border-radius: 12px;
-        padding: 8px 12px;
-        min-width: 120px;
-        max-width: 165px;
+        border-radius: 11px;
+        padding: 7px 10px;
         cursor: pointer;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
-        transition: transform 0.12s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+        transition: transform 0.12s, opacity 0.18s, border-color 0.15s;
     }
     .graph-node:active { transform: scale(0.95); }
     .graph-node.node-lever {
         border-color: var(--accent-emerald);
-        box-shadow: 0 0 12px rgba(0, 230, 118, 0.2);
+        box-shadow: 0 0 10px rgba(0, 230, 118, 0.18);
     }
     .graph-node.node-locked {
         border-color: var(--accent-crimson);
         border-style: dashed;
     }
     .graph-node.node-done {
-        opacity: 0.45;
+        opacity: 0.42;
         border-color: var(--text-tertiary);
     }
+    .graph-node.node-selected {
+        outline: 2px solid var(--accent-cyan);
+        outline-offset: 1px;
+        transform: scale(1.03);
+    }
+    .graph-node.node-dimmed {
+        opacity: 0.22;
+    }
     .node-cat {
-        font-size: 0.56rem;
+        font-size: 0.54rem;
         font-weight: 800;
         text-transform: uppercase;
         color: var(--text-secondary);
         display: flex;
         justify-content: space-between;
+        gap: 4px;
     }
     .node-title {
-        font-size: 0.78rem;
+        font-size: 0.74rem;
         font-weight: 800;
         color: var(--text-primary);
         margin-top: 2px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    /* TRI RAPIDE VIDE-TÊTE */
+    .quick-quad-badges {
+        display: flex;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+    .q-mini-btn {
+        border: 1px solid var(--border-medium);
+        background: var(--bg-panel);
+        font-size: 0.62rem;
+        font-weight: 900;
+        padding: 4px 7px;
+        border-radius: 7px;
+        cursor: pointer;
     }
 
     /* BOTTOM NAV (3 ONGLETS) */
@@ -1249,10 +1331,10 @@
 <!-- CONTENEUR DES ONGLETS -->
 <main class="view-container">
 
-    <!-- ONGLET 1 : MATRICE D'EISENHOWER 2x2 -->
+    <!-- ONGLET 1 : MATRICE D'EISENHOWER 2x2 (AVEC GLISSER-DÉPOSER) -->
     <section class="tab-view active" id="tab-matrix">
         <div class="matrix-grid">
-            <div class="quadrant" id="quad-q1">
+            <div class="quadrant" id="quad-q1" data-quad="q1">
                 <div class="quad-header" onclick="openQuadrantDetail('q1')">
                     <div class="quad-title"><span>Faire</span> <span style="font-size:0.75rem;">⊕</span></div>
                     <div class="quad-sub">Urgent & Important</div>
@@ -1260,7 +1342,7 @@
                 <div class="quad-tasks" id="matrixList-q1"></div>
             </div>
 
-            <div class="quadrant" id="quad-q2">
+            <div class="quadrant" id="quad-q2" data-quad="q2">
                 <div class="quad-header" onclick="openQuadrantDetail('q2')">
                     <div class="quad-title"><span>Planifier</span> <span style="font-size:0.75rem;">⊕</span></div>
                     <div class="quad-sub">Important, non urgent</div>
@@ -1268,7 +1350,7 @@
                 <div class="quad-tasks" id="matrixList-q2"></div>
             </div>
 
-            <div class="quadrant" id="quad-q3">
+            <div class="quadrant" id="quad-q3" data-quad="q3">
                 <div class="quad-header" onclick="openQuadrantDetail('q3')">
                     <div class="quad-title"><span>Déléguer</span> <span style="font-size:0.75rem;">⊕</span></div>
                     <div class="quad-sub">Urgent, non important</div>
@@ -1276,7 +1358,7 @@
                 <div class="quad-tasks" id="matrixList-q3"></div>
             </div>
 
-            <div class="quadrant" id="quad-q4">
+            <div class="quadrant" id="quad-q4" data-quad="q4">
                 <div class="quad-header" onclick="openQuadrantDetail('q4')">
                     <div class="quad-title"><span>Éliminer</span> <span style="font-size:0.75rem;">⊕</span></div>
                     <div class="quad-sub">Ni urgent, ni important</div>
@@ -1316,7 +1398,7 @@
         <div class="habits-carousel-container" id="habitsCarousel"></div>
     </section>
 
-    <!-- ONGLET 3 : RÉSEAU (GRAPHE DE DÉPENDANCES VISUEL) -->
+    <!-- ONGLET 3 : RÉSEAU (GRAPHE DE DÉPENDANCES MULTI-ÎLOTS SUGIYAMA) -->
     <section class="tab-view" id="tab-network">
         <div class="quick-link-card">
             <div class="section-title">LIER DEUX TÂCHES</div>
@@ -1328,15 +1410,15 @@
             </div>
         </div>
 
+        <!-- INSPECTEUR CONTEXTUEL DE NOEUD -->
+        <div class="node-inspector-bar" id="nodeInspectorBar"></div>
+
         <div class="section-title">
             <span>GRAPHE DES DÉPENDANCES</span>
             <span id="networkStatsBadge" style="color:var(--accent-emerald);">0 lien</span>
         </div>
 
-        <div class="network-stage" id="networkStage">
-            <svg class="network-svg-layer" id="networkSvg"></svg>
-            <div id="networkTiersContainer" style="display:flex; flex-direction:column; gap:36px; width:100%;"></div>
-        </div>
+        <div class="network-clusters-wrap" id="networkClustersWrap"></div>
     </section>
 
 </main>
@@ -1344,7 +1426,7 @@
 <!-- CONTRÔLES FLOTTANTS (VISIBLES UNIQUEMENT SUR LA MATRICE) -->
 <div class="floating-bar" id="floatingBar">
     <button class="btn-magic" onclick="openFocusHub()" title="Exécution & Aujourd'hui">✨</button>
-    <button class="btn-videtete" onclick="openQuadrantDetail('inbox')">
+    <button class="btn-videtete" id="btnVideTete" data-quad="inbox" onclick="openQuadrantDetail('inbox')">
         📥 Vide-tête <span class="badge-inbox-count" id="inboxCounter">0</span>
     </button>
 </div>
@@ -1478,7 +1560,7 @@
             <div class="section-title">CONFIGURATION</div>
             <div class="form-group-card">
                 <div class="form-row">
-                    <input type="text" id="habitTitleInput" class="form-input-text" placeholder="Nom (ex: Trade, Sport, Zéro écart...)">
+                    <input type="text" id="habitTitleInput" class="form-input-text" placeholder="Nom (ex: Trade, Finance, Sport...)">
                 </div>
                 <div class="form-row">
                     <label style="font-size:0.85rem; font-weight:700;">Catégorie</label>
@@ -1487,8 +1569,8 @@
                 <div class="form-row">
                     <label style="font-size:0.85rem; font-weight:700;">Polarité</label>
                     <select id="habitPolaritySelect" class="form-select">
-                        <option value="positive">Croissance (Objectif à atteindre)</option>
-                        <option value="negative">Sobriété (Écart à éviter)</option>
+                        <option value="positive">Croissance / Cashflow 📈</option>
+                        <option value="negative">Sobriété (Écart à éviter) 🛡️</option>
                     </select>
                 </div>
                 <div class="form-row">
@@ -1506,7 +1588,7 @@
             <div class="form-group-card">
                 <div class="form-row">
                     <label style="font-size:0.85rem; font-weight:700;">Unité</label>
-                    <input type="text" id="habitUnitInput" class="form-select" style="text-align:right; user-select:text;" value="R" placeholder="ex: R, $, kg, min">
+                    <input type="text" id="habitUnitInput" class="form-select" style="text-align:right; user-select:text;" value="R" placeholder="ex: R, $, €, kg, min">
                 </div>
                 <div class="form-row">
                     <label style="font-size:0.85rem; font-weight:700;">Cible quotidienne</label>
@@ -1515,6 +1597,10 @@
                 <div class="form-row">
                     <label style="font-size:0.85rem; font-weight:700;">Pas de réglage</label>
                     <input type="number" step="any" id="habitStepInput" class="form-select" style="text-align:right; user-select:text;" value="0.25">
+                </div>
+                <div class="form-row">
+                    <label style="font-size:0.85rem; font-weight:700;">Autoriser valeurs négatives (-)</label>
+                    <input type="checkbox" id="habitAllowNegativeInput" style="width:20px; height:20px; accent-color:var(--accent-emerald);" checked>
                 </div>
             </div>
         </div>
@@ -1812,6 +1898,7 @@ const INITIAL_DB = {
             unit: '$(payout)',
             targetValue: 500,
             step: 10,
+            allowNegative: true,
             history: {}
         },
         {
@@ -1823,6 +1910,7 @@ const INITIAL_DB = {
             unit: 'min',
             targetValue: 45,
             step: 5,
+            allowNegative: false,
             history: {}
         },
         {
@@ -1834,6 +1922,7 @@ const INITIAL_DB = {
             unit: 'écarts',
             targetValue: 0,
             step: 1,
+            allowNegative: false,
             history: {}
         }
     ],
@@ -1873,12 +1962,13 @@ const INITIAL_DB = {
 let db = loadDatabase();
 let globalHeatWeeks = 12;
 let activeCarouselIndex = 0;
-let activeEditDateByHabit = {}; // Stocke la date sélectionnée par appui long pour chaque habitude
+let activeEditDateByHabit = {};
 let editingHabitId = null;
 let activeZoomQuadrant = null;
 let activeTaskId = null;
 let activeFocusTaskId = null;
 let activeFocusTab = 'levers';
+let selectedGraphNodeId = null;
 let focusTimer = null;
 let focusSeconds = 1500;
 let searchQuery = '';
@@ -1896,6 +1986,7 @@ function loadDatabase() {
                 if (!h.unit) h.unit = h.valueType === 'boolean' ? 'fait' : 'R';
                 if (h.targetValue === undefined) h.targetValue = h.polarity === 'negative' ? 0 : 1;
                 if (!h.step) h.step = 1;
+                if (h.allowNegative === undefined) h.allowNegative = true;
                 if (!h.history) h.history = {};
             });
         }
@@ -1918,7 +2009,7 @@ function toast(msg) {
 }
 
 /* ============================================================================
-   LOGIQUE MÉTIER HABITUDES
+   LOGIQUE MÉTIER HABITUDES (AVEC NOMBRES NÉGATIFS & CUMUL NET 28J)
 ============================================================================ */
 function getActiveDateForHabit(habitId) {
     return activeEditDateByHabit[habitId] || TODAY_STR;
@@ -1968,6 +2059,18 @@ function calcHabit7DayAvg(habit) {
         sum += getHabitVal(habit, toDateStr(d));
     }
     return parseFloat((sum / 7).toFixed(1));
+}
+
+function calcHabit28DayNet(habit) {
+    const matrix = getStrictISOWindow(4);
+    let net = 0;
+    matrix.forEach(w => {
+        w.forEach(cell => {
+            if (!cell.isFuture) net += getHabitVal(habit, cell.dateStr);
+        });
+    });
+    const rounded = parseFloat(net.toFixed(2));
+    return rounded > 0 ? `+${rounded}` : `${rounded}`;
 }
 
 function calcScore() {
@@ -2033,7 +2136,7 @@ function renderHeader() {
 }
 
 /* ============================================================================
-   ONGLET HABITUDES : ZÉRO SCROLL VERTICAL & APPUI LONG SUR CALENDRIER
+   ONGLET HABITUDES : ZÉRO SCROLL VERTICAL, VALEURS NÉGATIVES & APPUI LONG
 ============================================================================ */
 function setGlobalHeatWeeks(weeks) {
     AudioEngine.click();
@@ -2079,19 +2182,23 @@ function renderGlobalIsoHeatmap() {
 
             totalEligibleDays++;
             let achievedCount = 0;
-            let breachCount = 0;
+            let negativeOrBreachCount = 0;
 
             habits.forEach(h => {
+                const v = getHabitVal(h, cell.dateStr);
                 if (isHabitAchieved(h, cell.dateStr)) {
                     achievedCount++;
-                } else if (h.polarity === 'negative' && h.history && h.history[cell.dateStr] > h.targetValue) {
-                    breachCount++;
+                } else if (
+                    (h.polarity === 'negative' && h.history && h.history[cell.dateStr] > h.targetValue) ||
+                    (h.polarity === 'positive' && v < 0)
+                ) {
+                    negativeOrBreachCount++;
                 }
             });
 
             totalActionPoints += achievedCount;
 
-            if (achievedCount === 0 && breachCount > 0) {
+            if (achievedCount === 0 && negativeOrBreachCount > 0) {
                 el.classList.add('bad-3');
             } else {
                 const ratio = habits.length ? (achievedCount / habits.length) : 0;
@@ -2119,9 +2226,10 @@ function getCardDynamicVisuals(habit) {
     const achieved = isHabitAchieved(habit, targetDate);
     const streak = calcHabitStreak(habit);
     const avg7 = calcHabit7DayAvg(habit);
+    const net28 = calcHabit28DayNet(habit);
 
     let valColor = 'var(--text-primary)';
-    let displayVal = currentVal;
+    let displayVal = currentVal > 0 && habit.allowNegative ? `+${currentVal}` : `${currentVal}`;
     let displayUnit = habit.unit;
     let btnClass = 'is-pending';
     let btnLabel = 'Valider';
@@ -2133,7 +2241,11 @@ function getCardDynamicVisuals(habit) {
         btnClass = achieved ? 'is-achieved' : 'is-pending';
         btnLabel = achieved ? '✓ Validé' : 'Valider';
     } else if (habit.polarity === 'positive') {
-        if (achieved) {
+        if (currentVal < 0) {
+            valColor = 'var(--accent-crimson)';
+            btnClass = 'is-breached';
+            btnLabel = `${currentVal}`;
+        } else if (achieved) {
             valColor = 'var(--accent-emerald)';
             btnClass = 'is-achieved';
             btnLabel = '✓ Cible';
@@ -2141,8 +2253,11 @@ function getCardDynamicVisuals(habit) {
             valColor = 'var(--accent-cyan)';
             btnClass = 'is-pending';
             btnLabel = 'Cible';
+        } else {
+            displayVal = '0';
         }
     } else {
+        displayVal = `${currentVal}`;
         if (!hasEntry) {
             displayVal = '0';
             valColor = 'var(--text-secondary)';
@@ -2159,7 +2274,7 @@ function getCardDynamicVisuals(habit) {
         }
     }
 
-    return { targetDate, isEditingPast, currentVal, achieved, streak, avg7, valColor, displayVal, displayUnit, btnClass, btnLabel };
+    return { targetDate, isEditingPast, currentVal, achieved, streak, avg7, net28, valColor, displayVal, displayUnit, btnClass, btnLabel };
 }
 
 function updateHabitCardDOMInPlace(habitId) {
@@ -2181,7 +2296,7 @@ function updateHabitCardDOMInPlace(habitId) {
         valEl.style.color = v.valColor;
     }
     if (unitEl) unitEl.textContent = v.displayUnit;
-    if (subEl) subEl.textContent = `Cible ${habit.targetValue} · Pas ${habit.step} · Moy. 7j : ${v.avg7}`;
+    if (subEl) subEl.textContent = `Cible ${habit.targetValue} · Net 28j : ${v.net28} · Moy 7j : ${v.avg7}`;
     if (streakEl) streakEl.innerHTML = `${habit.polarity === 'negative' ? '🛡️' : '🔥'} ${v.streak}j`;
     if (btnEl) {
         btnEl.className = `btn-done-toggle ${v.btnClass}`;
@@ -2229,7 +2344,6 @@ function renderHabitsCarousel() {
         const card = document.createElement('div');
         card.className = 'habit-full-card';
 
-        // 1. En-tête compact (avec bouton ⋯ intégré)
         const header = document.createElement('div');
         header.className = 'habit-card-header';
         header.innerHTML = `
@@ -2245,7 +2359,6 @@ function renderHabitsCarousel() {
             </div>
         `;
 
-        // 2. Indicateur numérique central compact + badge d'édition de date passée
         const monument = document.createElement('div');
         monument.className = 'monument-indicator-wrap';
         monument.innerHTML = `
@@ -2256,10 +2369,9 @@ function renderHabitsCarousel() {
                 <span class="monument-val" id="monumentVal_${habit.id}" style="color:${v.valColor};">${v.displayVal}</span>
                 <span class="monument-unit" id="monumentUnit_${habit.id}">${escapeHtml(v.displayUnit)}</span>
             </div>
-            <div class="monument-subtext" id="monumentSub_${habit.id}">Cible ${habit.targetValue} · Pas ${habit.step} · Moy. 7j : ${v.avg7}</div>
+            <div class="monument-subtext" id="monumentSub_${habit.id}">Cible ${habit.targetValue} · Net 28j : ${v.net28} · Moy 7j : ${v.avg7}</div>
         `;
 
-        // 3. Barillet haptique épuré
         const dialBox = document.createElement('div');
         dialBox.className = 'dial-controller-box';
 
@@ -2285,7 +2397,6 @@ function renderHabitsCarousel() {
             `;
         }
 
-        // 4. Calendrier 4 semaines élastique (rentre à 100% dans l'espace restant)
         const miniWrap = document.createElement('div');
         miniWrap.className = 'mini-heatmap-wrap';
         miniWrap.innerHTML = `
@@ -2368,11 +2479,19 @@ function renderMiniIsoGrid(containerId, habit) {
                 el.classList.add(val ? 'level-4' : 'level-0');
                 el.textContent = val ? `${cell.dayNumber} ✓` : cell.dayNumber;
             } else if (habit.polarity === 'positive') {
-                if (val <= 0) el.classList.add('level-0');
-                else if (val < habit.targetValue * 0.5) el.classList.add('level-1');
-                else if (val < habit.targetValue) el.classList.add('level-2');
-                else el.classList.add('level-4');
-                el.textContent = val !== 0 ? `${cell.dayNumber} · ${val}` : cell.dayNumber;
+                if (val < 0) {
+                    if (Math.abs(val) >= habit.targetValue) el.classList.add('bad-4');
+                    else el.classList.add('bad-2');
+                    el.textContent = `${cell.dayNumber} · ${val}`;
+                } else if (val === 0) {
+                    el.classList.add('level-0');
+                    el.textContent = cell.dayNumber;
+                } else {
+                    if (val < habit.targetValue * 0.5) el.classList.add('level-1');
+                    else if (val < habit.targetValue) el.classList.add('level-2');
+                    else el.classList.add('level-4');
+                    el.textContent = `${cell.dayNumber} · +${val}`;
+                }
             } else {
                 if (val <= habit.targetValue) el.classList.add('level-4');
                 else if (val <= habit.targetValue + habit.step) el.classList.add('bad-2');
@@ -2385,7 +2504,6 @@ function renderMiniIsoGrid(containerId, habit) {
                 el.classList.add('editing-ring');
             }
 
-            // Gestion Tap Court (Toggle) vs Appui Long (Sélection pour Roulette Haptique)
             attachCellTapAndLongPress(el, habit.id, cell.dateStr);
             box.appendChild(el);
         });
@@ -2424,7 +2542,7 @@ function attachCellTapAndLongPress(cellEl, habitId, dateStr) {
 }
 
 /* ============================================================================
-   ROULETTE HAPTIQUE ISOLÉE (PILOTE AUJOURD'HUI OU LA DATE SÉLECTIONNÉE)
+   ROULETTE HAPTIQUE ISOLÉE (AVEC SUPPORT DES NOMBRES NÉGATIFS)
 ============================================================================ */
 function setupHapticDial(habit, carouselElement) {
     const vp = document.getElementById(`dialViewport_${habit.id}`);
@@ -2544,7 +2662,7 @@ function stepHabitValue(habitId, delta) {
         next = Math.round(next);
     }
 
-    if (habit.polarity === 'negative' || habit.unit.toLowerCase() !== 'r') {
+    if (!habit.allowNegative) {
         next = Math.max(0, next);
     }
 
@@ -2607,15 +2725,16 @@ function promptDirectHabitValue(habitId) {
     if (!habit || habit.valueType === 'boolean') return;
     const targetDate = getActiveDateForHabit(habit.id);
     const cur = getHabitVal(habit, targetDate);
-    const entered = prompt(`Valeur du ${formatShortDate(targetDate)} (${habit.unit}) :`, cur);
+    const entered = prompt(`Valeur du ${formatShortDate(targetDate)} (${habit.unit}, ex: -150 ou 500) :`, cur);
     if (entered === null) return;
     if (entered.trim() === '') {
         delete habit.history[targetDate];
         updateHabitCardDOMInPlace(habit.id);
         return;
     }
-    const num = parseFloat(entered.replace(',', '.'));
+    let num = parseFloat(entered.replace(',', '.'));
     if (!isNaN(num)) {
+        if (!habit.allowNegative) num = Math.max(0, num);
         if (!habit.history) habit.history = {};
         habit.history[targetDate] = num;
         updateHabitCardDOMInPlace(habit.id);
@@ -2623,7 +2742,7 @@ function promptDirectHabitValue(habitId) {
 }
 
 /* ============================================================================
-   ONGLET RÉSEAU : VRAI GRAPHE VISUEL SVG DES DÉPENDANCES
+   ONGLET RÉSEAU : CLUSTERS DISJOINTS + SUGIYAMA + INSPECTEUR RAPIDE
 ============================================================================ */
 function countUnlockedBy(taskId) {
     return db.tasks.filter(t => !t.completed && t.blockedBy && t.blockedBy.includes(taskId)).length;
@@ -2640,6 +2759,61 @@ function isBlocked(task) {
     return getUnfinishedBlockers(task).length > 0;
 }
 
+// Vérifie si A atteint B par un chemin de longueur >= 2 (pour éliminer les arêtes redondantes)
+function hasIndirectPath(sourceId, targetId) {
+    const target = db.tasks.find(t => t.id === targetId);
+    if (!target || !target.blockedBy) return false;
+
+    const queue = target.blockedBy.filter(id => id !== sourceId);
+    const visited = new Set(queue);
+
+    while (queue.length > 0) {
+        const currId = queue.shift();
+        if (currId === sourceId) return true;
+        const currTask = db.tasks.find(t => t.id === currId);
+        if (currTask && currTask.blockedBy) {
+            currTask.blockedBy.forEach(nextId => {
+                if (!visited.has(nextId)) {
+                    visited.add(nextId);
+                    queue.push(nextId);
+                }
+            });
+        }
+    }
+    return false;
+}
+
+// Récupère toute la lignée (ancêtres + descendants) d'un nœud pour la mise en surbrillance
+function getConnectedLineageSet(rootId) {
+    const lineage = new Set([rootId]);
+    // Ancêtres
+    const upQueue = [rootId];
+    while (upQueue.length > 0) {
+        const cid = upQueue.shift();
+        const ct = db.tasks.find(t => t.id === cid);
+        if (ct && ct.blockedBy) {
+            ct.blockedBy.forEach(bid => {
+                if (!lineage.has(bid)) {
+                    lineage.add(bid);
+                    upQueue.push(bid);
+                }
+            });
+        }
+    }
+    // Descendants
+    const downQueue = [rootId];
+    while (downQueue.length > 0) {
+        const cid = downQueue.shift();
+        db.tasks.forEach(t => {
+            if (t.blockedBy && t.blockedBy.includes(cid) && !lineage.has(t.id)) {
+                lineage.add(t.id);
+                downQueue.push(t.id);
+            }
+        });
+    }
+    return lineage;
+}
+
 function renderNetworkView() {
     const bSelect = document.getElementById('netBlockerSelect');
     const tSelect = document.getElementById('netTargetSelect');
@@ -2654,16 +2828,23 @@ function renderNetworkView() {
         tSelect.innerHTML += `<option value="${t.id}">${escapeHtml(t.title)}</option>`;
     });
 
-    // Identification des tâches impliquées dans le graphe
+    renderNodeInspector();
+
+    // 1. Collecte des nœuds et construction d'une liste d'adjacence non-orientée pour trouver les îlots
     const connectedIds = new Set();
+    const undirectedAdj = {};
     let totalEdges = 0;
 
     db.tasks.forEach(t => {
         if (t.blockedBy && t.blockedBy.length > 0) {
-            connectedIds.add(t.id);
             t.blockedBy.forEach(bid => {
                 if (db.tasks.some(x => x.id === bid)) {
+                    connectedIds.add(t.id);
                     connectedIds.add(bid);
+                    if (!undirectedAdj[t.id]) undirectedAdj[t.id] = new Set();
+                    if (!undirectedAdj[bid]) undirectedAdj[bid] = new Set();
+                    undirectedAdj[t.id].add(bid);
+                    undirectedAdj[bid].add(t.id);
                     totalEdges++;
                 }
             });
@@ -2671,95 +2852,238 @@ function renderNetworkView() {
     });
 
     document.getElementById('networkStatsBadge').textContent = `${totalEdges} lien(s)`;
-    const tiersContainer = document.getElementById('networkTiersContainer');
-    const svg = document.getElementById('networkSvg');
-    tiersContainer.innerHTML = '';
-    svg.innerHTML = '';
+    const wrap = document.getElementById('networkClustersWrap');
+    wrap.innerHTML = '';
 
     if (connectedIds.size === 0) {
-        tiersContainer.innerHTML = `
-            <div style="text-align:center; padding:50px 16px; color:var(--text-tertiary); font-size:0.8rem;">
-                Aucune dépendance active.<br>Utilise le sélecteur ci-dessus pour relier deux tâches et visualiser le graphe.
+        wrap.innerHTML = `
+            <div style="text-align:center; padding:50px 16px; color:var(--text-tertiary); font-size:0.8rem; background:var(--bg-panel); border-radius:14px;">
+                Aucune dépendance active.<br>Relie deux tâches ci-dessus pour générer le graphe.
             </div>
         `;
         return;
     }
 
-    const graphTasks = db.tasks.filter(t => connectedIds.has(t.id));
+    // 2. Partitionnement en Composantes Connexes (Îlots indépendants)
+    const visitedCluster = new Set();
+    const clusters = [];
 
-    // Calcul de la profondeur (rang dans l'arbre) pour chaque nœud
-    const depthMap = {};
-    const computeDepth = (task, visited = new Set()) => {
-        if (depthMap[task.id] !== undefined) return depthMap[task.id];
-        if (visited.has(task.id)) return 0;
-        visited.add(task.id);
-
-        if (!task.blockedBy || task.blockedBy.length === 0) {
-            depthMap[task.id] = 0;
-            return 0;
+    connectedIds.forEach(id => {
+        if (visitedCluster.has(id)) return;
+        const comp = [];
+        const q = [id];
+        visitedCluster.add(id);
+        while (q.length > 0) {
+            const curr = q.shift();
+            const taskObj = db.tasks.find(x => x.id === curr);
+            if (taskObj) comp.push(taskObj);
+            (undirectedAdj[curr] || []).forEach(nb => {
+                if (!visitedCluster.has(nb)) {
+                    visitedCluster.add(nb);
+                    q.push(nb);
+                }
+            });
         }
-        let maxParent = 0;
-        task.blockedBy.forEach(bid => {
-            const p = db.tasks.find(x => x.id === bid);
-            if (p) maxParent = Math.max(maxParent, computeDepth(p, new Set(visited)) + 1);
-        });
-        depthMap[task.id] = maxParent;
-        return maxParent;
-    };
-
-    graphTasks.forEach(t => computeDepth(t));
-
-    // Regroupement par niveaux (Tiers)
-    const tiers = {};
-    graphTasks.forEach(t => {
-        const d = depthMap[t.id] || 0;
-        if (!tiers[d]) tiers[d] = [];
-        tiers[d].push(t);
+        clusters.push(comp);
     });
 
-    Object.keys(tiers).sort((a, b) => a - b).forEach(level => {
-        const row = document.createElement('div');
-        row.className = 'network-tier';
+    // Tri des îlots : les plus vastes en haut
+    clusters.sort((a, b) => b.length - a.length);
 
-        tiers[level].forEach(t => {
-            const node = document.createElement('div');
-            const blocked = isBlocked(t);
-            const unlocks = countUnlockedBy(t.id);
-            let statusClass = '';
-            if (t.completed) statusClass = 'node-done';
-            else if (blocked) statusClass = 'node-locked';
-            else if (unlocks > 0) statusClass = 'node-lever';
+    const activeLineage = selectedGraphNodeId ? getConnectedLineageSet(selectedGraphNodeId) : null;
 
-            node.className = `graph-node ${statusClass}`;
-            node.id = `gnode_${t.id}`;
-            node.innerHTML = `
-                <div class="node-cat">
-                    <span>${escapeHtml(t.category)}</span>
-                    <span>${t.completed ? '✓' : (blocked ? '🔒' : `⚡${unlocks}`)}</span>
-                </div>
-                <div class="node-title">${escapeHtml(t.title)}</div>
-            `;
-            node.onclick = () => openTaskDetail(t.id);
-            row.appendChild(node);
+    // 3. Rendu de chaque îlot avec ordonnancement barycentrique de Sugiyama
+    clusters.forEach((clusterTasks, cIdx) => {
+        const clusterCard = document.createElement('div');
+        clusterCard.className = 'network-cluster-card';
+        clusterCard.id = `clusterCard_${cIdx}`;
+
+        const label = document.createElement('div');
+        label.className = 'cluster-label';
+        label.textContent = `Chaîne #${cIdx + 1}`;
+        clusterCard.appendChild(label);
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'cluster-svg-layer');
+        svg.id = `clusterSvg_${cIdx}`;
+        clusterCard.appendChild(svg);
+
+        // Calcul du rang vertical (plus long chemin depuis les racines de l'îlot)
+        const depthMap = {};
+        const computeDepth = (task, visited = new Set()) => {
+            if (depthMap[task.id] !== undefined) return depthMap[task.id];
+            if (visited.has(task.id)) return 0;
+            visited.add(task.id);
+
+            const validBlockers = (task.blockedBy || []).filter(bid => clusterTasks.some(x => x.id === bid));
+            if (validBlockers.length === 0) {
+                depthMap[task.id] = 0;
+                return 0;
+            }
+            let maxP = 0;
+            validBlockers.forEach(bid => {
+                const p = clusterTasks.find(x => x.id === bid);
+                if (p) maxP = Math.max(maxP, computeDepth(p, new Set(visited)) + 1);
+            });
+            depthMap[task.id] = maxP;
+            return maxP;
+        };
+
+        clusterTasks.forEach(t => computeDepth(t));
+
+        const tiers = {};
+        clusterTasks.forEach(t => {
+            const d = depthMap[t.id] || 0;
+            if (!tiers[d]) tiers[d] = [];
+            tiers[d].push(t);
         });
 
-        tiersContainer.appendChild(row);
+        const sortedLevels = Object.keys(tiers).map(Number).sort((a, b) => a - b);
+
+        // Tri du niveau 0 par effet de levier décroissant
+        if (tiers[0]) {
+            tiers[0].sort((a, b) => countUnlockedBy(b.id) - countUnlockedBy(a.id));
+        }
+
+        // Barycentre de Sugiyama : aligne les enfants sous la position moyenne de leurs parents
+        const posIndex = {};
+        if (tiers[0]) tiers[0].forEach((t, i) => { posIndex[t.id] = i; });
+
+        for (let l = 1; l < sortedLevels.length; l++) {
+            const lvl = sortedLevels[l];
+            tiers[lvl].sort((a, b) => {
+                const aParents = (a.blockedBy || []).filter(id => posIndex[id] !== undefined);
+                const bParents = (b.blockedBy || []).filter(id => posIndex[id] !== undefined);
+                const aBary = aParents.length ? aParents.reduce((s, id) => s + posIndex[id], 0) / aParents.length : 0;
+                const bBary = bParents.length ? bParents.reduce((s, id) => s + posIndex[id], 0) / bParents.length : 0;
+                return aBary - bBary;
+            });
+            tiers[lvl].forEach((t, i) => { posIndex[t.id] = i; });
+        }
+
+        sortedLevels.forEach(lvl => {
+            const row = document.createElement('div');
+            row.className = 'cluster-tier';
+
+            tiers[lvl].forEach(t => {
+                const node = document.createElement('div');
+                const blocked = isBlocked(t);
+                const unlocks = countUnlockedBy(t.id);
+                let statusClass = '';
+                if (t.completed) statusClass = 'node-done';
+                else if (blocked) statusClass = 'node-locked';
+                else if (unlocks > 0) statusClass = 'node-lever';
+
+                if (selectedGraphNodeId === t.id) statusClass += ' node-selected';
+                else if (activeLineage && !activeLineage.has(t.id)) statusClass += ' node-dimmed';
+
+                node.className = `graph-node ${statusClass}`;
+                node.id = `gnode_${t.id}`;
+                node.innerHTML = `
+                    <div class="node-cat">
+                        <span>${escapeHtml(t.category)}</span>
+                        <span>${t.completed ? '✓' : (blocked ? '🔒' : `⚡${unlocks}`)}</span>
+                    </div>
+                    <div class="node-title">${escapeHtml(t.title)}</div>
+                `;
+                node.onclick = (e) => {
+                    e.stopPropagation();
+                    AudioEngine.click();
+                    haptic(10);
+                    selectedGraphNodeId = (selectedGraphNodeId === t.id) ? null : t.id;
+                    renderNetworkView();
+                };
+                row.appendChild(node);
+            });
+
+            clusterCard.appendChild(row);
+        });
+
+        clusterCard.onclick = () => {
+            if (selectedGraphNodeId) {
+                selectedGraphNodeId = null;
+                renderNetworkView();
+            }
+        };
+
+        wrap.appendChild(clusterCard);
     });
 
-    // Tracé des courbes de Bézier SVG entre les nœuds
-    requestAnimationFrame(() => drawNetworkSvgCurves(graphTasks));
+    requestAnimationFrame(() => {
+        clusters.forEach((clusterTasks, cIdx) => {
+            drawClusterSvgCurves(clusterTasks, cIdx);
+        });
+    });
 }
 
-function drawNetworkSvgCurves(graphTasks) {
-    const svg = document.getElementById('networkSvg');
-    const stage = document.getElementById('networkStage');
+function renderNodeInspector() {
+    const bar = document.getElementById('nodeInspectorBar');
+    if (!bar) return;
+    const task = db.tasks.find(t => t.id === selectedGraphNodeId);
+    if (!task) {
+        bar.classList.remove('open');
+        bar.innerHTML = '';
+        return;
+    }
+
+    bar.classList.add('open');
+    const blockers = (task.blockedBy || []).map(id => db.tasks.find(x => x.id === id)).filter(Boolean);
+
+    let blockersHtml = '';
+    if (blockers.length > 0) {
+        blockersHtml = `
+            <div style="display:flex; flex-wrap:wrap; gap:6px; padding-top:4px; border-top:1px solid var(--border-subtle);">
+                ${blockers.map(b => `
+                    <span style="font-size:0.7rem; background:var(--bg-input); padding:4px 8px; border-radius:8px; display:inline-flex; align-items:center; gap:6px;">
+                        🔒 ${escapeHtml(b.title)}
+                        <strong style="color:var(--accent-crimson); cursor:pointer;" onclick="unlinkPairFromGraph('${b.id}', '${task.id}')">✂️</strong>
+                    </span>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    bar.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div style="min-width:0;">
+                <div style="font-size:0.6rem; color:var(--accent-cyan); font-weight:800; text-transform:uppercase;">NŒUD SÉLECTIONNÉ · ${escapeHtml(task.category)}</div>
+                <div style="font-size:0.92rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(task.title)}</div>
+            </div>
+            <div style="display:flex; gap:6px; flex-shrink:0;">
+                <button class="stepper-btn" style="padding:0 10px; height:30px; font-size:0.74rem;" onclick="toggleTaskDone('${task.id}')">
+                    ${task.completed ? '↺ Rouvrir' : '✓ Valider'}
+                </button>
+                <button class="stepper-btn" style="padding:0 10px; height:30px; font-size:0.74rem;" onclick="openTaskDetail('${task.id}')">
+                    ✏️ Détails
+                </button>
+            </div>
+        </div>
+        ${blockersHtml}
+    `;
+}
+
+function unlinkPairFromGraph(blockerId, targetId) {
+    const t = db.tasks.find(x => x.id === targetId);
+    if (!t || !t.blockedBy) return;
+    t.blockedBy = t.blockedBy.filter(id => id !== blockerId);
+    AudioEngine.click();
+    haptic(12);
+    toast('✂️ Lien supprimé');
+    renderApp();
+}
+
+function drawClusterSvgCurves(clusterTasks, cIdx) {
+    const svg = document.getElementById(`clusterSvg_${cIdx}`);
+    const stage = document.getElementById(`clusterCard_${cIdx}`);
     if (!svg || !stage) return;
     svg.innerHTML = '';
 
     const stageRect = stage.getBoundingClientRect();
     if (stageRect.width === 0) return;
 
-    graphTasks.forEach(targetTask => {
+    const activeLineage = selectedGraphNodeId ? getConnectedLineageSet(selectedGraphNodeId) : null;
+
+    clusterTasks.forEach(targetTask => {
         if (!targetTask.blockedBy) return;
         const targetEl = document.getElementById(`gnode_${targetTask.id}`);
         if (!targetEl) return;
@@ -2769,7 +3093,10 @@ function drawNetworkSvgCurves(graphTasks) {
         const y2 = targetRect.top - stageRect.top;
 
         targetTask.blockedBy.forEach(blockerId => {
-            const blockerTask = db.tasks.find(x => x.id === blockerId);
+            // Réduction transitive : n'affiche pas la ligne directe si un chemin indirect existe déjà
+            if (hasIndirectPath(blockerId, targetTask.id)) return;
+
+            const blockerTask = clusterTasks.find(x => x.id === blockerId);
             const blockerEl = document.getElementById(`gnode_${blockerId}`);
             if (!blockerEl || !blockerTask) return;
 
@@ -2778,11 +3105,17 @@ function drawNetworkSvgCurves(graphTasks) {
             const y1 = blockerRect.top - stageRect.top + blockerRect.height;
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const cY = (y1 + y2) / 2;
+            const cY = y1 + (y2 - y1) * 0.5;
             path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${cY}, ${x2} ${cY}, ${x2} ${y2}`);
             path.setAttribute('fill', 'none');
-            path.setAttribute('stroke', blockerTask.completed ? 'rgba(0, 230, 118, 0.45)' : 'rgba(255, 61, 113, 0.75)');
-            path.setAttribute('stroke-width', '2');
+
+            const isEdgeHighlighted = !activeLineage || (activeLineage.has(blockerId) && activeLineage.has(targetTask.id));
+            const baseColor = blockerTask.completed
+                ? (isEdgeHighlighted ? 'rgba(0, 230, 118, 0.55)' : 'rgba(0, 230, 118, 0.12)')
+                : (isEdgeHighlighted ? 'rgba(255, 61, 113, 0.8)' : 'rgba(255, 61, 113, 0.15)');
+
+            path.setAttribute('stroke', baseColor);
+            path.setAttribute('stroke-width', isEdgeHighlighted && selectedGraphNodeId ? '2.5' : '1.8');
             if (!blockerTask.completed) path.setAttribute('stroke-dasharray', '4 3');
             svg.appendChild(path);
         });
@@ -2809,7 +3142,7 @@ function quickLinkFromNetwork() {
         target.blockedBy.push(blockerId);
         AudioEngine.unlock();
         haptic(15);
-        toast('🔗 Lien ajouté au graphe');
+        toast('🔗 Lien ajouté');
         renderApp();
     }
 }
@@ -2892,7 +3225,6 @@ function renderFocusHubContent() {
         `;
     }
 
-    // Listes compactes d'Aujourd'hui intégrées
     const activeTasks = db.tasks.filter(t => !t.completed && t.quadrant !== 'inbox');
     const levers = activeTasks.filter(t => countUnlockedBy(t.id) > 0 && !isBlocked(t));
     const priorities = activeTasks.filter(t => (t.quadrant === 'q1' || t.quadrant === 'q2') && !isBlocked(t));
@@ -2969,7 +3301,7 @@ function closeFocusModal() {
 }
 
 /* ============================================================================
-   MATRICE D'EISENHOWER & DÉTAILS DE TÂCHE
+   MATRICE D'EISENHOWER & GLISSER-DÉPOSER TACTILE (SLIDE ENTRE QUADRANTS)
 ============================================================================ */
 function getFilteredTasksForQuadrant(quadId) {
     return db.tasks
@@ -3016,6 +3348,7 @@ function renderMatrix() {
             const check = document.createElement('div');
             check.className = 'radio-circle';
             check.innerHTML = blocked ? '🔒' : (t.completed ? '✓' : '');
+            check.onpointerdown = (e) => e.stopPropagation();
             check.onclick = (e) => {
                 e.stopPropagation();
                 toggleTaskDone(t.id);
@@ -3042,10 +3375,113 @@ function renderMatrix() {
             pill.appendChild(center);
             pill.appendChild(ageBadge);
 
-            pill.onclick = () => openTaskDetail(t.id);
+            attachMatrixPillDragAndTap(pill, t);
             list.appendChild(pill);
         });
     });
+}
+
+function attachMatrixPillDragAndTap(pillEl, task) {
+    let holdTimer = null;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let ghostEl = null;
+    let currentHoveredQuad = null;
+
+    const clearDropHighlights = () => {
+        document.querySelectorAll('.quadrant, #btnVideTete').forEach(el => {
+            el.classList.remove('drop-target-active');
+        });
+    };
+
+    pillEl.onpointerdown = (e) => {
+        if (e.button && e.button !== 0) return;
+        startX = e.clientX;
+        startY = e.clientY;
+        isDragging = false;
+        currentHoveredQuad = null;
+
+        holdTimer = setTimeout(() => {
+            isDragging = true;
+            try { pillEl.setPointerCapture(e.pointerId); } catch (err) {}
+            pillEl.classList.add('dragging-source');
+            AudioEngine.tickHaptic();
+            haptic(18);
+
+            ghostEl = document.createElement('div');
+            ghostEl.className = 'drag-ghost-pill';
+            ghostEl.textContent = task.title;
+            ghostEl.style.left = `${startX}px`;
+            ghostEl.style.top = `${startY}px`;
+            document.body.appendChild(ghostEl);
+        }, 160);
+    };
+
+    pillEl.onpointermove = (e) => {
+        const dx = Math.abs(e.clientX - startX);
+        const dy = Math.abs(e.clientY - startY);
+
+        if (!isDragging) {
+            if (dx > 8 || dy > 8) clearTimeout(holdTimer);
+            return;
+        }
+
+        if (e.cancelable) e.preventDefault();
+        if (ghostEl) {
+            ghostEl.style.left = `${e.clientX}px`;
+            ghostEl.style.top = `${e.clientY}px`;
+        }
+
+        const under = document.elementFromPoint(e.clientX, e.clientY);
+        const dropZone = under ? under.closest('[data-quad]') : null;
+        const newQuad = dropZone ? dropZone.getAttribute('data-quad') : null;
+
+        if (newQuad !== currentHoveredQuad) {
+            currentHoveredQuad = newQuad;
+            clearDropHighlights();
+            if (dropZone) {
+                dropZone.classList.add('drop-target-active');
+                haptic(6);
+            }
+        }
+    };
+
+    const finishGesture = (e) => {
+        clearTimeout(holdTimer);
+        if (isDragging) {
+            isDragging = false;
+            pillEl.classList.remove('dragging-source');
+            if (ghostEl) {
+                ghostEl.remove();
+                ghostEl = null;
+            }
+            clearDropHighlights();
+
+            if (currentHoveredQuad && currentHoveredQuad !== task.quadrant) {
+                task.quadrant = currentHoveredQuad;
+                AudioEngine.unlock();
+                haptic([12, 30]);
+                toast(`➔ ${QUAD_CONFIG[currentHoveredQuad].title}`);
+                renderApp();
+            }
+            return;
+        }
+
+        // Si simple tap court
+        if (e.type === 'pointerup' && Math.abs(e.clientX - startX) < 8 && Math.abs(e.clientY - startY) < 8) {
+            openTaskDetail(task.id);
+        }
+    };
+
+    pillEl.onpointerup = finishGesture;
+    pillEl.onpointercancel = () => {
+        clearTimeout(holdTimer);
+        isDragging = false;
+        pillEl.classList.remove('dragging-source');
+        if (ghostEl) { ghostEl.remove(); ghostEl = null; }
+        clearDropHighlights();
+    };
 }
 
 function openTaskDetail(taskId) {
@@ -3271,6 +3707,17 @@ function submitQuickTask() {
     renderApp();
 }
 
+function dispatchInboxTaskToQuad(taskId, targetQuad, ev) {
+    if (ev) ev.stopPropagation();
+    const t = db.tasks.find(x => x.id === taskId);
+    if (!t) return;
+    t.quadrant = targetQuad;
+    AudioEngine.unlock();
+    haptic(12);
+    toast(`➔ ${QUAD_CONFIG[targetQuad].title}`);
+    renderApp();
+}
+
 function renderZoomList() {
     const box = document.getElementById('zoomTasksList');
     box.innerHTML = '';
@@ -3288,17 +3735,27 @@ function renderZoomList() {
         const card = document.createElement('div');
         card.className = 'full-card';
         card.style.opacity = t.completed ? '0.45' : '1';
+
+        const quickDispatchHtml = activeZoomQuadrant === 'inbox' ? `
+            <div class="quick-quad-badges">
+                <button class="q-mini-btn" style="color:var(--q1-color); border-color:var(--q1-color);" onclick="dispatchInboxTaskToQuad('${t.id}', 'q1', event)">Q1</button>
+                <button class="q-mini-btn" style="color:var(--q2-color); border-color:var(--q2-color);" onclick="dispatchInboxTaskToQuad('${t.id}', 'q2', event)">Q2</button>
+                <button class="q-mini-btn" style="color:var(--q3-color); border-color:var(--q3-color);" onclick="dispatchInboxTaskToQuad('${t.id}', 'q3', event)">Q3</button>
+                <button class="q-mini-btn" style="color:var(--q4-color); border-color:var(--q4-color);" onclick="dispatchInboxTaskToQuad('${t.id}', 'q4', event)">Q4</button>
+            </div>
+        ` : `<span class="age-badge">${age}j</span>`;
+
         card.innerHTML = `
             <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')">
                 ${t.completed ? '✓' : ''}
             </div>
-            <div style="flex:1;">
-                <div style="font-weight:800; font-size:0.88rem;">${escapeHtml(t.title)}</div>
+            <div style="flex:1; min-width:0;">
+                <div style="font-weight:800; font-size:0.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(t.title)}</div>
                 <div style="font-size:0.68rem; color:var(--text-secondary); margin-top:2px;">
                     ${escapeHtml(t.category)} · ${age}j
                 </div>
             </div>
-            <span class="age-badge">${age}j</span>
+            ${quickDispatchHtml}
         `;
         card.onclick = () => openTaskDetail(t.id);
         box.appendChild(card);
@@ -3319,6 +3776,7 @@ function openCreateHabitModal() {
     document.getElementById('habitStepInput').value = '0.25';
     document.getElementById('habitPolaritySelect').value = 'positive';
     document.getElementById('habitValueTypeSelect').value = 'numeric';
+    document.getElementById('habitAllowNegativeInput').checked = true;
     toggleHabitNumericFields('numeric');
 
     const catSelect = document.getElementById('habitCategorySelect');
@@ -3348,6 +3806,7 @@ function openEditHabitModal(habitId) {
     document.getElementById('habitUnitInput').value = h.unit;
     document.getElementById('habitTargetInput').value = h.targetValue;
     document.getElementById('habitStepInput').value = h.step;
+    document.getElementById('habitAllowNegativeInput').checked = Boolean(h.allowNegative);
     toggleHabitNumericFields(h.valueType);
 
     const catSelect = document.getElementById('habitCategorySelect');
@@ -3380,6 +3839,7 @@ function saveHabitFromModal() {
     const targetValue = isNaN(rawTarget) ? (polarity === 'negative' ? 0 : 1) : rawTarget;
     const rawStep = parseFloat(document.getElementById('habitStepInput').value);
     const step = isNaN(rawStep) || rawStep <= 0 ? 1 : rawStep;
+    const allowNegative = document.getElementById('habitAllowNegativeInput').checked;
 
     if (editingHabitId) {
         const h = db.habits.find(x => x.id === editingHabitId);
@@ -3391,6 +3851,7 @@ function saveHabitFromModal() {
             h.unit = unit;
             h.targetValue = targetValue;
             h.step = step;
+            h.allowNegative = allowNegative;
         }
     } else {
         db.habits.push({
@@ -3402,6 +3863,7 @@ function saveHabitFromModal() {
             unit,
             targetValue,
             step,
+            allowNegative,
             history: {}
         });
         activeCarouselIndex = getFilteredHabits().length - 1;
@@ -3505,7 +3967,6 @@ function switchNavTab(tabName) {
     document.getElementById(`tab-${tabName}`).classList.add('active');
     document.querySelector(`.nav-btn[data-tab="${tabName}"]`).classList.add('active');
 
-    // Masque les boutons flottants hors de la Matrice pour libérer l'espace bas
     document.getElementById('floatingBar').classList.toggle('hidden', tabName !== 'matrix');
 
     renderApp();
