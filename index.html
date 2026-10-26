@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#080e0c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Inconscient Tactique</title>
+<title>Inconscient</title>
 
 <!-- Liaisons PWA -->
 <link rel="manifest" href="manifest.json">
@@ -53,7 +53,7 @@
 
         --radius-sm: 8px;
         --radius-md: 14px;
-        --radius-lg: 20px;
+        --radius-lg: 18px;
     }
 
     * {
@@ -68,9 +68,8 @@
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         background-color: var(--bg-void);
         background-image: 
-            radial-gradient(at 0% 0%, rgba(0, 229, 255, 0.05) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(0, 230, 118, 0.07) 0px, transparent 60%),
-            radial-gradient(at 50% 100%, rgba(179, 136, 255, 0.04) 0px, transparent 60%);
+            radial-gradient(at 0% 0%, rgba(0, 229, 255, 0.04) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(0, 230, 118, 0.06) 0px, transparent 60%);
         color: var(--text-primary);
         height: 100dvh;
         display: flex;
@@ -80,12 +79,12 @@
 
     /* HEADER */
     .app-header {
-        padding: 12px 16px 8px 16px;
+        padding: 10px 14px 8px 14px;
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        background: rgba(7, 13, 11, 0.85);
+        gap: 8px;
+        background: rgba(7, 13, 11, 0.88);
         backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--border-subtle);
         z-index: 20;
@@ -97,24 +96,11 @@
         align-items: center;
     }
 
-    .brand-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .brand-subtitle {
-        font-size: 0.65rem;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        color: var(--accent-emerald);
-        font-weight: 800;
-    }
-
     .brand-title {
-        font-size: 1.45rem;
+        font-size: 1.3rem;
         font-weight: 900;
-        letter-spacing: 0.5px;
-        margin: 2px 0 0 0;
+        letter-spacing: 0.3px;
+        margin: 0;
         color: #fff;
         text-transform: uppercase;
         display: flex;
@@ -134,7 +120,7 @@
 
     .header-actions {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         align-items: center;
     }
 
@@ -142,15 +128,15 @@
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
         color: var(--text-secondary);
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        font-size: 1rem;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 0.95rem;
+        transition: all 0.18s;
     }
 
     .btn-icon:active { transform: scale(0.92); }
@@ -158,12 +144,11 @@
         color: var(--accent-emerald);
         border-color: var(--accent-emerald);
         background: rgba(0, 230, 118, 0.12);
-        box-shadow: 0 0 10px var(--accent-emerald-glow);
     }
 
     .search-wrapper {
         display: none;
-        padding: 2px 0 6px 0;
+        padding: 2px 0 4px 0;
     }
     .search-wrapper.open { display: block; }
     .search-input {
@@ -171,15 +156,15 @@
         background: var(--bg-input);
         border: 1px solid var(--accent-emerald);
         border-radius: 10px;
-        padding: 9px 12px;
+        padding: 8px 12px;
         color: var(--text-primary);
-        font-size: 0.88rem;
+        font-size: 0.86rem;
         outline: none;
     }
 
     .cat-bar {
         display: flex;
-        gap: 7px;
+        gap: 6px;
         overflow-x: auto;
         padding-bottom: 2px;
         scrollbar-width: none;
@@ -187,12 +172,12 @@
     .cat-bar::-webkit-scrollbar { display: none; }
 
     .cat-pill {
-        padding: 6px 13px;
-        border-radius: 20px;
-        font-size: 0.72rem;
+        padding: 5px 12px;
+        border-radius: 18px;
+        font-size: 0.7rem;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.6px;
         background: var(--bg-panel);
         color: var(--text-secondary);
         border: 1px solid var(--border-subtle);
@@ -200,15 +185,15 @@
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 6px;
-        transition: all 0.2s;
+        gap: 5px;
+        transition: all 0.18s;
     }
 
     .cat-pill.active {
         background: var(--accent-emerald);
         color: #04120a;
         border-color: var(--accent-emerald);
-        box-shadow: 0 0 12px var(--accent-emerald-glow);
+        box-shadow: 0 0 10px var(--accent-emerald-glow);
     }
 
     .cat-pill.add-cat {
@@ -216,8 +201,10 @@
         color: var(--accent-emerald);
     }
 
+    /* CONTENEUR PRINCIPAL */
     .view-container {
         flex: 1;
+        min-height: 0;
         overflow: hidden;
         position: relative;
     }
@@ -225,14 +212,22 @@
     .tab-view {
         display: none;
         height: 100%;
+        min-height: 0;
         overflow-y: auto;
-        padding: 10px 12px 130px 12px;
+        padding: 10px 12px 84px 12px;
         flex-direction: column;
-        gap: 14px;
+        gap: 10px;
         scrollbar-width: none;
     }
     .tab-view::-webkit-scrollbar { display: none; }
     .tab-view.active { display: flex; }
+
+    /* VERROUILLAGE STRICT ZÉRO SCROLL VERTICAL SUR L'ONGLET HABITUDES */
+    #tab-routine {
+        overflow: hidden !important;
+        padding: 8px 12px 70px 12px;
+        gap: 8px;
+    }
 
     /* MATRICE EISENHOWER */
     .matrix-grid {
@@ -242,7 +237,7 @@
         gap: 6px;
         flex: 1;
         min-height: 0;
-        margin-bottom: 10px;
+        margin-bottom: 58px;
     }
 
     .quadrant {
@@ -254,10 +249,7 @@
         flex-direction: column;
         overflow: hidden;
         backdrop-filter: blur(8px);
-        transition: border-color 0.2s;
     }
-
-    .quadrant:focus-within { border-color: var(--border-medium); }
 
     .quad-header {
         display: flex;
@@ -269,20 +261,19 @@
     #quad-q2 .quad-header, #quad-q4 .quad-header { text-align: right; }
 
     .quad-title {
-        font-size: 0.92rem;
+        font-size: 0.9rem;
         font-weight: 900;
         margin: 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        letter-spacing: 0.3px;
     }
     #quad-q2 .quad-title, #quad-q4 .quad-title { flex-direction: row-reverse; }
 
     .quad-sub {
-        font-size: 0.65rem;
+        font-size: 0.62rem;
         font-weight: 600;
-        opacity: 0.75;
+        opacity: 0.7;
         margin-top: 1px;
     }
 
@@ -297,7 +288,6 @@
         display: flex;
         flex-direction: column;
         gap: 6px;
-        padding-right: 2px;
         scrollbar-width: none;
     }
     .quad-tasks::-webkit-scrollbar { display: none; }
@@ -305,29 +295,28 @@
     .task-pill {
         background: rgba(22, 36, 32, 0.9);
         border: 1px solid var(--border-subtle);
-        border-radius: 20px;
-        padding: 7px 10px;
+        border-radius: 18px;
+        padding: 6px 10px;
         display: flex;
         align-items: center;
         gap: 8px;
         cursor: pointer;
-        transition: transform 0.12s, border-color 0.2s, opacity 0.2s;
-        min-height: 38px;
+        min-height: 36px;
     }
     .task-pill:active { transform: scale(0.97); }
 
-    #quad-q1 .task-pill { border-color: rgba(255, 61, 113, 0.45); }
-    #quad-q2 .task-pill { border-color: rgba(0, 229, 255, 0.4); }
-    #quad-q3 .task-pill { border-color: rgba(255, 171, 64, 0.4); }
-    #quad-q4 .task-pill { border-color: rgba(144, 164, 174, 0.3); }
+    #quad-q1 .task-pill { border-color: rgba(255, 61, 113, 0.4); }
+    #quad-q2 .task-pill { border-color: rgba(0, 229, 255, 0.35); }
+    #quad-q3 .task-pill { border-color: rgba(255, 171, 64, 0.35); }
+    #quad-q4 .task-pill { border-color: rgba(144, 164, 174, 0.28); }
 
     .task-pill.blocked {
-        opacity: 0.45;
+        opacity: 0.42;
         border-style: dashed !important;
     }
 
     .task-pill.completed {
-        opacity: 0.35;
+        opacity: 0.32;
         text-decoration: line-through;
     }
 
@@ -342,9 +331,7 @@
         justify-content: center;
         font-size: 0.65rem;
         cursor: pointer;
-        transition: transform 0.15s;
     }
-    .radio-circle:active { transform: scale(1.2); }
 
     #quad-q1 .radio-circle { color: var(--q1-color); }
     #quad-q2 .radio-circle { color: var(--q2-color); }
@@ -359,7 +346,7 @@
     }
 
     .pill-title {
-        font-size: 0.77rem;
+        font-size: 0.76rem;
         font-weight: 700;
         white-space: nowrap;
         overflow: hidden;
@@ -368,7 +355,7 @@
     }
 
     .pill-meta {
-        font-size: 0.62rem;
+        font-size: 0.6rem;
         color: var(--text-secondary);
         display: flex;
         gap: 5px;
@@ -376,8 +363,8 @@
     }
 
     .age-badge {
-        font-size: 0.68rem;
-        font-weight: 900;
+        font-size: 0.66rem;
+        font-weight: 800;
         font-variant-numeric: tabular-nums;
         color: var(--accent-crimson);
         flex-shrink: 0;
@@ -386,49 +373,51 @@
     .age-badge.warm { color: var(--accent-cyan); }
     .age-badge.aging { color: var(--accent-amber); }
 
-    /* CONTROLES FLOTTANTS */
+    /* CONTRÔLES FLOTTANTS (UNIQUEMENT SUR LA MATRICE) */
     .floating-bar {
         position: fixed;
         bottom: 72px;
-        right: 16px;
+        right: 14px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         z-index: 25;
+        transition: opacity 0.15s, transform 0.15s;
+    }
+    .floating-bar.hidden {
+        display: none !important;
     }
 
     .btn-magic {
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
         background: linear-gradient(135deg, rgba(179, 136, 255, 0.25), rgba(0, 229, 255, 0.25));
         border: 1px solid rgba(179, 136, 255, 0.5);
         color: #fff;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(8px);
-        transition: transform 0.2s;
     }
-    .btn-magic:active { transform: scale(0.9); }
+    .btn-magic:active { transform: scale(0.92); }
 
     .btn-videtete {
         background: var(--accent-emerald);
         color: #031208;
         border: none;
-        border-radius: 26px;
-        padding: 11px 18px;
-        font-size: 0.88rem;
+        border-radius: 24px;
+        padding: 10px 16px;
+        font-size: 0.84rem;
         font-weight: 900;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 7px;
         cursor: pointer;
-        box-shadow: 0 6px 20px var(--accent-emerald-glow);
-        transition: transform 0.15s;
+        box-shadow: 0 6px 18px var(--accent-emerald-glow);
     }
     .btn-videtete:active { transform: scale(0.95); }
 
@@ -437,37 +426,38 @@
         color: var(--accent-emerald);
         border-radius: 10px;
         padding: 1px 6px;
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 800;
     }
 
-    /* HEATMAP GLOBALE PLEINE LARGEUR (100% DU CADRE) */
+    /* HEATMAP GLOBALE COMPACTE PLEINE LARGEUR */
     .global-heatmap-wrap {
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
         border-radius: var(--radius-md);
-        padding: 14px;
+        padding: 9px 12px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 6px;
         width: 100%;
+        flex-shrink: 0;
     }
 
     .heat-period-toggle {
         display: flex;
-        gap: 4px;
+        gap: 3px;
         background: var(--bg-void);
         padding: 2px;
-        border-radius: 8px;
+        border-radius: 7px;
     }
     .heat-period-btn {
         background: transparent;
         border: none;
         color: var(--text-secondary);
-        font-size: 0.68rem;
+        font-size: 0.64rem;
         font-weight: 800;
-        padding: 4px 9px;
-        border-radius: 6px;
+        padding: 3px 8px;
+        border-radius: 5px;
         cursor: pointer;
     }
     .heat-period-btn.active {
@@ -477,19 +467,19 @@
 
     .calendar-heatmap-layout {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         align-items: stretch;
         width: 100%;
     }
 
     .day-labels-col {
         display: grid;
-        grid-template-rows: repeat(7, 16px);
-        gap: 4px;
-        font-size: 0.6rem;
+        grid-template-rows: repeat(7, 11px);
+        gap: 3px;
+        font-size: 0.54rem;
         font-weight: 800;
         color: var(--text-tertiary);
-        line-height: 16px;
+        line-height: 11px;
         text-align: right;
         padding-right: 2px;
         flex-shrink: 0;
@@ -499,53 +489,71 @@
         flex: 1;
         width: 100%;
         display: grid;
-        grid-template-rows: repeat(7, 16px);
+        grid-template-rows: repeat(7, 11px);
         grid-auto-flow: column;
         grid-template-columns: repeat(var(--cols, 12), minmax(0, 1fr));
-        gap: 4px;
+        gap: 3px;
     }
 
     .heat-cell {
         width: 100%;
         height: 100%;
-        border-radius: 4px;
+        border-radius: 3px;
         background: var(--heat-0);
         cursor: pointer;
-        transition: transform 0.12s, background-color 0.15s;
+        transition: transform 0.1s, background-color 0.15s;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.62rem;
+        font-size: 0.6rem;
         font-weight: 800;
-        color: rgba(255, 255, 255, 0.75);
+        color: rgba(255, 255, 255, 0.78);
+        touch-action: manipulation;
     }
-    .heat-cell:active { transform: scale(0.95); z-index: 5; }
 
-    .heat-cell.level-0 { background: var(--heat-0); color: rgba(255, 255, 255, 0.28); }
+    .heat-cell.level-0 { background: var(--heat-0); color: rgba(255, 255, 255, 0.25); }
     .heat-cell.level-1 { background: var(--heat-1); }
     .heat-cell.level-2 { background: var(--heat-2); }
     .heat-cell.level-3 { background: var(--heat-3); }
-    .heat-cell.level-4 { background: var(--heat-4); color: #03140a; font-weight: 900; box-shadow: 0 0 6px var(--accent-emerald-glow); }
+    .heat-cell.level-4 { background: var(--heat-4); color: #03140a; font-weight: 900; }
 
     .heat-cell.bad-1 { background: var(--heat-bad-1); }
     .heat-cell.bad-2 { background: var(--heat-bad-2); }
     .heat-cell.bad-3 { background: var(--heat-bad-3); }
-    .heat-cell.bad-4 { background: var(--heat-bad-4); color: #fff; font-weight: 900; box-shadow: 0 0 6px rgba(255, 61, 113, 0.45); }
+    .heat-cell.bad-4 { background: var(--heat-bad-4); color: #fff; font-weight: 900; }
 
     .heat-cell.empty-cell {
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(255, 255, 255, 0.015);
         color: transparent;
         pointer-events: none;
     }
-    .heat-cell.today-ring { outline: 1.5px solid #fff; outline-offset: 1px; }
+    .heat-cell.today-ring { outline: 1.5px solid rgba(255, 255, 255, 0.85); outline-offset: -1px; }
+    .heat-cell.editing-ring {
+        outline: 2px solid var(--accent-cyan) !important;
+        outline-offset: 0px;
+        box-shadow: 0 0 10px rgba(0, 229, 255, 0.5) !important;
+        z-index: 4;
+    }
 
-    /* CARROUSEL DE CARTES D'HABITUDES PLEIN ÉCRAN */
+    /* BARRE INTERMÉDIAIRE HABITUDES + POINTS DE CARROUSEL */
+    .routine-bar-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+        padding: 0 2px;
+    }
+
+    /* CARROUSEL DE CARTES D'HABITUDES ÉLASTIQUE SANS DÉBORDEMENT */
     .habits-carousel-container {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
         display: flex;
         overflow-x: auto;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         gap: 12px;
-        padding: 4px 2px 10px 2px;
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
     }
@@ -553,57 +561,68 @@
 
     .habit-full-card {
         flex: 0 0 100%;
+        height: 100%;
+        min-height: 0;
         scroll-snap-align: center;
         scroll-snap-stop: always;
         background: var(--bg-card);
         border: 1px solid var(--border-subtle);
         border-radius: var(--radius-lg);
-        padding: 16px;
+        padding: 12px 14px;
         display: flex;
         flex-direction: column;
-        gap: 14px;
-        position: relative;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+        gap: 8px;
+        overflow: hidden;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
     }
 
     .habit-card-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
         gap: 8px;
+        flex-shrink: 0;
     }
 
     .habit-title-box {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        min-width: 0;
     }
     .habit-category-badge {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         font-weight: 800;
-        letter-spacing: 1px;
+        letter-spacing: 0.8px;
         text-transform: uppercase;
         color: var(--accent-cyan);
     }
     .habit-card-title {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
         font-weight: 900;
         color: var(--text-primary);
-        letter-spacing: 0.3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .habit-header-right {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
     }
 
     .streak-badge {
         display: flex;
         align-items: center;
-        gap: 5px;
-        background: rgba(255, 171, 64, 0.15);
-        border: 1px solid rgba(255, 171, 64, 0.35);
+        gap: 4px;
+        background: rgba(255, 171, 64, 0.14);
+        border: 1px solid rgba(255, 171, 64, 0.3);
         color: var(--accent-amber);
-        padding: 4px 10px;
-        border-radius: 14px;
-        font-size: 0.78rem;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.72rem;
         font-weight: 800;
-        white-space: nowrap;
     }
     .streak-badge.negative-type {
         background: rgba(0, 230, 118, 0.12);
@@ -611,74 +630,95 @@
         color: var(--accent-emerald);
     }
 
-    /* INDICATEUR NUMÉRIQUE CENTRAL MONUMENTAL */
+    .btn-card-more {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    /* INDICATEUR NUMÉRIQUE CENTRAL COMPACT */
     .monument-indicator-wrap {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 8px 0 2px 0;
+        flex-shrink: 0;
         cursor: pointer;
+        padding: 2px 0;
     }
+
+    .edit-date-pill {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 229, 255, 0.14);
+        border: 1px solid var(--accent-cyan);
+        color: var(--accent-cyan);
+        font-size: 0.64rem;
+        font-weight: 800;
+        padding: 2px 9px;
+        border-radius: 12px;
+        margin-bottom: 3px;
+    }
+    .edit-date-pill.visible { display: inline-flex; }
+
+    .monument-main-line {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+    }
+
     .monument-val {
-        font-size: 3.7rem;
+        font-size: 2.75rem;
         font-weight: 900;
         font-variant-numeric: tabular-nums;
-        letter-spacing: -1.5px;
+        letter-spacing: -1px;
         line-height: 1;
-        transition: transform 0.1s, color 0.15s;
     }
-    .monument-val:active { transform: scale(0.95); }
     .monument-unit {
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
+        letter-spacing: 1px;
         color: var(--text-secondary);
-        margin-top: 5px;
     }
     .monument-subtext {
-        font-size: 0.7rem;
+        font-size: 0.64rem;
         color: var(--text-tertiary);
-        margin-top: 3px;
+        margin-top: 2px;
         font-weight: 600;
     }
 
-    /* ROULETTE HAPTIQUE / BARILLET ISOLÉ DU SWIPE */
+    /* ROULETTE HAPTIQUE / BARILLET COMPACT ISOLÉ */
     .dial-controller-box {
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-md);
-        padding: 10px;
+        border-radius: 12px;
+        padding: 7px 8px;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
+        flex-shrink: 0;
         touch-action: none;
     }
 
     .dial-viewport {
         position: relative;
-        height: 54px;
-        background: rgba(0, 0, 0, 0.45);
-        border-radius: var(--radius-sm);
+        height: 36px;
+        background: rgba(0, 0, 0, 0.42);
+        border-radius: 7px;
         overflow: hidden;
         cursor: ew-resize;
         touch-action: none !important;
         border: 1px solid var(--border-medium);
-    }
-
-    .dial-hint-label {
-        position: absolute;
-        bottom: 3px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-size: 0.56rem;
-        letter-spacing: 1.2px;
-        text-transform: uppercase;
-        color: var(--text-tertiary);
-        pointer-events: none;
-        font-weight: 800;
     }
 
     .dial-center-line {
@@ -686,10 +726,10 @@
         top: 0;
         bottom: 0;
         left: 50%;
-        width: 2.5px;
+        width: 2px;
         transform: translateX(-50%);
         background: var(--accent-emerald);
-        box-shadow: 0 0 10px var(--accent-emerald-glow);
+        box-shadow: 0 0 8px var(--accent-emerald-glow);
         z-index: 4;
         pointer-events: none;
     }
@@ -697,7 +737,7 @@
     .dial-track {
         position: absolute;
         top: 0;
-        bottom: 10px;
+        bottom: 0;
         left: -140px;
         right: -140px;
         display: flex;
@@ -709,20 +749,20 @@
 
     .dial-tick {
         width: 14px;
-        height: 16px;
+        height: 13px;
         border-left: 1.5px solid var(--text-tertiary);
-        opacity: 0.55;
+        opacity: 0.5;
         flex-shrink: 0;
     }
     .dial-tick.major {
-        height: 30px;
+        height: 24px;
         border-left: 2px solid var(--text-secondary);
-        opacity: 1;
+        opacity: 0.95;
     }
 
     .dial-actions-row {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         justify-content: space-between;
         align-items: center;
     }
@@ -732,35 +772,33 @@
         background: var(--bg-input);
         border: 1px solid var(--border-medium);
         color: var(--text-primary);
-        padding: 10px 0;
-        border-radius: 10px;
-        font-size: 1.2rem;
+        height: 34px;
+        border-radius: 8px;
+        font-size: 1.1rem;
         font-weight: 900;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         touch-action: manipulation;
-        transition: transform 0.1s;
     }
-    .stepper-btn:active { transform: scale(0.92); background: var(--bg-card-hover); }
+    .stepper-btn:active { transform: scale(0.94); background: var(--bg-card-hover); }
 
     .btn-done-toggle {
-        padding: 10px 16px;
-        border-radius: 10px;
-        font-weight: 900;
-        font-size: 0.85rem;
+        height: 34px;
+        padding: 0 14px;
+        border-radius: 8px;
+        font-weight: 800;
+        font-size: 0.78rem;
         cursor: pointer;
         border: none;
         display: flex;
         align-items: center;
-        gap: 6px;
-        transition: transform 0.1s;
+        gap: 5px;
     }
     .btn-done-toggle.is-achieved {
         background: var(--accent-emerald);
         color: #04140c;
-        box-shadow: 0 0 14px var(--accent-emerald-glow);
     }
     .btn-done-toggle.is-breached {
         background: rgba(255, 61, 113, 0.2);
@@ -773,51 +811,47 @@
         border: 1px solid var(--border-subtle);
     }
 
-    /* MINI HEATMAP 4 SEMAINES PLEINE LARGEUR (TACTILE & ÉLÉGANTE) */
+    /* MINI HEATMAP 4 SEMAINES ÉLASTIQUE (S'ADAPTE SANS JAMAIS DÉBORDER) */
     .mini-heatmap-wrap {
+        flex: 1;
+        min-height: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        background: rgba(0, 0, 0, 0.25);
-        padding: 12px;
-        border-radius: 12px;
+        gap: 4px;
+        background: rgba(0, 0, 0, 0.24);
+        padding: 7px 10px;
+        border-radius: 10px;
         border: 1px solid var(--border-subtle);
         width: 100%;
-    }
-    .mini-heatmap-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.65rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: var(--text-secondary);
+        overflow: hidden;
     }
     .mini-week-headers {
         display: grid;
-        grid-template-columns: 28px repeat(4, 1fr);
-        gap: 5px;
-        font-size: 0.58rem;
+        grid-template-columns: 26px repeat(4, 1fr);
+        gap: 4px;
+        font-size: 0.55rem;
         font-weight: 800;
         color: var(--text-tertiary);
         text-align: center;
+        flex-shrink: 0;
     }
     .mini-iso-layout {
+        flex: 1;
+        min-height: 0;
         display: flex;
-        gap: 5px;
+        gap: 4px;
         align-items: stretch;
         width: 100%;
     }
     .mini-day-labels {
-        width: 28px;
+        width: 26px;
         display: grid;
-        grid-template-rows: repeat(7, 22px);
-        gap: 4px;
-        font-size: 0.6rem;
+        grid-template-rows: repeat(7, minmax(0, 1fr));
+        gap: 3px;
+        font-size: 0.55rem;
         font-weight: 800;
         color: var(--text-tertiary);
-        line-height: 22px;
+        align-items: center;
         text-align: right;
         padding-right: 3px;
         flex-shrink: 0;
@@ -825,42 +859,143 @@
     .mini-iso-grid {
         flex: 1;
         width: 100%;
+        height: 100%;
+        min-height: 0;
         display: grid;
-        grid-template-rows: repeat(7, 22px);
+        grid-template-rows: repeat(7, minmax(0, 1fr));
         grid-auto-flow: column;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 4px;
+        gap: 3px;
     }
 
     /* INDICATEURS DE SLIDE */
     .carousel-dots-row {
         display: flex;
         justify-content: center;
-        gap: 6px;
-        padding: 4px 0 10px 0;
+        align-items: center;
+        gap: 5px;
     }
     .carousel-dot {
-        width: 7px;
-        height: 7px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
         background: var(--border-medium);
         transition: all 0.2s;
         cursor: pointer;
     }
     .carousel-dot.active {
-        width: 22px;
-        border-radius: 6px;
+        width: 18px;
+        border-radius: 5px;
         background: var(--accent-emerald);
-        box-shadow: 0 0 8px var(--accent-emerald-glow);
     }
 
-    /* BOTTOM NAV */
+    /* GRAPHE DE DÉPENDANCES VISUEL (ONGLET RÉSEAU) */
+    .quick-link-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+    .quick-link-row {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+    .quick-select {
+        flex: 1;
+        background: var(--bg-input);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-primary);
+        padding: 7px 8px;
+        border-radius: 8px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        outline: none;
+        min-width: 0;
+    }
+
+    .network-stage {
+        position: relative;
+        background: rgba(12, 20, 18, 0.7);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 18px 12px;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+        overflow-x: auto;
+    }
+    .network-svg-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .network-tier {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 2;
+    }
+    .graph-node {
+        background: var(--bg-card);
+        border: 1.5px solid var(--border-medium);
+        border-radius: 12px;
+        padding: 8px 12px;
+        min-width: 120px;
+        max-width: 165px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+        transition: transform 0.12s;
+    }
+    .graph-node:active { transform: scale(0.95); }
+    .graph-node.node-lever {
+        border-color: var(--accent-emerald);
+        box-shadow: 0 0 12px rgba(0, 230, 118, 0.2);
+    }
+    .graph-node.node-locked {
+        border-color: var(--accent-crimson);
+        border-style: dashed;
+    }
+    .graph-node.node-done {
+        opacity: 0.45;
+        border-color: var(--text-tertiary);
+    }
+    .node-cat {
+        font-size: 0.56rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        display: flex;
+        justify-content: space-between;
+    }
+    .node-title {
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* BOTTOM NAV (3 ONGLETS) */
     .bottom-nav {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 64px;
+        height: 62px;
         background: rgba(8, 14, 12, 0.95);
         backdrop-filter: blur(14px);
         border-top: 1px solid var(--border-subtle);
@@ -875,93 +1010,61 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+        gap: 3px;
         color: var(--text-tertiary);
         font-size: 0.68rem;
         font-weight: 700;
         cursor: pointer;
         flex: 1;
         padding: 6px 0;
-        transition: color 0.2s, transform 0.1s;
     }
-    .nav-btn:active { transform: scale(0.92); }
     .nav-btn.active { color: var(--accent-emerald); }
-    .nav-btn .nav-icon { font-size: 1.25rem; }
+    .nav-btn .nav-icon { font-size: 1.2rem; }
 
-    /* STATS & CARDS */
-    .stat-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-    }
-
-    .stat-box {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-sm);
-        padding: 12px 8px;
-        text-align: center;
-    }
-    .stat-box .val {
-        font-size: 1.35rem;
-        font-weight: 900;
-        color: var(--accent-emerald);
-        font-variant-numeric: tabular-nums;
-    }
-    .stat-box .lbl {
-        font-size: 0.63rem;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        margin-top: 2px;
-    }
-
+    /* CARDS & LISTES */
     .section-title {
-        font-size: 0.68rem;
+        font-size: 0.66rem;
         font-weight: 800;
-        letter-spacing: 1.5px;
+        letter-spacing: 1.2px;
         text-transform: uppercase;
         color: var(--text-secondary);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 6px;
     }
 
     .full-card {
         background: var(--bg-card);
         border: 1px solid var(--border-subtle);
         border-radius: var(--radius-md);
-        padding: 12px 14px;
+        padding: 10px 12px;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         cursor: pointer;
-        transition: background 0.15s, transform 0.1s;
     }
-    .full-card:active { background: var(--bg-card-hover); transform: scale(0.98); }
+    .full-card:active { background: var(--bg-card-hover); }
 
     /* MODALES */
     .modal-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(5, 10, 8, 0.94);
+        background: rgba(5, 10, 8, 0.95);
         backdrop-filter: blur(12px);
         z-index: 50;
         display: none;
         flex-direction: column;
-        animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .modal-overlay.open { display: flex; }
 
     @keyframes slideUp {
-        from { transform: translateY(30px); opacity: 0; }
+        from { transform: translateY(24px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
     }
 
     .modal-header {
-        padding: 14px 16px;
+        padding: 12px 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -972,7 +1075,7 @@
         background: none;
         border: none;
         color: var(--accent-emerald);
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-weight: 800;
         cursor: pointer;
         padding: 4px;
@@ -981,10 +1084,10 @@
     .modal-body {
         flex: 1;
         overflow-y: auto;
-        padding: 16px;
+        padding: 14px 16px;
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 14px;
     }
 
     .form-group {
@@ -1002,7 +1105,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 14px;
+        padding: 11px 14px;
         border-bottom: 1px solid var(--border-subtle);
         gap: 10px;
     }
@@ -1012,7 +1115,7 @@
         background: transparent;
         border: none;
         color: var(--text-primary);
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         font-weight: 700;
         outline: none;
         width: 100%;
@@ -1023,7 +1126,7 @@
         background: transparent;
         border: none;
         color: var(--accent-emerald);
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         font-weight: 700;
         outline: none;
         text-align: right;
@@ -1035,54 +1138,86 @@
         background: var(--accent-emerald);
         color: #04140c;
         border: none;
-        padding: 13px;
-        border-radius: 12px;
+        padding: 12px;
+        border-radius: 10px;
         font-weight: 900;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         cursor: pointer;
         text-align: center;
-        transition: transform 0.15s;
     }
-    .btn-action-primary:active { transform: scale(0.97); }
 
     .btn-action-danger {
         background: rgba(255, 61, 113, 0.15);
         color: var(--accent-crimson);
         border: 1px solid rgba(255, 61, 113, 0.35);
-        padding: 12px;
-        border-radius: 12px;
+        padding: 11px;
+        border-radius: 10px;
         font-weight: 800;
         cursor: pointer;
         text-align: center;
     }
 
-    /* POMODORO */
+    /* POMODORO & FOCUS COMPACT */
+    .focus-hero-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-medium);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+    }
     .timer-readout {
-        font-size: 4rem;
+        font-size: 3.1rem;
         font-weight: 900;
         font-variant-numeric: tabular-nums;
         color: var(--accent-emerald);
-        letter-spacing: 2px;
-        margin: 20px 0;
-        text-shadow: 0 0 25px var(--accent-emerald-glow);
+        letter-spacing: 1.5px;
+        margin: 6px 0;
+        text-shadow: 0 0 20px var(--accent-emerald-glow);
+    }
+
+    .focus-filter-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        background: var(--bg-panel);
+        padding: 4px;
+        border-radius: 10px;
+    }
+    .focus-tab-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        padding: 7px 4px;
+        border-radius: 7px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .focus-tab-btn.active {
+        background: var(--bg-card);
+        color: var(--accent-emerald);
     }
 
     /* TOAST */
     .toast-box {
         position: fixed;
-        top: 20px;
+        top: 16px;
         left: 50%;
         transform: translateX(-50%);
         background: var(--bg-card);
         color: #fff;
         border: 1px solid var(--accent-emerald);
-        padding: 10px 20px;
-        border-radius: 30px;
-        font-size: 0.82rem;
+        padding: 8px 18px;
+        border-radius: 24px;
+        font-size: 0.78rem;
         font-weight: 800;
         z-index: 100;
         display: none;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.6);
     }
 </style>
 </head>
@@ -1093,125 +1228,28 @@
 <!-- EN-TÊTE PRINCIPAL -->
 <header class="app-header">
     <div class="header-top">
-        <div class="brand-group">
-            <span class="brand-subtitle">SYSTÈME TACTIQUE // V3</span>
-            <h1 class="brand-title" id="pageMainTitle">
-                <span>VUE GLOBALE</span>
-                <span class="score-badge" id="tacticalScoreBadge">0 pts</span>
-            </h1>
-        </div>
+        <h1 class="brand-title" id="pageMainTitle">
+            <span>GLOBAL</span>
+            <span class="score-badge" id="tacticalScoreBadge">0 pts</span>
+        </h1>
         <div class="header-actions">
-            <button class="btn-icon" onclick="toggleSearch()" title="Recherche temps réel">🔍</button>
-            <button class="btn-icon active" id="globalAggBtn" onclick="toggleGlobalAggregation()" title="Basculer Agrégation Globale">🔓</button>
-            <button class="btn-icon" onclick="openCategorySheet()" title="Gestionnaire de Catégories">🗂️</button>
+            <button class="btn-icon" onclick="toggleSearch()" title="Rechercher">🔍</button>
+            <button class="btn-icon active" id="globalAggBtn" onclick="toggleGlobalAggregation()" title="Agrégation">🔓</button>
+            <button class="btn-icon" onclick="openSystemModal()" title="Fichier & Catégories">🗂️</button>
         </div>
     </div>
 
-    <!-- RECHERCHE POP-IN -->
     <div class="search-wrapper" id="searchWrapper">
-        <input type="text" id="globalSearchInput" class="search-input" placeholder="Filtrer tâches, dépendances, programmes..." oninput="handleGlobalSearch(this.value)">
+        <input type="text" id="globalSearchInput" class="search-input" placeholder="Filtrer..." oninput="handleGlobalSearch(this.value)">
     </div>
 
-    <!-- BARRE DE CATÉGORIES -->
     <div class="cat-bar" id="categoryBar"></div>
 </header>
 
 <!-- CONTENEUR DES ONGLETS -->
 <main class="view-container">
 
-    <!-- ONGLET 1 : AUJOURD'HUI -->
-    <section class="tab-view" id="tab-today">
-        <div class="stat-row" id="todayStatsRow"></div>
-
-        <div class="form-group">
-            <div class="section-title">⚡ EFFET DE LEVIER MAXIMUM (DÉBLOQUENT D'AUTRES TÂCHES)</div>
-            <div id="leverageTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">🎯 CIBLES DU JOUR (FAIRE / PLANIFIER)</div>
-            <div id="todayPrimaryList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">💀 ZONE CRITIQUE // PROCRASTINATION (+90 JOURS)</div>
-            <div id="rottingTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-    </section>
-
-    <!-- ONGLET 2 : HABITUDES & SÉRIES -->
-    <section class="tab-view" id="tab-routine">
-        <!-- HEATMAP GLOBALE CALENDRIER ISO PLEINE LARGEUR -->
-        <div class="global-heatmap-wrap">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:0.92rem; font-weight:800; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
-                    📊 Discipline Calendaire
-                </span>
-                <div class="heat-period-toggle">
-                    <button class="heat-period-btn active" id="btnPeriod12" onclick="setGlobalHeatWeeks(12)">12 Sem.</button>
-                    <button class="heat-period-btn" id="btnPeriod4" onclick="setGlobalHeatWeeks(4)">4 Sem.</button>
-                </div>
-            </div>
-
-            <div class="calendar-heatmap-layout">
-                <div class="day-labels-col">
-                    <span>LUN</span>
-                    <span>MAR</span>
-                    <span>MER</span>
-                    <span>JEU</span>
-                    <span>VEN</span>
-                    <span>SAM</span>
-                    <span>DIM</span>
-                </div>
-                <div class="global-iso-grid" id="globalIsoGrid" style="--cols: 12;"></div>
-            </div>
-
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; color:var(--text-secondary); padding-top:4px; border-top:1px solid var(--border-subtle);">
-                <span id="globalHeatAverage">Moyenne : 0 act/j</span>
-                <div style="display:flex; gap:4px; align-items:center;">
-                    <span>Neutre</span>
-                    <div class="heat-cell level-0" style="width:12px;height:12px;"></div>
-                    <div class="heat-cell level-2" style="width:12px;height:12px;"></div>
-                    <div class="heat-cell level-4" style="width:12px;height:12px;"></div>
-                    <span style="margin-left:3px;">Cible</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- EN-TÊTE CARROUSEL -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
-            <span class="section-title" id="habitCarouselCounterTitle">MES HABITUDES & SÉRIES</span>
-            <button class="btn-text" style="font-size:0.78rem;" onclick="openCreateHabitModal()">+ Nouvelle Routine</button>
-        </div>
-
-        <!-- CARROUSEL SWIPEABLE PLEIN ÉCRAN -->
-        <div class="habits-carousel-container" id="habitsCarousel"></div>
-        <div class="carousel-dots-row" id="carouselDots"></div>
-    </section>
-
-    <!-- ONGLET 3 : TEMPLE -->
-    <section class="tab-view" id="tab-temple">
-        <div class="stat-row" id="templeStatsRow"></div>
-
-        <div class="form-group">
-            <div class="section-title">🕸️ MATRICE DES DÉPENDANCES & BLOCAGES</div>
-            <div id="templeDependencyList" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <div class="form-group">
-            <div class="section-title">💾 COFFRE-FORT LOCAL // BACKUP</div>
-            <div class="form-group-card" style="padding:14px; display:flex; flex-direction:column; gap:10px;">
-                <button class="btn-action-primary" onclick="exportDataJSON()">📤 Exporter Données Tactiques (.json)</button>
-                <label class="btn-action-primary" style="background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border-subtle); display:block;">
-                    📥 Importer Sauvegarde (.json)
-                    <input type="file" accept=".json" style="display:none" onchange="importDataJSON(event)">
-                </label>
-                <button class="btn-action-danger" onclick="resetToDemonstrationData()">Réinitialiser Données Démo</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ONGLET 4 : MATRICE D'EISENHOWER 2x2 -->
+    <!-- ONGLET 1 : MATRICE D'EISENHOWER 2x2 -->
     <section class="tab-view active" id="tab-matrix">
         <div class="matrix-grid">
             <div class="quadrant" id="quad-q1">
@@ -1225,7 +1263,7 @@
             <div class="quadrant" id="quad-q2">
                 <div class="quad-header" onclick="openQuadrantDetail('q2')">
                     <div class="quad-title"><span>Planifier</span> <span style="font-size:0.75rem;">⊕</span></div>
-                    <div class="quad-sub">Important, pas urgent</div>
+                    <div class="quad-sub">Important, non urgent</div>
                 </div>
                 <div class="quad-tasks" id="matrixList-q2"></div>
             </div>
@@ -1233,7 +1271,7 @@
             <div class="quadrant" id="quad-q3">
                 <div class="quad-header" onclick="openQuadrantDetail('q3')">
                     <div class="quad-title"><span>Déléguer</span> <span style="font-size:0.75rem;">⊕</span></div>
-                    <div class="quad-sub">Urgent, pas important</div>
+                    <div class="quad-sub">Urgent, non important</div>
                 </div>
                 <div class="quad-tasks" id="matrixList-q3"></div>
             </div>
@@ -1248,51 +1286,100 @@
         </div>
     </section>
 
+    <!-- ONGLET 2 : HABITUDES (ZÉRO SCROLL VERTICAL) -->
+    <section class="tab-view" id="tab-routine">
+        <div class="global-heatmap-wrap">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:800; color:var(--text-primary);" id="globalHeatAverage">
+                    Régularité
+                </span>
+                <div class="heat-period-toggle">
+                    <button class="heat-period-btn active" id="btnPeriod12" onclick="setGlobalHeatWeeks(12)">12 sem.</button>
+                    <button class="heat-period-btn" id="btnPeriod4" onclick="setGlobalHeatWeeks(4)">4 sem.</button>
+                </div>
+            </div>
+
+            <div class="calendar-heatmap-layout">
+                <div class="day-labels-col">
+                    <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                </div>
+                <div class="global-iso-grid" id="globalIsoGrid" style="--cols: 12;"></div>
+            </div>
+        </div>
+
+        <div class="routine-bar-row">
+            <span class="section-title" id="habitCarouselCounterTitle">HABITUDES</span>
+            <div class="carousel-dots-row" id="carouselDots"></div>
+            <button class="btn-text" style="font-size:0.75rem; padding:0;" onclick="openCreateHabitModal()">+ Ajouter</button>
+        </div>
+
+        <div class="habits-carousel-container" id="habitsCarousel"></div>
+    </section>
+
+    <!-- ONGLET 3 : RÉSEAU (GRAPHE DE DÉPENDANCES VISUEL) -->
+    <section class="tab-view" id="tab-network">
+        <div class="quick-link-card">
+            <div class="section-title">LIER DEUX TÂCHES</div>
+            <div class="quick-link-row">
+                <select id="netBlockerSelect" class="quick-select"></select>
+                <span style="font-size:0.75rem; color:var(--accent-emerald); font-weight:900;">➔</span>
+                <select id="netTargetSelect" class="quick-select"></select>
+                <button class="btn-action-primary" style="padding:7px 12px; font-size:0.75rem;" onclick="quickLinkFromNetwork()">Lier</button>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span>GRAPHE DES DÉPENDANCES</span>
+            <span id="networkStatsBadge" style="color:var(--accent-emerald);">0 lien</span>
+        </div>
+
+        <div class="network-stage" id="networkStage">
+            <svg class="network-svg-layer" id="networkSvg"></svg>
+            <div id="networkTiersContainer" style="display:flex; flex-direction:column; gap:36px; width:100%;"></div>
+        </div>
+    </section>
+
 </main>
 
-<!-- CONTRÔLES FLOTTANTS -->
-<div class="floating-bar">
-    <button class="btn-magic" onclick="triggerTacticalFocus()" title="Action immédiate (Algorithme de priorité)">✨</button>
+<!-- CONTRÔLES FLOTTANTS (VISIBLES UNIQUEMENT SUR LA MATRICE) -->
+<div class="floating-bar" id="floatingBar">
+    <button class="btn-magic" onclick="openFocusHub()" title="Exécution & Aujourd'hui">✨</button>
     <button class="btn-videtete" onclick="openQuadrantDetail('inbox')">
         📥 Vide-tête <span class="badge-inbox-count" id="inboxCounter">0</span>
     </button>
 </div>
 
-<!-- BARRE DE NAVIGATION INFÉRIEURE -->
+<!-- BARRE DE NAVIGATION INFÉRIEURE (3 ONGLETS) -->
 <nav class="bottom-nav">
-    <div class="nav-btn" data-tab="today" onclick="switchNavTab('today')">
-        <span class="nav-icon">☀️</span>
-        <span>Aujourd'hui</span>
+    <div class="nav-btn active" data-tab="matrix" onclick="switchNavTab('matrix')">
+        <span class="nav-icon">🎛️</span>
+        <span>Matrice</span>
     </div>
     <div class="nav-btn" data-tab="routine" onclick="switchNavTab('routine')">
         <span class="nav-icon">📈</span>
         <span>Habitudes</span>
     </div>
-    <div class="nav-btn" data-tab="temple" onclick="switchNavTab('temple')">
-        <span class="nav-icon">🏛️</span>
-        <span>Temple</span>
-    </div>
-    <div class="nav-btn active" data-tab="matrix" onclick="switchNavTab('matrix')">
-        <span class="nav-icon">🎛️</span>
-        <span>Matrice</span>
+    <div class="nav-btn" data-tab="network" onclick="switchNavTab('network')">
+        <span class="nav-icon">🕸️</span>
+        <span>Réseau</span>
     </div>
 </nav>
 
 <!-- MODAL 1 : ZOOM QUADRANT & VIDE-TÊTE -->
 <div class="modal-overlay" id="quadZoomModal">
     <div class="modal-header">
-        <button class="btn-text" onclick="closeQuadrantDetail()">‹ Retour Matrice</button>
+        <button class="btn-text" onclick="closeQuadrantDetail()">‹ Retour</button>
         <span class="score-badge" id="zoomCatIndicator">GLOBAL</span>
     </div>
     <div class="modal-body">
         <div style="text-align:center;">
-            <h2 id="zoomQuadHeading" style="margin:0; font-size:1.45rem; font-weight:900;">Planifier</h2>
-            <div id="zoomQuadSubheading" style="font-size:0.8rem; color:var(--text-secondary); margin-top:3px;">Important, pas urgent</div>
+            <h2 id="zoomQuadHeading" style="margin:0; font-size:1.35rem; font-weight:900;">Planifier</h2>
+            <div id="zoomQuadSubheading" style="font-size:0.76rem; color:var(--text-secondary); margin-top:2px;">Important, non urgent</div>
         </div>
 
         <div style="display:flex; gap:8px;">
-            <input type="text" id="quickTaskInput" class="search-input" placeholder="Ajouter une action tactique..." onkeydown="if(event.key==='Enter') submitQuickTask()">
-            <button class="btn-action-primary" style="padding:0 18px;" onclick="submitQuickTask()">OK</button>
+            <input type="text" id="quickTaskInput" class="search-input" placeholder="Nouvelle tâche..." onkeydown="if(event.key==='Enter') submitQuickTask()">
+            <button class="btn-action-primary" style="padding:0 16px;" onclick="submitQuickTask()">OK</button>
         </div>
 
         <div id="zoomTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
@@ -1303,7 +1390,7 @@
 <div class="modal-overlay" id="taskDetailModal">
     <div class="modal-header">
         <button class="btn-text" onclick="closeTaskDetail()">‹ Fermer</button>
-        <strong style="font-size:0.95rem;">Configuration Tactique</strong>
+        <strong style="font-size:0.9rem;">Détails</strong>
         <button class="btn-text" style="color:var(--accent-crimson);" onclick="deleteActiveTask()">Suppr.</button>
     </div>
     <div class="modal-body">
@@ -1311,7 +1398,7 @@
             <div class="section-title" id="subtaskCounterLabel">SOUS-TÂCHES (0/0)</div>
             <div class="form-group-card">
                 <div class="form-row">
-                    <input type="text" id="newSubtaskTitle" class="form-input-text" placeholder="⊕ Ajouter une étape intermédiaire..." onkeydown="if(event.key==='Enter') addSubtaskToActive()">
+                    <input type="text" id="newSubtaskTitle" class="form-input-text" placeholder="⊕ Ajouter une étape..." onkeydown="if(event.key==='Enter') addSubtaskToActive()">
                     <button class="btn-text" onclick="addSubtaskToActive()">Ajouter</button>
                 </div>
                 <div id="activeSubtasksContainer"></div>
@@ -1322,20 +1409,20 @@
             <div class="section-title">GÉNÉRAL</div>
             <div class="form-group-card">
                 <div class="form-row">
-                    <input type="text" id="editTaskTitle" class="form-input-text" style="font-size:1.05rem;" onchange="updateTaskProp('title', this.value)">
+                    <input type="text" id="editTaskTitle" class="form-input-text" style="font-size:1rem;" onchange="updateTaskProp('title', this.value)">
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Quadrant</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Quadrant</label>
                     <select id="editTaskQuadrant" class="form-select" onchange="updateTaskProp('quadrant', this.value)">
                         <option value="q1">Faire (Urgent & Important)</option>
-                        <option value="q2">Planifier (Important, pas urgent)</option>
-                        <option value="q3">Déléguer (Urgent, pas important)</option>
-                        <option value="q4">Éliminer (Ni urgent, ni important)</option>
-                        <option value="inbox">Vide-tête (Inbox)</option>
+                        <option value="q2">Planifier (Important)</option>
+                        <option value="q3">Déléguer (Urgent)</option>
+                        <option value="q4">Éliminer</option>
+                        <option value="inbox">Vide-tête</option>
                     </select>
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Niveau de Priorité</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Priorité</label>
                     <select id="editTaskPriority" class="form-select" onchange="updateTaskProp('priority', this.value)">
                         <option value="critique">Critique 🔥</option>
                         <option value="haute">Haute ⚡</option>
@@ -1347,12 +1434,12 @@
         </div>
 
         <div class="form-group">
-            <div class="section-title">DÉPENDANCES BLOQUANTES</div>
+            <div class="section-title">PRÉREQUIS BLOQUANTS</div>
             <div class="form-group-card">
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Prérequis</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Bloqué par</label>
                     <select id="dependencySelect" class="form-select" onchange="attachDependency(this.value)">
-                        <option value="">+ Ajouter un verrou...</option>
+                        <option value="">+ Choisir une tâche...</option>
                     </select>
                 </div>
                 <div id="activeDependenciesBox" style="padding:10px 14px; display:flex; flex-direction:column; gap:6px;"></div>
@@ -1360,18 +1447,18 @@
         </div>
 
         <div class="form-group">
-            <div class="section-title">MÉTADONNÉES</div>
+            <div class="section-title">CLASSEMENT</div>
             <div class="form-group-card">
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Catégorie</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Catégorie</label>
                     <select id="editTaskCategory" class="form-select" onchange="updateTaskProp('category', this.value)"></select>
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Date de création</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Création</label>
                     <input type="date" id="editTaskDate" class="form-select" onchange="updateTaskProp('createdAt', this.value)">
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Programme / Bootcamp</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Projet / Groupe</label>
                     <input type="text" id="editTaskProgram" class="form-select" style="user-select:text;" onchange="updateTaskProp('program', this.value)">
                 </div>
             </div>
@@ -1379,75 +1466,119 @@
     </div>
 </div>
 
-<!-- MODAL 3 : CRÉATION / MODIFICATION D'UNE HABITUDE -->
+<!-- MODAL 3 : PARAMÈTRES D'UNE HABITUDE -->
 <div class="modal-overlay" id="habitModal">
     <div class="modal-header">
         <button class="btn-text" onclick="closeHabitModal()">‹ Fermer</button>
-        <strong style="font-size:0.95rem;" id="habitModalHeading">Nouvelle Routine</strong>
+        <strong style="font-size:0.9rem;" id="habitModalHeading">Habitude</strong>
         <button class="btn-text" style="color:var(--accent-crimson); display:none;" id="btnDeleteHabit" onclick="deleteCurrentHabit()">Suppr.</button>
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <div class="section-title">PARAMÈTRES DE LA ROUTINE</div>
+            <div class="section-title">CONFIGURATION</div>
             <div class="form-group-card">
                 <div class="form-row">
-                    <input type="text" id="habitTitleInput" class="form-input-text" placeholder="Intitulé (ex: Performance MES, Pompes, Zéro écart...)">
+                    <input type="text" id="habitTitleInput" class="form-input-text" placeholder="Nom (ex: Trade, Sport, Zéro écart...)">
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Catégorie</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Catégorie</label>
                     <select id="habitCategorySelect" class="form-select"></select>
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Polarité</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Polarité</label>
                     <select id="habitPolaritySelect" class="form-select">
-                        <option value="positive">Croissance / Bonne Habitude 📈</option>
-                        <option value="negative">Sobriété / Mauvaise Habitude à réduire 🛡️</option>
+                        <option value="positive">Croissance (Objectif à atteindre)</option>
+                        <option value="negative">Sobriété (Écart à éviter)</option>
                     </select>
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Mode de Suivi</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Type</label>
                     <select id="habitValueTypeSelect" class="form-select" onchange="toggleHabitNumericFields(this.value)">
-                        <option value="numeric">Quantifiable (Roulette Haptique + Unité)</option>
-                        <option value="boolean">Binaire (Fait / Non fait)</option>
+                        <option value="numeric">Quantitatif (Valeur & Unité)</option>
+                        <option value="boolean">Binaire (Oui / Non)</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <div class="form-group" id="habitNumericConfigGroup">
-            <div class="section-title">UNITÉ & PRÉCISION DU BARILLET</div>
+            <div class="section-title">UNITÉ & PRÉCISION</div>
             <div class="form-group-card">
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Unité personnalisée</label>
-                    <input type="text" id="habitUnitInput" class="form-select" style="text-align:right; user-select:text;" value="R" placeholder="ex: R, kg, reps, km, min, clopes">
+                    <label style="font-size:0.85rem; font-weight:700;">Unité</label>
+                    <input type="text" id="habitUnitInput" class="form-select" style="text-align:right; user-select:text;" value="R" placeholder="ex: R, $, kg, min">
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Seuil / Cible Quotidienne</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Cible quotidienne</label>
                     <input type="number" step="any" id="habitTargetInput" class="form-select" style="text-align:right; user-select:text;" value="2">
                 </div>
                 <div class="form-row">
-                    <label style="font-size:0.88rem; font-weight:700;">Pas de la Roulette (Step)</label>
+                    <label style="font-size:0.85rem; font-weight:700;">Pas de réglage</label>
                     <input type="number" step="any" id="habitStepInput" class="form-select" style="text-align:right; user-select:text;" value="0.25">
                 </div>
             </div>
         </div>
 
-        <button class="btn-action-primary" onclick="saveHabitFromModal()">Enregistrer la Routine</button>
+        <button class="btn-action-primary" onclick="saveHabitFromModal()">Enregistrer</button>
     </div>
 </div>
 
-<!-- MODAL 4 : FOCUS TACTIQUE -->
+<!-- MODAL 4 : HUB FOCUS & AUJOURD'HUI COMPACT (BOUTON ✨) -->
 <div class="modal-overlay" id="focusModal">
     <div class="modal-header">
-        <button class="btn-text" onclick="closeFocusModal()">‹ Quitter Focus</button>
-        <span class="score-badge">CONCENTRATION PROFONDE</span>
+        <button class="btn-text" onclick="closeFocusModal()">‹ Fermer</button>
+        <strong style="font-size:0.9rem;">Exécution & Priorités</strong>
+        <span style="width:48px;"></span>
     </div>
-    <div class="modal-body" id="focusBody" style="align-items:center; justify-content:center; text-align:center;"></div>
+    <div class="modal-body">
+        <div class="focus-hero-card" id="focusHeroBox"></div>
+
+        <div class="focus-filter-tabs">
+            <button class="focus-tab-btn active" id="fTab_levers" onclick="switchFocusListTab('levers')">⚡ Leviers (0)</button>
+            <button class="focus-tab-btn" id="fTab_today" onclick="switchFocusListTab('today')">🎯 Priorités (0)</button>
+            <button class="focus-tab-btn" id="fTab_old" onclick="switchFocusListTab('old')">⏳ +90j (0)</button>
+        </div>
+
+        <div id="focusCompactTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+</div>
+
+<!-- MODAL 5 : MENU FICHIER & CATÉGORIES (BOUTON 🗂️) -->
+<div class="modal-overlay" id="systemMenuModal">
+    <div class="modal-header">
+        <button class="btn-text" onclick="closeSystemModal()">‹ Fermer</button>
+        <strong style="font-size:0.9rem;">Fichier & Catégories</strong>
+        <span style="width:48px;"></span>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="section-title">CATÉGORIE ACTIVE : <span id="sysActiveCatLabel" style="color:var(--accent-emerald);">GLOBAL</span></div>
+            <div class="form-group-card" style="padding:12px; display:flex; flex-direction:column; gap:8px;">
+                <button class="btn-action-primary" onclick="createCategoryPrompt(); closeSystemModal();">+ Nouvelle catégorie</button>
+                <div id="sysCatEditActions" style="display:flex; gap:8px;">
+                    <button class="stepper-btn" style="font-size:0.82rem;" onclick="renameActiveCategory()">Renommer</button>
+                    <button class="btn-action-danger" style="flex:1; padding:8px;" onclick="deleteActiveCategory()">Supprimer</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="section-title">DONNÉES LOCALES</div>
+            <div class="form-group-card" style="padding:12px; display:flex; flex-direction:column; gap:8px;">
+                <button class="stepper-btn" style="font-size:0.85rem; height:42px;" onclick="exportDataJSON()">📤 Exporter le fichier (.json)</button>
+                <label class="stepper-btn" style="font-size:0.85rem; height:42px; cursor:pointer;">
+                    📥 Importer une sauvegarde (.json)
+                    <input type="file" accept=".json" style="display:none" onchange="importDataJSON(event); closeSystemModal();">
+                </label>
+                <button class="btn-action-danger" style="margin-top:6px;" onclick="resetToDemonstrationData(); closeSystemModal();">Réinitialiser par défaut</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script id="mainAppScript">
 /* ============================================================================
-   SYNCHRONISATION EN DIRECT À CHAQUE COMMIT GITHUB (AUTO-UPDATE SANS DÉLAI)
+   SYNCHRONISATION EN DIRECT À CHAQUE COMMIT GITHUB
 ============================================================================ */
 function simpleHash(str) {
     let h = 0;
@@ -1488,8 +1619,8 @@ async function checkGitHubLiveCommit() {
                     await c.put('./index.html', freshResp);
                 }
             }
-            toast('⚡ Nouveau commit GitHub synchronisé !');
-            setTimeout(() => window.location.reload(), 500);
+            toast('⚡ Mise à jour appliquée');
+            setTimeout(() => window.location.reload(), 450);
         }
     } catch (e) {}
 }
@@ -1502,8 +1633,7 @@ if ('serviceWorker' in navigator) {
                 const newWorker = registration.installing;
                 newWorker.addEventListener('statechange', () => {
                     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        toast('⚡ Mise à jour déployée !');
-                        setTimeout(() => window.location.reload(), 500);
+                        window.location.reload();
                     }
                 });
             });
@@ -1513,9 +1643,7 @@ if ('serviceWorker' in navigator) {
     });
 
     document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-            checkGitHubLiveCommit();
-        }
+        if (document.visibilityState === 'visible') checkGitHubLiveCommit();
     });
 }
 
@@ -1524,7 +1652,7 @@ if (navigator.storage && navigator.storage.persist) {
 }
 
 /* ============================================================================
-   AUDIO SYNTHESIZER & HAPTIQUE (100% Hors-ligne / Zero CDN)
+   SYNTHÉTISEUR AUDIO & HAPTIQUE
 ============================================================================ */
 const AudioEngine = {
     ctx: null,
@@ -1542,13 +1670,13 @@ const AudioEngine = {
         const gain = this.ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.04);
-        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.035);
+        gain.gain.setValueAtTime(0.07, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.035);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
-        osc.stop(this.ctx.currentTime + 0.04);
+        osc.stop(this.ctx.currentTime + 0.035);
     },
     tickHaptic() {
         this.init();
@@ -1557,13 +1685,13 @@ const AudioEngine = {
         const gain = this.ctx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(640, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(190, this.ctx.currentTime + 0.016);
-        gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.016);
+        osc.frequency.exponentialRampToValueAtTime(190, this.ctx.currentTime + 0.015);
+        gain.gain.setValueAtTime(0.045, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.015);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
-        osc.stop(this.ctx.currentTime + 0.016);
+        osc.stop(this.ctx.currentTime + 0.015);
     },
     unlock() {
         this.init();
@@ -1572,13 +1700,13 @@ const AudioEngine = {
         [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
             const osc = this.ctx.createOscillator();
             const gain = this.ctx.createGain();
-            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-            gain.gain.setValueAtTime(0.09, now + idx * 0.06);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.2);
+            osc.frequency.setValueAtTime(freq, now + idx * 0.055);
+            gain.gain.setValueAtTime(0.08, now + idx * 0.055);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.055 + 0.18);
             osc.connect(gain);
             gain.connect(this.ctx.destination);
-            osc.start(now + idx * 0.06);
-            osc.stop(now + idx * 0.06 + 0.2);
+            osc.start(now + idx * 0.055);
+            osc.stop(now + idx * 0.055 + 0.18);
         });
     },
     bell() {
@@ -1589,21 +1717,21 @@ const AudioEngine = {
         const gain = this.ctx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(587.33, now);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.5);
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.2);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(now);
-        osc.stop(now + 2.5);
+        osc.stop(now + 2.2);
     }
 };
 
-function haptic(ms = 12) {
+function haptic(ms = 10) {
     if (navigator.vibrate) navigator.vibrate(ms);
 }
 
 /* ============================================================================
-   CALENDRIER ISO 8601 STRICT (LUNDI LIGNE 1 -> DIMANCHE LIGNE 7)
+   CALENDRIER ISO 8601 (LUNDI -> DIMANCHE)
 ============================================================================ */
 function toDateStr(d) {
     const pad = n => String(n).padStart(2, '0');
@@ -1612,9 +1740,15 @@ function toDateStr(d) {
 
 const TODAY_STR = toDateStr(new Date());
 
+function formatShortDate(dateStr) {
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return `${parts[2]}/${parts[1]}`;
+}
+
 function getIsoDayOfWeek(date) {
     const d = date.getDay();
-    return d === 0 ? 7 : d; // 1 = Lundi, 7 = Dimanche
+    return d === 0 ? 7 : d;
 }
 
 function getStrictISOWindow(numWeeks) {
@@ -1660,185 +1794,91 @@ function calcDaysAgo(dateStr) {
 }
 
 /* ============================================================================
-   DONNÉES INITIALES & PERSISTANCE COMPATIBLE TACTIQUE_OS_V3
+   BASE DE DONNÉES & PERSISTANCE (TACTIQUE_OS_V3)
 ============================================================================ */
 const DB_KEY = 'TACTIQUE_OS_V3';
 
 const INITIAL_DB = {
     currentCategory: 'GLOBAL',
     aggregateGlobal: true,
-    categories: ['GLOBAL', 'Trading', 'Université', 'Moto & Terrain', 'Bivouac'],
+    categories: ['GLOBAL', 'Trading', 'Finance', 'Santé'],
     habits: [
         {
             id: 'h_trading',
-            title: 'Performance Quotidienne MES',
+            title: 'Trade',
             category: 'Trading',
             polarity: 'positive',
             valueType: 'numeric',
-            unit: 'R',
-            targetValue: 2.0,
-            step: 0.25,
-            history: generateMockNumericHistory(84, 2.0, 0.25)
-        },
-        {
-            id: 'h_matrice',
-            title: 'Scan & Priorisation Eisenhower',
-            category: 'GLOBAL',
-            polarity: 'positive',
-            valueType: 'boolean',
-            unit: 'validation',
-            targetValue: 1,
-            step: 1,
-            history: generateMockBoolHistory(84, 0.82)
-        },
-        {
-            id: 'h_flashcards',
-            title: 'Répétition Espacée (Flashcards)',
-            category: 'Université',
-            polarity: 'positive',
-            valueType: 'numeric',
-            unit: 'cartes',
-            targetValue: 50,
-            step: 5,
-            history: generateMockNumericHistory(84, 50, 5)
+            unit: '$(payout)',
+            targetValue: 500,
+            step: 10,
+            history: {}
         },
         {
             id: 'h_sport',
-            title: 'Entraînement Physique & Intensité',
-            category: 'Moto & Terrain',
+            title: 'Séance Physique',
+            category: 'Santé',
             polarity: 'positive',
             valueType: 'numeric',
             unit: 'min',
             targetValue: 45,
             step: 5,
-            history: generateMockNumericHistory(84, 45, 5)
+            history: {}
         },
         {
-            id: 'h_overtrading',
-            title: 'Zéro Overtrading / Sobriété',
+            id: 'h_sobriete',
+            title: 'Zéro Overtrading',
             category: 'Trading',
             polarity: 'negative',
             valueType: 'numeric',
             unit: 'écarts',
             targetValue: 0,
             step: 1,
-            history: generateMockSobrietyHistory(28)
+            history: {}
         }
     ],
     tasks: [
         {
-            id: 't_chasse',
-            title: 'Permis chasse',
-            quadrant: 'q2',
-            category: 'GLOBAL',
-            priority: 'normale',
-            program: 'Général',
-            createdAt: getOffsetDateISO(176),
-            completed: false,
-            subtasks: [],
-            blockedBy: [],
-            notes: ''
-        },
-        {
             id: 't_moto',
             title: 'Permis moto',
             quadrant: 'q2',
-            category: 'Moto & Terrain',
+            category: 'GLOBAL',
             priority: 'haute',
             program: 'A2',
-            createdAt: getOffsetDateISO(156),
+            createdAt: TODAY_STR,
             completed: false,
             subtasks: [
-                { id: 's1', title: 'Plateau lent & chrono', done: false },
-                { id: 's2', title: 'Circulation en agglomération', done: false },
-                { id: 's3', title: 'Choix de la monture (Hornet / MT-07 / Duke)', done: false }
-            ],
-            blockedBy: [],
-            notes: 'Code validé en mai'
-        },
-        {
-            id: 't_panier',
-            title: 'Panier',
-            quadrant: 'q3',
-            category: 'GLOBAL',
-            priority: 'normale',
-            program: 'Général',
-            createdAt: getOffsetDateISO(150),
-            completed: false,
-            subtasks: [
-                { id: 'sp1', title: 'Module A', done: false },
-                { id: 'sp2', title: 'Module B', done: false },
-                { id: 'sp3', title: 'Module C', done: false },
-                { id: 'sp4', title: 'Module D', done: false },
-                { id: 'sp5', title: 'Module E', done: false }
+                { id: 's1', title: 'Plateau', done: false },
+                { id: 's2', title: 'Circulation', done: false }
             ],
             blockedBy: [],
             notes: ''
         },
         {
             id: 't_crapahuter',
-            title: 'Crapahuter',
+            title: 'Sortie Bivouac',
             quadrant: 'q4',
-            category: 'Bivouac',
+            category: 'Santé',
             priority: 'normale',
-            program: 'Sentier des Roches',
-            createdAt: getOffsetDateISO(128),
+            program: 'Terrain',
+            createdAt: TODAY_STR,
             completed: false,
             subtasks: [],
             blockedBy: ['t_moto'],
-            notes: 'Nécessite la validation du permis moto pour le transport'
+            notes: ''
         }
     ]
 };
 
-function getOffsetDateISO(days) {
-    const d = new Date();
-    d.setDate(d.getDate() - days);
-    return toDateStr(d);
-}
-
-function generateMockBoolHistory(days, prob) {
-    const hist = {};
-    const now = new Date();
-    for (let i = days; i >= 0; i--) {
-        const d = new Date(now);
-        d.setDate(d.getDate() - i);
-        if (Math.random() < prob) hist[toDateStr(d)] = true;
-    }
-    return hist;
-}
-
-function generateMockNumericHistory(days, target, step) {
-    const hist = {};
-    const now = new Date();
-    for (let i = days; i >= 0; i--) {
-        const d = new Date(now);
-        d.setDate(d.getDate() - i);
-        if (Math.random() < 0.72) {
-            const mult = Math.max(1, Math.round((Math.random() * 1.35 * target) / step));
-            hist[toDateStr(d)] = parseFloat((mult * step).toFixed(2));
-        }
-    }
-    return hist;
-}
-
-function generateMockSobrietyHistory(days) {
-    const hist = {};
-    const now = new Date();
-    for (let i = days; i >= 1; i--) {
-        const d = new Date(now);
-        d.setDate(d.getDate() - i);
-        hist[toDateStr(d)] = Math.random() < 0.85 ? 0 : 1;
-    }
-    return hist;
-}
-
 let db = loadDatabase();
 let globalHeatWeeks = 12;
 let activeCarouselIndex = 0;
+let activeEditDateByHabit = {}; // Stocke la date sélectionnée par appui long pour chaque habitude
 let editingHabitId = null;
 let activeZoomQuadrant = null;
 let activeTaskId = null;
+let activeFocusTaskId = null;
+let activeFocusTab = 'levers';
 let focusTimer = null;
 let focusSeconds = 1500;
 let searchQuery = '';
@@ -1874,12 +1914,16 @@ function toast(msg) {
     el.textContent = msg;
     el.style.display = 'block';
     clearTimeout(window._tTimer);
-    window._tTimer = setTimeout(() => { el.style.display = 'none'; }, 2200);
+    window._tTimer = setTimeout(() => { el.style.display = 'none'; }, 2000);
 }
 
 /* ============================================================================
-   LOGIQUE MÉTIER DES HABITUDES
+   LOGIQUE MÉTIER HABITUDES
 ============================================================================ */
+function getActiveDateForHabit(habitId) {
+    return activeEditDateByHabit[habitId] || TODAY_STR;
+}
+
 function getHabitVal(habit, dateStr) {
     if (!habit.history || habit.history[dateStr] === undefined) return 0;
     const v = habit.history[dateStr];
@@ -1892,14 +1936,9 @@ function getHabitVal(habit, dateStr) {
 function isHabitAchieved(habit, dateStr) {
     if (!habit.history || habit.history[dateStr] === undefined) return false;
     const raw = habit.history[dateStr];
-
-    if (habit.valueType === 'boolean') {
-        return Boolean(raw);
-    }
+    if (habit.valueType === 'boolean') return Boolean(raw);
     const val = typeof raw === 'number' ? raw : 0;
-    if (habit.polarity === 'negative') {
-        return val <= habit.targetValue;
-    }
+    if (habit.polarity === 'negative') return val <= habit.targetValue;
     return val >= habit.targetValue;
 }
 
@@ -1931,7 +1970,7 @@ function calcHabit7DayAvg(habit) {
     return parseFloat((sum / 7).toFixed(1));
 }
 
-function calcTacticalScore() {
+function calcScore() {
     const doneTasks = db.tasks.filter(t => t.completed).length;
     let habitSuccess = 0;
     db.habits.forEach(h => {
@@ -1945,23 +1984,23 @@ function calcTacticalScore() {
 }
 
 /* ============================================================================
-   RENDU PRINCIPAL & SYNCHRONISATION DES COMPOSANTS
+   RENDU GLOBAL
 ============================================================================ */
 function renderApp() {
     persist();
     renderHeader();
     renderMatrix();
-    renderTodayView();
     renderHabitsView();
-    renderTempleView();
+    renderNetworkView();
     if (activeZoomQuadrant) renderZoomList();
+    if (document.getElementById('focusModal').classList.contains('open')) renderFocusHubContent();
 }
 
 function renderHeader() {
     document.getElementById('pageMainTitle').firstElementChild.textContent =
-        db.currentCategory === 'GLOBAL' ? 'VUE GLOBALE' : db.currentCategory.toUpperCase();
+        db.currentCategory === 'GLOBAL' ? 'GLOBAL' : db.currentCategory.toUpperCase();
 
-    document.getElementById('tacticalScoreBadge').textContent = `${calcTacticalScore()} pts`;
+    document.getElementById('tacticalScoreBadge').textContent = `${calcScore()} pts`;
 
     const aggBtn = document.getElementById('globalAggBtn');
     aggBtn.textContent = db.aggregateGlobal ? '🔓' : '🔒';
@@ -1978,10 +2017,10 @@ function renderHeader() {
             return (cat === 'GLOBAL' && db.aggregateGlobal) ? true : t.category === cat;
         }).length;
 
-        pill.innerHTML = `<span>${cat}</span> <span style="opacity:0.65; font-size:0.68rem;">${pendingCount}</span>`;
+        pill.innerHTML = `<span>${cat}</span> <span style="opacity:0.65; font-size:0.65rem;">${pendingCount}</span>`;
         pill.onclick = () => {
             AudioEngine.click();
-            haptic(10);
+            haptic(8);
             db.currentCategory = cat;
             activeCarouselIndex = 0;
             renderApp();
@@ -1989,22 +2028,16 @@ function renderHeader() {
         bar.appendChild(pill);
     });
 
-    const addBtn = document.createElement('div');
-    addBtn.className = 'cat-pill add-cat';
-    addBtn.textContent = '+ Catégorie';
-    addBtn.onclick = createCategoryPrompt;
-    bar.appendChild(addBtn);
-
     const inboxCount = db.tasks.filter(t => t.quadrant === 'inbox' && !t.completed).length;
     document.getElementById('inboxCounter').textContent = inboxCount;
 }
 
 /* ============================================================================
-   HABITUDES : HEATMAP PLEINE LARGEUR, CARROUSEL & BARILLET HAPTIQUE
+   ONGLET HABITUDES : ZÉRO SCROLL VERTICAL & APPUI LONG SUR CALENDRIER
 ============================================================================ */
 function setGlobalHeatWeeks(weeks) {
     AudioEngine.click();
-    haptic(10);
+    haptic(8);
     globalHeatWeeks = weeks;
     document.getElementById('btnPeriod12').classList.toggle('active', weeks === 12);
     document.getElementById('btnPeriod4').classList.toggle('active', weeks === 4);
@@ -2012,9 +2045,7 @@ function setGlobalHeatWeeks(weeks) {
 }
 
 function getFilteredHabits() {
-    if (db.currentCategory === 'GLOBAL' && db.aggregateGlobal) {
-        return db.habits;
-    }
+    if (db.currentCategory === 'GLOBAL' && db.aggregateGlobal) return db.habits;
     return db.habits.filter(h => h.category === db.currentCategory);
 }
 
@@ -2071,24 +2102,21 @@ function renderGlobalIsoHeatmap() {
                 else el.classList.add('level-4');
             }
 
-            if (globalHeatWeeks === 4) {
-                el.textContent = cell.dayNumber;
-            }
-
             if (cell.isToday) el.classList.add('today-ring');
-            el.title = `${cell.dateStr} : ${achievedCount}/${habits.length} cible(s) atteinte(s)`;
             grid.appendChild(el);
         });
     });
 
     const avg = totalEligibleDays ? (totalActionPoints / totalEligibleDays).toFixed(1) : 0;
-    document.getElementById('globalHeatAverage').textContent = `Rigueur : ${avg} act/j (${habits.length} routines)`;
+    document.getElementById('globalHeatAverage').textContent = `Régularité · ${avg} act/j`;
 }
 
 function getCardDynamicVisuals(habit) {
-    const hasToday = habit.history && habit.history[TODAY_STR] !== undefined;
-    const currentVal = getHabitVal(habit, TODAY_STR);
-    const achieved = isHabitAchieved(habit, TODAY_STR);
+    const targetDate = getActiveDateForHabit(habit.id);
+    const isEditingPast = targetDate !== TODAY_STR;
+    const hasEntry = habit.history && habit.history[targetDate] !== undefined;
+    const currentVal = getHabitVal(habit, targetDate);
+    const achieved = isHabitAchieved(habit, targetDate);
     const streak = calcHabitStreak(habit);
     const avg7 = calcHabit7DayAvg(habit);
 
@@ -2096,42 +2124,42 @@ function getCardDynamicVisuals(habit) {
     let displayVal = currentVal;
     let displayUnit = habit.unit;
     let btnClass = 'is-pending';
-    let btnLabel = 'Valider Cible';
+    let btnLabel = 'Valider';
 
     if (habit.valueType === 'boolean') {
         displayVal = achieved ? '✓' : '—';
-        displayUnit = achieved ? 'ACCOMPLI' : 'EN ATTENTE';
+        displayUnit = achieved ? 'FAIT' : 'ATTENTE';
         valColor = achieved ? 'var(--accent-emerald)' : 'var(--text-tertiary)';
         btnClass = achieved ? 'is-achieved' : 'is-pending';
-        btnLabel = achieved ? '✓ Routine Validée Aujourd\'hui' : 'Marquer comme fait';
+        btnLabel = achieved ? '✓ Validé' : 'Valider';
     } else if (habit.polarity === 'positive') {
         if (achieved) {
             valColor = 'var(--accent-emerald)';
             btnClass = 'is-achieved';
-            btnLabel = '✓ Cible Atteinte';
+            btnLabel = '✓ Cible';
         } else if (currentVal > 0) {
             valColor = 'var(--accent-cyan)';
             btnClass = 'is-pending';
-            btnLabel = 'Atteindre Cible';
+            btnLabel = 'Cible';
         }
     } else {
-        if (!hasToday) {
+        if (!hasEntry) {
             displayVal = '0';
             valColor = 'var(--text-secondary)';
             btnClass = 'is-pending';
-            btnLabel = '🛡️ Valider 0 Écart';
+            btnLabel = '🛡️ 0 Écart';
         } else if (currentVal <= habit.targetValue) {
             valColor = 'var(--accent-emerald)';
             btnClass = 'is-achieved';
-            btnLabel = '🛡️ Sobriété Validée';
+            btnLabel = '🛡️ Sobriété';
         } else {
             valColor = 'var(--accent-crimson)';
             btnClass = 'is-breached';
-            btnLabel = `⚠️ ${currentVal} ${habit.unit}`;
+            btnLabel = `⚠️ ${currentVal}`;
         }
     }
 
-    return { currentVal, achieved, streak, avg7, valColor, displayVal, displayUnit, btnClass, btnLabel };
+    return { targetDate, isEditingPast, currentVal, achieved, streak, avg7, valColor, displayVal, displayUnit, btnClass, btnLabel };
 }
 
 function updateHabitCardDOMInPlace(habitId) {
@@ -2146,22 +2174,35 @@ function updateHabitCardDOMInPlace(habitId) {
     const subEl = document.getElementById(`monumentSub_${habit.id}`);
     const streakEl = document.getElementById(`streakBadge_${habit.id}`);
     const btnEl = document.getElementById(`btnToggle_${habit.id}`);
+    const editPillEl = document.getElementById(`editDatePill_${habit.id}`);
 
     if (valEl) {
         valEl.textContent = v.displayVal;
         valEl.style.color = v.valColor;
     }
     if (unitEl) unitEl.textContent = v.displayUnit;
-    if (subEl) subEl.textContent = `Cible : ${habit.targetValue} ${habit.unit} · Pas : ${habit.step} · Moy. 7j : ${v.avg7}`;
+    if (subEl) subEl.textContent = `Cible ${habit.targetValue} · Pas ${habit.step} · Moy. 7j : ${v.avg7}`;
     if (streakEl) streakEl.innerHTML = `${habit.polarity === 'negative' ? '🛡️' : '🔥'} ${v.streak}j`;
     if (btnEl) {
         btnEl.className = `btn-done-toggle ${v.btnClass}`;
         btnEl.textContent = v.btnLabel;
     }
+    if (editPillEl) {
+        editPillEl.classList.toggle('visible', v.isEditingPast);
+        editPillEl.innerHTML = `📅 Édition : ${formatShortDate(v.targetDate)} ✕`;
+    }
 
     renderMiniIsoGrid(`miniGrid_${habit.id}`, habit);
     renderGlobalIsoHeatmap();
-    document.getElementById('tacticalScoreBadge').textContent = `${calcTacticalScore()} pts`;
+    document.getElementById('tacticalScoreBadge').textContent = `${calcScore()} pts`;
+}
+
+function resetHabitEditDate(habitId, ev) {
+    if (ev) ev.stopPropagation();
+    delete activeEditDateByHabit[habitId];
+    AudioEngine.click();
+    haptic(8);
+    updateHabitCardDOMInPlace(habitId);
 }
 
 function renderHabitsCarousel() {
@@ -2173,11 +2214,10 @@ function renderHabitsCarousel() {
     dots.innerHTML = '';
 
     const habits = getFilteredHabits();
-    document.getElementById('habitCarouselCounterTitle').textContent =
-        `MES HABITUDES (${habits.length})`;
+    document.getElementById('habitCarouselCounterTitle').textContent = `HABITUDES (${habits.length})`;
 
     if (habits.length === 0) {
-        carousel.innerHTML = `<div style="padding:40px; text-align:center; color:var(--text-tertiary); width:100%;">Aucune routine dans cette catégorie.</div>`;
+        carousel.innerHTML = `<div style="padding:30px; text-align:center; color:var(--text-tertiary); width:100%;">Aucune habitude dans cette catégorie.</div>`;
         return;
     }
 
@@ -2189,27 +2229,37 @@ function renderHabitsCarousel() {
         const card = document.createElement('div');
         card.className = 'habit-full-card';
 
+        // 1. En-tête compact (avec bouton ⋯ intégré)
         const header = document.createElement('div');
         header.className = 'habit-card-header';
         header.innerHTML = `
             <div class="habit-title-box">
-                <span class="habit-category-badge">${escapeHtml(habit.category)} · ${habit.polarity === 'positive' ? 'CROISSANCE' : 'SOBRIÉTÉ'}</span>
+                <span class="habit-category-badge">${escapeHtml(habit.category)}</span>
                 <span class="habit-card-title">${escapeHtml(habit.title)}</span>
             </div>
-            <div class="streak-badge ${habit.polarity === 'negative' ? 'negative-type' : ''}" id="streakBadge_${habit.id}">
-                ${habit.polarity === 'negative' ? '🛡️' : '🔥'} ${v.streak}j
+            <div class="habit-header-right">
+                <div class="streak-badge ${habit.polarity === 'negative' ? 'negative-type' : ''}" id="streakBadge_${habit.id}">
+                    ${habit.polarity === 'negative' ? '🛡️' : '🔥'} ${v.streak}j
+                </div>
+                <button class="btn-card-more" onclick="openEditHabitModal('${habit.id}')" title="Configurer">⋯</button>
             </div>
         `;
 
+        // 2. Indicateur numérique central compact + badge d'édition de date passée
         const monument = document.createElement('div');
         monument.className = 'monument-indicator-wrap';
         monument.innerHTML = `
-            <div class="monument-val" id="monumentVal_${habit.id}" style="color:${v.valColor};">${v.displayVal}</div>
-            <div class="monument-unit" id="monumentUnit_${habit.id}">${escapeHtml(v.displayUnit)}</div>
-            <div class="monument-subtext" id="monumentSub_${habit.id}">Cible : ${habit.targetValue} ${escapeHtml(habit.unit)} · Pas : ${habit.step} · Moy. 7j : ${v.avg7}</div>
+            <div class="edit-date-pill ${v.isEditingPast ? 'visible' : ''}" id="editDatePill_${habit.id}" onclick="resetHabitEditDate('${habit.id}', event)">
+                📅 Édition : ${formatShortDate(v.targetDate)} ✕
+            </div>
+            <div class="monument-main-line" onclick="promptDirectHabitValue('${habit.id}')">
+                <span class="monument-val" id="monumentVal_${habit.id}" style="color:${v.valColor};">${v.displayVal}</span>
+                <span class="monument-unit" id="monumentUnit_${habit.id}">${escapeHtml(v.displayUnit)}</span>
+            </div>
+            <div class="monument-subtext" id="monumentSub_${habit.id}">Cible ${habit.targetValue} · Pas ${habit.step} · Moy. 7j : ${v.avg7}</div>
         `;
-        monument.onclick = () => promptDirectHabitValue(habit.id);
 
+        // 3. Barillet haptique épuré
         const dialBox = document.createElement('div');
         dialBox.className = 'dial-controller-box';
 
@@ -2218,7 +2268,6 @@ function renderHabitsCarousel() {
                 <div class="dial-viewport" id="dialViewport_${habit.id}">
                     <div class="dial-center-line"></div>
                     <div class="dial-track" id="dialTrack_${habit.id}"></div>
-                    <div class="dial-hint-label">‹ GLISSER LA ROULETTE HAPTIQUE (${habit.step} ${escapeHtml(habit.unit)}) ›</div>
                 </div>
                 <div class="dial-actions-row">
                     <button class="stepper-btn" id="btnMinus_${habit.id}">−</button>
@@ -2230,25 +2279,22 @@ function renderHabitsCarousel() {
             `;
         } else {
             dialBox.innerHTML = `
-                <button class="btn-done-toggle ${v.btnClass}" id="btnToggle_${habit.id}" style="width:100%; justify-content:center; padding:14px;" onclick="toggleHabitDailyCompletion('${habit.id}')">
+                <button class="btn-done-toggle ${v.btnClass}" id="btnToggle_${habit.id}" style="width:100%; justify-content:center;" onclick="toggleHabitDailyCompletion('${habit.id}')">
                     ${v.btnLabel}
                 </button>
             `;
         }
 
+        // 4. Calendrier 4 semaines élastique (rentre à 100% dans l'espace restant)
         const miniWrap = document.createElement('div');
         miniWrap.className = 'mini-heatmap-wrap';
         miniWrap.innerHTML = `
-            <div class="mini-heatmap-title">
-                <span>📅 4 Dernières Semaines</span>
-                <span>Taper une case pour éditer</span>
-            </div>
             <div class="mini-week-headers">
                 <span></span>
                 <span>S-3</span>
                 <span>S-2</span>
                 <span>S-1</span>
-                <span style="color:var(--accent-emerald);">CETTE SEM.</span>
+                <span style="color:var(--accent-emerald);">SEM.</span>
             </div>
             <div class="mini-iso-layout">
                 <div class="mini-day-labels">
@@ -2258,21 +2304,10 @@ function renderHabitsCarousel() {
             </div>
         `;
 
-        const cardFooter = document.createElement('div');
-        cardFooter.style.display = 'flex';
-        cardFooter.style.justifyContent = 'space-between';
-        cardFooter.style.fontSize = '0.74rem';
-        cardFooter.style.color = 'var(--text-secondary)';
-        cardFooter.innerHTML = `
-            <span style="cursor:pointer; font-weight:700;" onclick="openEditHabitModal('${habit.id}')">⚙️ Configurer unité / cible</span>
-            <span style="color:var(--accent-crimson); cursor:pointer; font-weight:700;" onclick="deleteHabit('${habit.id}')">Supprimer</span>
-        `;
-
         card.appendChild(header);
         card.appendChild(monument);
         card.appendChild(dialBox);
         card.appendChild(miniWrap);
-        card.appendChild(cardFooter);
         carousel.appendChild(card);
 
         renderMiniIsoGrid(`miniGrid_${habit.id}`, habit);
@@ -2310,6 +2345,7 @@ function renderMiniIsoGrid(containerId, habit) {
     if (!box) return;
     box.innerHTML = '';
     const matrix = getStrictISOWindow(4);
+    const activeTargetDate = getActiveDateForHabit(habit.id);
 
     matrix.forEach(week => {
         week.forEach(cell => {
@@ -2336,7 +2372,7 @@ function renderMiniIsoGrid(containerId, habit) {
                 else if (val < habit.targetValue * 0.5) el.classList.add('level-1');
                 else if (val < habit.targetValue) el.classList.add('level-2');
                 else el.classList.add('level-4');
-                el.textContent = val > 0 ? `${cell.dayNumber} · ${val}` : cell.dayNumber;
+                el.textContent = val !== 0 ? `${cell.dayNumber} · ${val}` : cell.dayNumber;
             } else {
                 if (val <= habit.targetValue) el.classList.add('level-4');
                 else if (val <= habit.targetValue + habit.step) el.classList.add('bad-2');
@@ -2345,19 +2381,50 @@ function renderMiniIsoGrid(containerId, habit) {
             }
 
             if (cell.isToday) el.classList.add('today-ring');
-            el.title = `${cell.dateStr} : ${hasEntry ? val + ' ' + habit.unit : 'Non renseigné'}`;
-            el.onclick = () => {
-                AudioEngine.click();
-                haptic(15);
-                toggleHabitDaySpecific(habit.id, cell.dateStr);
-            };
+            if (activeTargetDate === cell.dateStr && cell.dateStr !== TODAY_STR) {
+                el.classList.add('editing-ring');
+            }
+
+            // Gestion Tap Court (Toggle) vs Appui Long (Sélection pour Roulette Haptique)
+            attachCellTapAndLongPress(el, habit.id, cell.dateStr);
             box.appendChild(el);
         });
     });
 }
 
+function attachCellTapAndLongPress(cellEl, habitId, dateStr) {
+    let pressTimer = null;
+    let longPressTriggered = false;
+
+    cellEl.onpointerdown = (e) => {
+        e.stopPropagation();
+        longPressTriggered = false;
+        pressTimer = setTimeout(() => {
+            longPressTriggered = true;
+            activeEditDateByHabit[habitId] = dateStr;
+            AudioEngine.unlock();
+            haptic([15, 35]);
+            toast(`📅 Barillet connecté au ${formatShortDate(dateStr)}`);
+            updateHabitCardDOMInPlace(habitId);
+        }, 320);
+    };
+
+    const endPress = (e) => {
+        clearTimeout(pressTimer);
+        if (!longPressTriggered && e.type === 'pointerup') {
+            AudioEngine.click();
+            haptic(12);
+            toggleHabitDaySpecific(habitId, dateStr);
+        }
+    };
+
+    cellEl.onpointerup = endPress;
+    cellEl.onpointercancel = () => clearTimeout(pressTimer);
+    cellEl.onpointerleave = () => clearTimeout(pressTimer);
+}
+
 /* ============================================================================
-   ROULETTE HAPTIQUE ISOLÉE (AUCUN REBUILD DU CARROUSEL, ZÉRO SWIPE CONFLIT)
+   ROULETTE HAPTIQUE ISOLÉE (PILOTE AUJOURD'HUI OU LA DATE SÉLECTIONNÉE)
 ============================================================================ */
 function setupHapticDial(habit, carouselElement) {
     const vp = document.getElementById(`dialViewport_${habit.id}`);
@@ -2405,7 +2472,7 @@ function setupHapticDial(habit, carouselElement) {
 
             stepHabitValue(habit.id, stepDelta);
             AudioEngine.tickHaptic();
-            haptic(7);
+            haptic(6);
 
             lastTickX += ticksMoved * tickSpacingPx;
             visualOffset = (visualOffset + ticksMoved * tickSpacingPx) % (tickSpacingPx * 5);
@@ -2426,13 +2493,13 @@ function setupHapticDial(habit, carouselElement) {
     attachStepperLongPress(btnMinus, () => {
         stepHabitValue(habit.id, -habit.step);
         AudioEngine.tickHaptic();
-        haptic(7);
+        haptic(6);
     });
 
     attachStepperLongPress(btnPlus, () => {
         stepHabitValue(habit.id, habit.step);
         AudioEngine.tickHaptic();
-        haptic(7);
+        haptic(6);
     });
 }
 
@@ -2466,7 +2533,8 @@ function stepHabitValue(habitId, delta) {
     if (!habit) return;
     if (!habit.history) habit.history = {};
 
-    const cur = getHabitVal(habit, TODAY_STR);
+    const targetDate = getActiveDateForHabit(habit.id);
+    const cur = getHabitVal(habit, targetDate);
     let next = cur + delta;
 
     if (String(habit.step).includes('.')) {
@@ -2480,7 +2548,7 @@ function stepHabitValue(habitId, delta) {
         next = Math.max(0, next);
     }
 
-    habit.history[TODAY_STR] = next;
+    habit.history[targetDate] = next;
     updateHabitCardDOMInPlace(habit.id);
 }
 
@@ -2489,34 +2557,26 @@ function toggleHabitDailyCompletion(habitId) {
     if (!habit) return;
     if (!habit.history) habit.history = {};
 
+    const targetDate = getActiveDateForHabit(habit.id);
+
     if (habit.valueType === 'boolean') {
-        if (habit.history[TODAY_STR]) {
-            delete habit.history[TODAY_STR];
-        } else {
-            habit.history[TODAY_STR] = true;
-        }
+        if (habit.history[targetDate]) delete habit.history[targetDate];
+        else habit.history[targetDate] = true;
     } else if (habit.polarity === 'negative') {
-        if (habit.history[TODAY_STR] === undefined) {
-            habit.history[TODAY_STR] = habit.targetValue;
-        } else {
-            delete habit.history[TODAY_STR];
-        }
+        if (habit.history[targetDate] === undefined) habit.history[targetDate] = habit.targetValue;
+        else delete habit.history[targetDate];
     } else {
-        const cur = getHabitVal(habit, TODAY_STR);
-        if (cur >= habit.targetValue) {
-            delete habit.history[TODAY_STR];
-        } else {
-            habit.history[TODAY_STR] = habit.targetValue;
-        }
+        const cur = getHabitVal(habit, targetDate);
+        if (cur >= habit.targetValue) delete habit.history[targetDate];
+        else habit.history[targetDate] = habit.targetValue;
     }
 
-    if (isHabitAchieved(habit, TODAY_STR)) {
+    if (isHabitAchieved(habit, targetDate)) {
         AudioEngine.unlock();
-        haptic([20, 50]);
-        toast('🎯 Cible du jour validée !');
+        haptic([15, 40]);
     } else {
         AudioEngine.click();
-        haptic(15);
+        haptic(10);
     }
     updateHabitCardDOMInPlace(habit.id);
 }
@@ -2530,22 +2590,14 @@ function toggleHabitDaySpecific(habitId, dateStr) {
         if (habit.history[dateStr]) delete habit.history[dateStr];
         else habit.history[dateStr] = true;
     } else if (habit.polarity === 'negative') {
-        if (habit.history[dateStr] === undefined) {
-            habit.history[dateStr] = habit.targetValue;
-        } else if (habit.history[dateStr] <= habit.targetValue) {
-            habit.history[dateStr] = habit.targetValue + habit.step;
-        } else {
-            delete habit.history[dateStr];
-        }
+        if (habit.history[dateStr] === undefined) habit.history[dateStr] = habit.targetValue;
+        else if (habit.history[dateStr] <= habit.targetValue) habit.history[dateStr] = habit.targetValue + habit.step;
+        else delete habit.history[dateStr];
     } else {
         const cur = getHabitVal(habit, dateStr);
-        if (habit.history[dateStr] === undefined) {
-            habit.history[dateStr] = habit.targetValue;
-        } else if (cur >= habit.targetValue) {
-            delete habit.history[dateStr];
-        } else {
-            habit.history[dateStr] = habit.targetValue;
-        }
+        if (habit.history[dateStr] === undefined) habit.history[dateStr] = habit.targetValue;
+        else if (cur >= habit.targetValue) delete habit.history[dateStr];
+        else habit.history[dateStr] = habit.targetValue;
     }
     updateHabitCardDOMInPlace(habit.id);
 }
@@ -2553,148 +2605,25 @@ function toggleHabitDaySpecific(habitId, dateStr) {
 function promptDirectHabitValue(habitId) {
     const habit = db.habits.find(h => h.id === habitId);
     if (!habit || habit.valueType === 'boolean') return;
-    const cur = getHabitVal(habit, TODAY_STR);
-    const entered = prompt(`Saisir la valeur exacte pour "${habit.title}" (${habit.unit}) :`, cur);
+    const targetDate = getActiveDateForHabit(habit.id);
+    const cur = getHabitVal(habit, targetDate);
+    const entered = prompt(`Valeur du ${formatShortDate(targetDate)} (${habit.unit}) :`, cur);
     if (entered === null) return;
     if (entered.trim() === '') {
-        delete habit.history[TODAY_STR];
+        delete habit.history[targetDate];
         updateHabitCardDOMInPlace(habit.id);
         return;
     }
     const num = parseFloat(entered.replace(',', '.'));
     if (!isNaN(num)) {
         if (!habit.history) habit.history = {};
-        habit.history[TODAY_STR] = num;
+        habit.history[targetDate] = num;
         updateHabitCardDOMInPlace(habit.id);
     }
 }
 
 /* ============================================================================
-   GESTION DES MODALES D'HABITUDES
-============================================================================ */
-function openCreateHabitModal() {
-    editingHabitId = null;
-    document.getElementById('habitModalHeading').textContent = 'Nouvelle Routine';
-    document.getElementById('btnDeleteHabit').style.display = 'none';
-
-    document.getElementById('habitTitleInput').value = '';
-    document.getElementById('habitUnitInput').value = 'R';
-    document.getElementById('habitTargetInput').value = '2';
-    document.getElementById('habitStepInput').value = '0.25';
-    document.getElementById('habitPolaritySelect').value = 'positive';
-    document.getElementById('habitValueTypeSelect').value = 'numeric';
-    toggleHabitNumericFields('numeric');
-
-    const catSelect = document.getElementById('habitCategorySelect');
-    catSelect.innerHTML = '';
-    db.categories.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        if (c === db.currentCategory) opt.selected = true;
-        catSelect.appendChild(opt);
-    });
-
-    document.getElementById('habitModal').classList.add('open');
-}
-
-function openEditHabitModal(habitId) {
-    editingHabitId = habitId;
-    const h = db.habits.find(x => x.id === habitId);
-    if (!h) return;
-
-    document.getElementById('habitModalHeading').textContent = 'Paramètres Routine';
-    document.getElementById('btnDeleteHabit').style.display = 'block';
-
-    document.getElementById('habitTitleInput').value = h.title;
-    document.getElementById('habitPolaritySelect').value = h.polarity;
-    document.getElementById('habitValueTypeSelect').value = h.valueType;
-    document.getElementById('habitUnitInput').value = h.unit;
-    document.getElementById('habitTargetInput').value = h.targetValue;
-    document.getElementById('habitStepInput').value = h.step;
-    toggleHabitNumericFields(h.valueType);
-
-    const catSelect = document.getElementById('habitCategorySelect');
-    catSelect.innerHTML = '';
-    db.categories.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        if (c === h.category) opt.selected = true;
-        catSelect.appendChild(opt);
-    });
-
-    document.getElementById('habitModal').classList.add('open');
-}
-
-function toggleHabitNumericFields(valType) {
-    document.getElementById('habitNumericConfigGroup').style.display =
-        valType === 'numeric' ? 'flex' : 'none';
-}
-
-function saveHabitFromModal() {
-    const title = document.getElementById('habitTitleInput').value.trim();
-    if (!title) return;
-
-    const category = document.getElementById('habitCategorySelect').value;
-    const polarity = document.getElementById('habitPolaritySelect').value;
-    const valueType = document.getElementById('habitValueTypeSelect').value;
-    const unit = document.getElementById('habitUnitInput').value.trim() || (valueType === 'boolean' ? 'fait' : 'R');
-    const rawTarget = parseFloat(document.getElementById('habitTargetInput').value);
-    const targetValue = isNaN(rawTarget) ? (polarity === 'negative' ? 0 : 1) : rawTarget;
-    const rawStep = parseFloat(document.getElementById('habitStepInput').value);
-    const step = isNaN(rawStep) || rawStep <= 0 ? 1 : rawStep;
-
-    if (editingHabitId) {
-        const h = db.habits.find(x => x.id === editingHabitId);
-        if (h) {
-            h.title = title;
-            h.category = category;
-            h.polarity = polarity;
-            h.valueType = valueType;
-            h.unit = unit;
-            h.targetValue = targetValue;
-            h.step = step;
-        }
-    } else {
-        db.habits.push({
-            id: 'h_' + Date.now(),
-            title,
-            category,
-            polarity,
-            valueType,
-            unit,
-            targetValue,
-            step,
-            history: {}
-        });
-        activeCarouselIndex = getFilteredHabits().length - 1;
-    }
-
-    closeHabitModal();
-    renderApp();
-}
-
-function deleteCurrentHabit() {
-    if (!editingHabitId) return;
-    deleteHabit(editingHabitId);
-    closeHabitModal();
-}
-
-function deleteHabit(habitId) {
-    if (!confirm('Supprimer définitivement cette habitude et toute sa heatmap ?')) return;
-    db.habits = db.habits.filter(h => h.id !== habitId);
-    activeCarouselIndex = Math.max(0, activeCarouselIndex - 1);
-    renderApp();
-}
-
-function closeHabitModal() {
-    editingHabitId = null;
-    document.getElementById('habitModal').classList.remove('open');
-}
-
-/* ============================================================================
-   AUJOURD'HUI & TEMPLE (ORIGINAUX CONSERVÉS)
+   ONGLET RÉSEAU : VRAI GRAPHE VISUEL SVG DES DÉPENDANCES
 ============================================================================ */
 function countUnlockedBy(taskId) {
     return db.tasks.filter(t => !t.completed && t.blockedBy && t.blockedBy.includes(taskId)).length;
@@ -2711,100 +2640,336 @@ function isBlocked(task) {
     return getUnfinishedBlockers(task).length > 0;
 }
 
-const QUAD_CONFIG = {
-    q1: { title: 'Faire', sub: 'Urgent & Important', color: 'var(--q1-color)', weight: 50 },
-    q2: { title: 'Planifier', sub: 'Important, pas urgent', color: 'var(--q2-color)', weight: 35 },
-    q3: { title: 'Déléguer', sub: 'Urgent, pas important', color: 'var(--q3-color)', weight: 20 },
-    q4: { title: 'Éliminer', sub: 'Ni urgent, ni important', color: 'var(--q4-color)', weight: 10 },
-    inbox: { title: 'Vide-tête', sub: 'Idées brutes à trier', color: 'var(--accent-emerald)', weight: 5 }
-};
+function renderNetworkView() {
+    const bSelect = document.getElementById('netBlockerSelect');
+    const tSelect = document.getElementById('netTargetSelect');
+    if (!bSelect || !tSelect) return;
 
-function renderTodayView() {
-    const activeTasks = db.tasks.filter(t => !t.completed && t.quadrant !== 'inbox');
-    const leverageTasks = activeTasks.filter(t => countUnlockedBy(t.id) > 0 && !isBlocked(t));
-    const rotting = activeTasks.filter(t => calcDaysAgo(t.createdAt) >= 90);
+    const activeTasks = db.tasks.filter(t => !t.completed);
+    bSelect.innerHTML = '<option value="">Prérequis (A)...</option>';
+    tSelect.innerHTML = '<option value="">Débloque (B)...</option>';
 
-    document.getElementById('todayStatsRow').innerHTML = `
-        <div class="stat-box"><div class="val">${activeTasks.length}</div><div class="lbl">Tâches</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-cyan);">${leverageTasks.length}</div><div class="lbl">Leviers ⚡</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-crimson);">${rotting.length}</div><div class="lbl">Rotting 💀</div></div>
-    `;
+    activeTasks.forEach(t => {
+        bSelect.innerHTML += `<option value="${t.id}">${escapeHtml(t.title)}</option>`;
+        tSelect.innerHTML += `<option value="${t.id}">${escapeHtml(t.title)}</option>`;
+    });
 
-    const fillList = (elId, list, emptyMsg) => {
-        const box = document.getElementById(elId);
-        box.innerHTML = '';
-        if (list.length === 0) {
-            box.innerHTML = `<div style="font-size:0.78rem; color:var(--text-tertiary); padding:6px 0;">${emptyMsg}</div>`;
-            return;
+    // Identification des tâches impliquées dans le graphe
+    const connectedIds = new Set();
+    let totalEdges = 0;
+
+    db.tasks.forEach(t => {
+        if (t.blockedBy && t.blockedBy.length > 0) {
+            connectedIds.add(t.id);
+            t.blockedBy.forEach(bid => {
+                if (db.tasks.some(x => x.id === bid)) {
+                    connectedIds.add(bid);
+                    totalEdges++;
+                }
+            });
         }
-        list.forEach(t => {
-            const age = calcDaysAgo(t.createdAt);
-            const unlocks = countUnlockedBy(t.id);
-            const card = document.createElement('div');
-            card.className = 'full-card';
-            card.innerHTML = `
-                <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')"></div>
-                <div style="flex:1;">
-                    <div style="font-weight:800; font-size:0.9rem;">${escapeHtml(t.title)}</div>
-                    <div style="font-size:0.7rem; color:var(--text-secondary); margin-top:2px;">
-                        ${QUAD_CONFIG[t.quadrant].title} · ${t.category} ${unlocks ? `· ⚡ Débloque ${unlocks}` : ''}
-                    </div>
-                </div>
-                <span class="age-badge">${age}j</span>
-            `;
-            card.onclick = () => openTaskDetail(t.id);
-            box.appendChild(card);
-        });
-    };
+    });
 
-    fillList('leverageTasksList', leverageTasks, 'Aucun goulot d\'étranglement actif.');
-    fillList('todayPrimaryList', activeTasks.filter(t => (t.quadrant === 'q1' || t.quadrant === 'q2') && !isBlocked(t)).slice(0, 5), 'Aucune tâche prioritaire en attente.');
-    fillList('rottingTasksList', rotting, 'Aucune tâche en stagnation extrême (+90 jours).');
-}
+    document.getElementById('networkStatsBadge').textContent = `${totalEdges} lien(s)`;
+    const tiersContainer = document.getElementById('networkTiersContainer');
+    const svg = document.getElementById('networkSvg');
+    tiersContainer.innerHTML = '';
+    svg.innerHTML = '';
 
-function renderTempleView() {
-    const active = db.tasks.filter(t => !t.completed);
-    const avgAge = active.length
-        ? Math.round(active.reduce((acc, t) => acc + calcDaysAgo(t.createdAt), 0) / active.length)
-        : 0;
-    const blockedCount = active.filter(t => isBlocked(t)).length;
-
-    document.getElementById('templeStatsRow').innerHTML = `
-        <div class="stat-box"><div class="val">${avgAge}j</div><div class="lbl">Âge Moyen</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-crimson);">${blockedCount}</div><div class="lbl">Verrouillées</div></div>
-        <div class="stat-box"><div class="val" style="color:var(--accent-purple);">${db.categories.length}</div><div class="lbl">Catégories</div></div>
-    `;
-
-    const depBox = document.getElementById('templeDependencyList');
-    depBox.innerHTML = '';
-    const lockedTasks = db.tasks.filter(t => t.blockedBy && t.blockedBy.length > 0);
-
-    if (lockedTasks.length === 0) {
-        depBox.innerHTML = '<div style="font-size:0.78rem; color:var(--text-tertiary);">Aucun lien de dépendance paramétré.</div>';
+    if (connectedIds.size === 0) {
+        tiersContainer.innerHTML = `
+            <div style="text-align:center; padding:50px 16px; color:var(--text-tertiary); font-size:0.8rem;">
+                Aucune dépendance active.<br>Utilise le sélecteur ci-dessus pour relier deux tâches et visualiser le graphe.
+            </div>
+        `;
         return;
     }
 
-    lockedTasks.forEach(t => {
-        const blockers = t.blockedBy.map(id => db.tasks.find(x => x.id === id)).filter(Boolean);
-        const card = document.createElement('div');
-        card.className = 'full-card';
-        card.innerHTML = `
-            <div style="flex:1;">
-                <div style="font-size:0.75rem; color:var(--accent-emerald); font-weight:700;">
-                    ${blockers.map(b => `${b.completed ? '✓' : '🔒'} ${escapeHtml(b.title)}`).join(' + ')}
+    const graphTasks = db.tasks.filter(t => connectedIds.has(t.id));
+
+    // Calcul de la profondeur (rang dans l'arbre) pour chaque nœud
+    const depthMap = {};
+    const computeDepth = (task, visited = new Set()) => {
+        if (depthMap[task.id] !== undefined) return depthMap[task.id];
+        if (visited.has(task.id)) return 0;
+        visited.add(task.id);
+
+        if (!task.blockedBy || task.blockedBy.length === 0) {
+            depthMap[task.id] = 0;
+            return 0;
+        }
+        let maxParent = 0;
+        task.blockedBy.forEach(bid => {
+            const p = db.tasks.find(x => x.id === bid);
+            if (p) maxParent = Math.max(maxParent, computeDepth(p, new Set(visited)) + 1);
+        });
+        depthMap[task.id] = maxParent;
+        return maxParent;
+    };
+
+    graphTasks.forEach(t => computeDepth(t));
+
+    // Regroupement par niveaux (Tiers)
+    const tiers = {};
+    graphTasks.forEach(t => {
+        const d = depthMap[t.id] || 0;
+        if (!tiers[d]) tiers[d] = [];
+        tiers[d].push(t);
+    });
+
+    Object.keys(tiers).sort((a, b) => a - b).forEach(level => {
+        const row = document.createElement('div');
+        row.className = 'network-tier';
+
+        tiers[level].forEach(t => {
+            const node = document.createElement('div');
+            const blocked = isBlocked(t);
+            const unlocks = countUnlockedBy(t.id);
+            let statusClass = '';
+            if (t.completed) statusClass = 'node-done';
+            else if (blocked) statusClass = 'node-locked';
+            else if (unlocks > 0) statusClass = 'node-lever';
+
+            node.className = `graph-node ${statusClass}`;
+            node.id = `gnode_${t.id}`;
+            node.innerHTML = `
+                <div class="node-cat">
+                    <span>${escapeHtml(t.category)}</span>
+                    <span>${t.completed ? '✓' : (blocked ? '🔒' : `⚡${unlocks}`)}</span>
                 </div>
-                <div style="font-size:0.88rem; font-weight:800; margin-top:4px;">
-                    ↳ Débloque : ${escapeHtml(t.title)} (${t.category})
-                </div>
-            </div>
-        `;
-        card.onclick = () => openTaskDetail(t.id);
-        depBox.appendChild(card);
+                <div class="node-title">${escapeHtml(t.title)}</div>
+            `;
+            node.onclick = () => openTaskDetail(t.id);
+            row.appendChild(node);
+        });
+
+        tiersContainer.appendChild(row);
+    });
+
+    // Tracé des courbes de Bézier SVG entre les nœuds
+    requestAnimationFrame(() => drawNetworkSvgCurves(graphTasks));
+}
+
+function drawNetworkSvgCurves(graphTasks) {
+    const svg = document.getElementById('networkSvg');
+    const stage = document.getElementById('networkStage');
+    if (!svg || !stage) return;
+    svg.innerHTML = '';
+
+    const stageRect = stage.getBoundingClientRect();
+    if (stageRect.width === 0) return;
+
+    graphTasks.forEach(targetTask => {
+        if (!targetTask.blockedBy) return;
+        const targetEl = document.getElementById(`gnode_${targetTask.id}`);
+        if (!targetEl) return;
+
+        const targetRect = targetEl.getBoundingClientRect();
+        const x2 = targetRect.left - stageRect.left + targetRect.width / 2;
+        const y2 = targetRect.top - stageRect.top;
+
+        targetTask.blockedBy.forEach(blockerId => {
+            const blockerTask = db.tasks.find(x => x.id === blockerId);
+            const blockerEl = document.getElementById(`gnode_${blockerId}`);
+            if (!blockerEl || !blockerTask) return;
+
+            const blockerRect = blockerEl.getBoundingClientRect();
+            const x1 = blockerRect.left - stageRect.left + blockerRect.width / 2;
+            const y1 = blockerRect.top - stageRect.top + blockerRect.height;
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const cY = (y1 + y2) / 2;
+            path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${cY}, ${x2} ${cY}, ${x2} ${y2}`);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', blockerTask.completed ? 'rgba(0, 230, 118, 0.45)' : 'rgba(255, 61, 113, 0.75)');
+            path.setAttribute('stroke-width', '2');
+            if (!blockerTask.completed) path.setAttribute('stroke-dasharray', '4 3');
+            svg.appendChild(path);
+        });
     });
 }
 
+function quickLinkFromNetwork() {
+    const blockerId = document.getElementById('netBlockerSelect').value;
+    const targetId = document.getElementById('netTargetSelect').value;
+    if (!blockerId || !targetId || blockerId === targetId) {
+        toast('Sélectionne deux tâches distinctes');
+        return;
+    }
+    const target = db.tasks.find(t => t.id === targetId);
+    const blocker = db.tasks.find(t => t.id === blockerId);
+    if (!target || !blocker) return;
+
+    if (blocker.blockedBy && blocker.blockedBy.includes(targetId)) {
+        toast('⚠️ Boucle circulaire interdite');
+        return;
+    }
+    if (!target.blockedBy) target.blockedBy = [];
+    if (!target.blockedBy.includes(blockerId)) {
+        target.blockedBy.push(blockerId);
+        AudioEngine.unlock();
+        haptic(15);
+        toast('🔗 Lien ajouté au graphe');
+        renderApp();
+    }
+}
+
 /* ============================================================================
-   MATRICE D'EISENHOWER & DÉTAILS (ORIGINAUX CONSERVÉS)
+   HUB FOCUS & AUJOURD'HUI COMPACT (BOUTON ✨)
+============================================================================ */
+const QUAD_CONFIG = {
+    q1: { title: 'Faire', sub: 'Urgent & Important', color: 'var(--q1-color)', weight: 50 },
+    q2: { title: 'Planifier', sub: 'Important, non urgent', color: 'var(--q2-color)', weight: 35 },
+    q3: { title: 'Déléguer', sub: 'Urgent, non important', color: 'var(--q3-color)', weight: 20 },
+    q4: { title: 'Éliminer', sub: 'Ni urgent, ni important', color: 'var(--q4-color)', weight: 10 },
+    inbox: { title: 'Vide-tête', sub: 'Idées à trier', color: 'var(--accent-emerald)', weight: 5 }
+};
+
+function getBestExecutableTask() {
+    const candidates = db.tasks.filter(t => !t.completed && !isBlocked(t) && t.quadrant !== 'inbox');
+    if (candidates.length === 0) return null;
+
+    const scored = candidates.map(t => {
+        const qScore = QUAD_CONFIG[t.quadrant].weight;
+        const pScore = t.priority === 'critique' ? 40 : (t.priority === 'haute' ? 25 : 10);
+        const levScore = countUnlockedBy(t.id) * 30;
+        const ageScore = Math.min(40, calcDaysAgo(t.createdAt) * 0.5);
+        return { task: t, total: qScore + pScore + levScore + ageScore };
+    }).sort((a, b) => b.total - a.total);
+
+    return scored[0].task;
+}
+
+function openFocusHub() {
+    AudioEngine.click();
+    haptic(12);
+    const best = getBestExecutableTask();
+    activeFocusTaskId = best ? best.id : null;
+    if (!focusTimer) focusSeconds = 25 * 60;
+    renderFocusHubContent();
+    document.getElementById('focusModal').classList.add('open');
+}
+
+function switchFocusListTab(tab) {
+    AudioEngine.click();
+    activeFocusTab = tab;
+    renderFocusHubContent();
+}
+
+function selectTaskForFocus(taskId) {
+    AudioEngine.click();
+    haptic(10);
+    activeFocusTaskId = taskId;
+    clearInterval(focusTimer);
+    focusTimer = null;
+    focusSeconds = 25 * 60;
+    renderFocusHubContent();
+}
+
+function renderFocusHubContent() {
+    const hero = document.getElementById('focusHeroBox');
+    const target = db.tasks.find(t => t.id === activeFocusTaskId && !t.completed) || getBestExecutableTask();
+
+    const m = String(Math.floor(focusSeconds / 60)).padStart(2, '0');
+    const s = String(focusSeconds % 60).padStart(2, '0');
+
+    if (!target) {
+        hero.innerHTML = `<div style="color:var(--text-secondary); padding:10px;">Aucune tâche exécutable en attente.</div>`;
+    } else {
+        activeFocusTaskId = target.id;
+        const unlocks = countUnlockedBy(target.id);
+        hero.innerHTML = `
+            <span class="score-badge" style="color:var(--accent-emerald); border-color:var(--accent-emerald);">CIBLE PRIORITAIRE</span>
+            <div style="font-size:1.25rem; font-weight:900; margin-top:4px;">${escapeHtml(target.title)}</div>
+            <div style="font-size:0.74rem; color:var(--text-secondary);">
+                ${QUAD_CONFIG[target.quadrant].title} · ${escapeHtml(target.category)} ${unlocks ? `· ⚡ Débloque ${unlocks}` : ''}
+            </div>
+            <div class="timer-readout" id="focusClock">${m}:${s}</div>
+            <div style="display:flex; gap:8px; width:100%;">
+                <button class="btn-action-primary" style="flex:1;" onclick="toggleTimer()">${focusTimer ? '⏸ Pause' : '▶ Démarrer'}</button>
+                <button class="stepper-btn" style="flex:1; font-size:0.85rem;" onclick="toggleTaskDone('${target.id}')">✓ Terminer</button>
+            </div>
+        `;
+    }
+
+    // Listes compactes d'Aujourd'hui intégrées
+    const activeTasks = db.tasks.filter(t => !t.completed && t.quadrant !== 'inbox');
+    const levers = activeTasks.filter(t => countUnlockedBy(t.id) > 0 && !isBlocked(t));
+    const priorities = activeTasks.filter(t => (t.quadrant === 'q1' || t.quadrant === 'q2') && !isBlocked(t));
+    const oldTasks = activeTasks.filter(t => calcDaysAgo(t.createdAt) >= 90);
+
+    document.getElementById('fTab_levers').textContent = `⚡ Leviers (${levers.length})`;
+    document.getElementById('fTab_today').textContent = `🎯 Priorités (${priorities.length})`;
+    document.getElementById('fTab_old').textContent = `⏳ +90j (${oldTasks.length})`;
+
+    ['levers', 'today', 'old'].forEach(k => {
+        document.getElementById(`fTab_${k}`).classList.toggle('active', activeFocusTab === k);
+    });
+
+    const listEl = document.getElementById('focusCompactTasksList');
+    listEl.innerHTML = '';
+
+    const currentList = activeFocusTab === 'levers' ? levers : (activeFocusTab === 'today' ? priorities : oldTasks);
+
+    if (currentList.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-tertiary); font-size:0.78rem;">Aucune tâche dans cette section.</div>`;
+        return;
+    }
+
+    currentList.forEach(t => {
+        const age = calcDaysAgo(t.createdAt);
+        const unlocks = countUnlockedBy(t.id);
+        const card = document.createElement('div');
+        card.className = 'full-card';
+        if (t.id === activeFocusTaskId) card.style.borderColor = 'var(--accent-emerald)';
+
+        card.innerHTML = `
+            <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')"></div>
+            <div style="flex:1; min-width:0;" onclick="selectTaskForFocus('${t.id}')">
+                <div style="font-weight:800; font-size:0.86rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(t.title)}</div>
+                <div style="font-size:0.68rem; color:var(--text-secondary);">
+                    ${QUAD_CONFIG[t.quadrant].title} · ${escapeHtml(t.category)} ${unlocks ? `· ⚡${unlocks}` : ''}
+                </div>
+            </div>
+            <span class="age-badge">${age}j</span>
+            <button class="btn-card-more" onclick="event.stopPropagation(); closeFocusModal(); openTaskDetail('${t.id}')">⋯</button>
+        `;
+        listEl.appendChild(card);
+    });
+}
+
+function toggleTimer() {
+    const clock = document.getElementById('focusClock');
+    if (focusTimer) {
+        clearInterval(focusTimer);
+        focusTimer = null;
+        renderFocusHubContent();
+        return;
+    }
+    AudioEngine.click();
+    focusTimer = setInterval(() => {
+        focusSeconds--;
+        if (focusSeconds <= 0) {
+            clearInterval(focusTimer);
+            focusTimer = null;
+            AudioEngine.bell();
+            toast('🔔 Session terminée');
+            renderFocusHubContent();
+            return;
+        }
+        const m = String(Math.floor(focusSeconds / 60)).padStart(2, '0');
+        const s = String(focusSeconds % 60).padStart(2, '0');
+        if (clock) clock.textContent = `${m}:${s}`;
+    }, 1000);
+    renderFocusHubContent();
+}
+
+function closeFocusModal() {
+    document.getElementById('focusModal').classList.remove('open');
+}
+
+/* ============================================================================
+   MATRICE D'EISENHOWER & DÉTAILS DE TÂCHE
 ============================================================================ */
 function getFilteredTasksForQuadrant(quadId) {
     return db.tasks
@@ -2834,6 +2999,7 @@ function getFilteredTasksForQuadrant(quadId) {
 function renderMatrix() {
     ['q1', 'q2', 'q3', 'q4'].forEach(qid => {
         const list = document.getElementById(`matrixList-${qid}`);
+        if (!list) return;
         list.innerHTML = '';
         const tasks = getFilteredTasksForQuadrant(qid);
 
@@ -2924,7 +3090,7 @@ function updateTaskProp(prop, val) {
 }
 
 function deleteActiveTask() {
-    if (!confirm('Supprimer définitivement cette tâche tactique ?')) return;
+    if (!confirm('Supprimer cette tâche ?')) return;
     db.tasks = db.tasks.filter(t => t.id !== activeTaskId);
     db.tasks.forEach(t => {
         if (t.blockedBy) t.blockedBy = t.blockedBy.filter(id => id !== activeTaskId);
@@ -2944,7 +3110,7 @@ function renderSubtasksSection(t) {
         row.className = 'form-row';
         row.innerHTML = `
             <input type="checkbox" style="width:18px; height:18px; accent-color:var(--accent-emerald);" ${s.done ? 'checked' : ''} onchange="toggleSubtaskDone(${idx})">
-            <span style="flex:1; font-size:0.88rem; font-weight:600; ${s.done ? 'text-decoration:line-through; color:var(--text-tertiary);' : ''}">${escapeHtml(s.title)}</span>
+            <span style="flex:1; font-size:0.86rem; font-weight:600; ${s.done ? 'text-decoration:line-through; color:var(--text-tertiary);' : ''}">${escapeHtml(s.title)}</span>
             <button class="btn-text" style="color:var(--accent-crimson);" onclick="removeSubtask(${idx})">✕</button>
         `;
         box.appendChild(row);
@@ -2980,7 +3146,7 @@ function removeSubtask(idx) {
 
 function renderDependenciesSection(t) {
     const select = document.getElementById('dependencySelect');
-    select.innerHTML = '<option value="">+ Ajouter un verrou...</option>';
+    select.innerHTML = '<option value="">+ Choisir une tâche...</option>';
 
     db.tasks
         .filter(x => x.id !== t.id && (!t.blockedBy || !t.blockedBy.includes(x.id)))
@@ -2994,7 +3160,7 @@ function renderDependenciesSection(t) {
     const box = document.getElementById('activeDependenciesBox');
     box.innerHTML = '';
     if (!t.blockedBy || t.blockedBy.length === 0) {
-        box.innerHTML = '<div style="font-size:0.75rem; color:var(--text-tertiary);">Aucun verrou bloquant.</div>';
+        box.innerHTML = '<div style="font-size:0.74rem; color:var(--text-tertiary);">Aucun prérequis.</div>';
         return;
     }
 
@@ -3006,11 +3172,11 @@ function renderDependenciesSection(t) {
         row.style.justifyContent = 'space-between';
         row.style.alignItems = 'center';
         row.style.background = 'rgba(255,255,255,0.04)';
-        row.style.padding = '8px 12px';
+        row.style.padding = '7px 10px';
         row.style.borderRadius = '8px';
         row.innerHTML = `
-            <span style="font-size:0.8rem; font-weight:700; color:${blocker.completed ? 'var(--accent-emerald)' : 'var(--accent-crimson)'};">
-                ${blocker.completed ? '✓ Résolu' : '🔒 Bloqué'} : ${escapeHtml(blocker.title)}
+            <span style="font-size:0.78rem; font-weight:700; color:${blocker.completed ? 'var(--accent-emerald)' : 'var(--accent-crimson)'};">
+                ${blocker.completed ? '✓' : '🔒'} ${escapeHtml(blocker.title)}
             </span>
             <button class="btn-text" style="color:var(--accent-crimson);" onclick="removeDependency('${bid}')">✕</button>
         `;
@@ -3023,7 +3189,7 @@ function attachDependency(blockerId) {
     const t = db.tasks.find(x => x.id === activeTaskId);
     const blocker = db.tasks.find(x => x.id === blockerId);
     if (blocker.blockedBy && blocker.blockedBy.includes(t.id)) {
-        toast('⚠️ Boucle circulaire interdite !');
+        toast('⚠️ Boucle circulaire interdite');
         return;
     }
     if (!t.blockedBy) t.blockedBy = [];
@@ -3046,7 +3212,7 @@ function toggleTaskDone(taskId) {
     const blockers = getUnfinishedBlockers(t);
     if (!t.completed && blockers.length > 0) {
         AudioEngine.click();
-        haptic(50);
+        haptic(40);
         toast(`🔒 Bloqué par : ${blockers.map(b => b.title).join(', ')}`);
         return;
     }
@@ -3054,12 +3220,12 @@ function toggleTaskDone(taskId) {
     t.completed = !t.completed;
     if (t.completed) {
         AudioEngine.unlock();
-        haptic([20, 50, 30]);
+        haptic([15, 45]);
         const unlocked = countUnlockedBy(t.id);
-        if (unlocked > 0) toast(`⚡ Tâche abattue ! ${unlocked} tâche(s) débloquée(s).`);
+        if (unlocked > 0) toast(`⚡ ${unlocked} tâche(s) débloquée(s)`);
     } else {
         AudioEngine.click();
-        haptic(15);
+        haptic(12);
     }
     renderApp();
 }
@@ -3073,7 +3239,7 @@ function openQuadrantDetail(qid) {
     document.getElementById('zoomCatIndicator').textContent = db.currentCategory;
     renderZoomList();
     document.getElementById('quadZoomModal').classList.add('open');
-    setTimeout(() => document.getElementById('quickTaskInput').focus(), 120);
+    setTimeout(() => document.getElementById('quickTaskInput').focus(), 100);
 }
 
 function closeQuadrantDetail() {
@@ -3093,7 +3259,7 @@ function submitQuickTask() {
         quadrant: activeZoomQuadrant,
         category: db.currentCategory,
         priority: activeZoomQuadrant === 'q1' ? 'haute' : 'normale',
-        program: 'Général',
+        program: '',
         createdAt: TODAY_STR,
         completed: false,
         subtasks: [],
@@ -3113,7 +3279,7 @@ function renderZoomList() {
         : getFilteredTasksForQuadrant(activeZoomQuadrant);
 
     if (tasks.length === 0) {
-        box.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-tertiary);">Aucune tâche dans ce quadrant.</div>`;
+        box.innerHTML = `<div style="text-align:center; padding:32px; color:var(--text-tertiary);">Aucune tâche.</div>`;
         return;
     }
 
@@ -3127,9 +3293,9 @@ function renderZoomList() {
                 ${t.completed ? '✓' : ''}
             </div>
             <div style="flex:1;">
-                <div style="font-weight:800; font-size:0.92rem;">${escapeHtml(t.title)}</div>
-                <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;">
-                    ${t.category} · Créé il y a ${age}j
+                <div style="font-weight:800; font-size:0.88rem;">${escapeHtml(t.title)}</div>
+                <div style="font-size:0.68rem; color:var(--text-secondary); margin-top:2px;">
+                    ${escapeHtml(t.category)} · ${age}j
                 </div>
             </div>
             <span class="age-badge">${age}j</span>
@@ -3139,84 +3305,141 @@ function renderZoomList() {
     });
 }
 
-function triggerTacticalFocus() {
-    const candidates = db.tasks.filter(t => !t.completed && !isBlocked(t) && t.quadrant !== 'inbox');
-    const body = document.getElementById('focusBody');
-
-    if (candidates.length === 0) {
-        body.innerHTML = `<h3>Aucune tâche exécutable immédiatement.</h3><p style="color:var(--text-secondary);">Toutes tes tâches sont bloquées ou achevées.</p>`;
-        document.getElementById('focusModal').classList.add('open');
-        return;
-    }
-
-    const scored = candidates.map(t => {
-        const qScore = QUAD_CONFIG[t.quadrant].weight;
-        const pScore = t.priority === 'critique' ? 40 : (t.priority === 'haute' ? 25 : 10);
-        const levScore = countUnlockedBy(t.id) * 30;
-        const ageScore = Math.min(40, calcDaysAgo(t.createdAt) * 0.5);
-        return { task: t, total: qScore + pScore + levScore + ageScore };
-    }).sort((a, b) => b.total - a.total);
-
-    const target = scored[0].task;
-    const unlocks = countUnlockedBy(target.id);
-    focusSeconds = 25 * 60;
-    clearInterval(focusTimer);
-    focusTimer = null;
-
-    body.innerHTML = `
-        <span class="score-badge" style="color:var(--accent-emerald); border-color:var(--accent-emerald);">OBJECTIF PRINCIPAL</span>
-        <h2 style="font-size:1.6rem; margin:12px 0 4px 0; font-weight:900;">${escapeHtml(target.title)}</h2>
-        <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;">
-            ${QUAD_CONFIG[target.quadrant].title} · ${target.category} ${unlocks ? `· ⚡ Débloque ${unlocks} tâche(s)` : ''}
-        </div>
-        <div class="timer-readout" id="focusClock">25:00</div>
-        <div style="display:flex; gap:10px; width:100%; max-width:320px;">
-            <button class="btn-action-primary" style="flex:1;" onclick="toggleTimer()">▶ Démarrer</button>
-            <button class="btn-action-primary" style="flex:1; background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border-medium);" onclick="toggleTaskDone('${target.id}'); closeFocusModal();">✓ Fait</button>
-        </div>
-    `;
-    document.getElementById('focusModal').classList.add('open');
-}
-
-function toggleTimer() {
-    const clock = document.getElementById('focusClock');
-    if (focusTimer) {
-        clearInterval(focusTimer);
-        focusTimer = null;
-        return;
-    }
-    AudioEngine.click();
-    focusTimer = setInterval(() => {
-        focusSeconds--;
-        if (focusSeconds <= 0) {
-            clearInterval(focusTimer);
-            AudioEngine.bell();
-            toast('🔔 Session Focus accomplie !');
-            return;
-        }
-        const m = String(Math.floor(focusSeconds / 60)).padStart(2, '0');
-        const s = String(focusSeconds % 60).padStart(2, '0');
-        if (clock) clock.textContent = `${m}:${s}`;
-    }, 1000);
-}
-
-function closeFocusModal() {
-    clearInterval(focusTimer);
-    focusTimer = null;
-    document.getElementById('focusModal').classList.remove('open');
-}
-
 /* ============================================================================
-   UTILITAIRES GLOBAUX
+   MODALES D'HABITUDES & SYSTÈME (FICHIER / CATÉGORIES)
 ============================================================================ */
-function toggleGlobalAggregation() {
-    db.aggregateGlobal = !db.aggregateGlobal;
-    toast(db.aggregateGlobal ? '🔓 Vue Globale : Toutes catégories agrégées' : '🔒 Vue Globale : Catégorie GLOBAL uniquement');
+function openCreateHabitModal() {
+    editingHabitId = null;
+    document.getElementById('habitModalHeading').textContent = 'Nouvelle Habitude';
+    document.getElementById('btnDeleteHabit').style.display = 'none';
+
+    document.getElementById('habitTitleInput').value = '';
+    document.getElementById('habitUnitInput').value = 'R';
+    document.getElementById('habitTargetInput').value = '2';
+    document.getElementById('habitStepInput').value = '0.25';
+    document.getElementById('habitPolaritySelect').value = 'positive';
+    document.getElementById('habitValueTypeSelect').value = 'numeric';
+    toggleHabitNumericFields('numeric');
+
+    const catSelect = document.getElementById('habitCategorySelect');
+    catSelect.innerHTML = '';
+    db.categories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        if (c === db.currentCategory) opt.selected = true;
+        catSelect.appendChild(opt);
+    });
+
+    document.getElementById('habitModal').classList.add('open');
+}
+
+function openEditHabitModal(habitId) {
+    editingHabitId = habitId;
+    const h = db.habits.find(x => x.id === habitId);
+    if (!h) return;
+
+    document.getElementById('habitModalHeading').textContent = 'Configurer';
+    document.getElementById('btnDeleteHabit').style.display = 'block';
+
+    document.getElementById('habitTitleInput').value = h.title;
+    document.getElementById('habitPolaritySelect').value = h.polarity;
+    document.getElementById('habitValueTypeSelect').value = h.valueType;
+    document.getElementById('habitUnitInput').value = h.unit;
+    document.getElementById('habitTargetInput').value = h.targetValue;
+    document.getElementById('habitStepInput').value = h.step;
+    toggleHabitNumericFields(h.valueType);
+
+    const catSelect = document.getElementById('habitCategorySelect');
+    catSelect.innerHTML = '';
+    db.categories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        if (c === h.category) opt.selected = true;
+        catSelect.appendChild(opt);
+    });
+
+    document.getElementById('habitModal').classList.add('open');
+}
+
+function toggleHabitNumericFields(valType) {
+    document.getElementById('habitNumericConfigGroup').style.display =
+        valType === 'numeric' ? 'flex' : 'none';
+}
+
+function saveHabitFromModal() {
+    const title = document.getElementById('habitTitleInput').value.trim();
+    if (!title) return;
+
+    const category = document.getElementById('habitCategorySelect').value;
+    const polarity = document.getElementById('habitPolaritySelect').value;
+    const valueType = document.getElementById('habitValueTypeSelect').value;
+    const unit = document.getElementById('habitUnitInput').value.trim() || (valueType === 'boolean' ? 'fait' : 'R');
+    const rawTarget = parseFloat(document.getElementById('habitTargetInput').value);
+    const targetValue = isNaN(rawTarget) ? (polarity === 'negative' ? 0 : 1) : rawTarget;
+    const rawStep = parseFloat(document.getElementById('habitStepInput').value);
+    const step = isNaN(rawStep) || rawStep <= 0 ? 1 : rawStep;
+
+    if (editingHabitId) {
+        const h = db.habits.find(x => x.id === editingHabitId);
+        if (h) {
+            h.title = title;
+            h.category = category;
+            h.polarity = polarity;
+            h.valueType = valueType;
+            h.unit = unit;
+            h.targetValue = targetValue;
+            h.step = step;
+        }
+    } else {
+        db.habits.push({
+            id: 'h_' + Date.now(),
+            title,
+            category,
+            polarity,
+            valueType,
+            unit,
+            targetValue,
+            step,
+            history: {}
+        });
+        activeCarouselIndex = getFilteredHabits().length - 1;
+    }
+
+    closeHabitModal();
     renderApp();
 }
 
+function deleteCurrentHabit() {
+    if (!editingHabitId) return;
+    if (!confirm('Supprimer cette habitude ?')) return;
+    db.habits = db.habits.filter(h => h.id !== editingHabitId);
+    activeCarouselIndex = Math.max(0, activeCarouselIndex - 1);
+    closeHabitModal();
+    renderApp();
+}
+
+function closeHabitModal() {
+    editingHabitId = null;
+    document.getElementById('habitModal').classList.remove('open');
+}
+
+/* MENU FICHIER & CATÉGORIES (🗂️) */
+function openSystemModal() {
+    AudioEngine.click();
+    document.getElementById('sysActiveCatLabel').textContent = db.currentCategory;
+    document.getElementById('sysCatEditActions').style.display =
+        db.currentCategory === 'GLOBAL' ? 'none' : 'flex';
+    document.getElementById('systemMenuModal').classList.add('open');
+}
+
+function closeSystemModal() {
+    document.getElementById('systemMenuModal').classList.remove('open');
+}
+
 function createCategoryPrompt() {
-    const name = prompt('Nom de la catégorie :');
+    const name = prompt('Nouvelle catégorie :');
     if (!name || !name.trim()) return;
     const clean = name.trim();
     if (!db.categories.includes(clean)) db.categories.push(clean);
@@ -3224,34 +3447,37 @@ function createCategoryPrompt() {
     renderApp();
 }
 
-function openCategorySheet() {
-    if (db.currentCategory === 'GLOBAL') {
-        createCategoryPrompt();
-        return;
+function renameActiveCategory() {
+    if (db.currentCategory === 'GLOBAL') return;
+    const ren = prompt('Nouveau nom :', db.currentCategory);
+    if (ren && ren.trim()) {
+        const clean = ren.trim();
+        db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = clean; });
+        db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = clean; });
+        const idx = db.categories.indexOf(db.currentCategory);
+        if (idx > -1) db.categories[idx] = clean;
+        db.currentCategory = clean;
+        closeSystemModal();
+        renderApp();
     }
-    const act = prompt(`Catégorie : "${db.currentCategory}"\n1. Renommer\n2. Supprimer\n3. Nouvelle catégorie`);
-    if (act === '1') {
-        const ren = prompt('Nouveau nom :', db.currentCategory);
-        if (ren && ren.trim()) {
-            const clean = ren.trim();
-            db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = clean; });
-            db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = clean; });
-            const idx = db.categories.indexOf(db.currentCategory);
-            if (idx > -1) db.categories[idx] = clean;
-            db.currentCategory = clean;
-            renderApp();
-        }
-    } else if (act === '2') {
-        if (confirm(`Supprimer "${db.currentCategory}" ? Les éléments seront rebasculés dans GLOBAL.`)) {
-            db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = 'GLOBAL'; });
-            db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = 'GLOBAL'; });
-            db.categories = db.categories.filter(c => c !== db.currentCategory);
-            db.currentCategory = 'GLOBAL';
-            renderApp();
-        }
-    } else if (act === '3') {
-        createCategoryPrompt();
+}
+
+function deleteActiveCategory() {
+    if (db.currentCategory === 'GLOBAL') return;
+    if (confirm(`Supprimer "${db.currentCategory}" ? Les éléments seront déplacés dans GLOBAL.`)) {
+        db.tasks.forEach(t => { if (t.category === db.currentCategory) t.category = 'GLOBAL'; });
+        db.habits.forEach(h => { if (h.category === db.currentCategory) h.category = 'GLOBAL'; });
+        db.categories = db.categories.filter(c => c !== db.currentCategory);
+        db.currentCategory = 'GLOBAL';
+        closeSystemModal();
+        renderApp();
     }
+}
+
+function toggleGlobalAggregation() {
+    db.aggregateGlobal = !db.aggregateGlobal;
+    toast(db.aggregateGlobal ? '🔓 Toutes catégories' : '🔒 GLOBAL uniquement');
+    renderApp();
 }
 
 function toggleSearch() {
@@ -3272,12 +3498,16 @@ function handleGlobalSearch(val) {
 
 function switchNavTab(tabName) {
     AudioEngine.click();
-    haptic(10);
+    haptic(8);
     document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
     document.getElementById(`tab-${tabName}`).classList.add('active');
     document.querySelector(`.nav-btn[data-tab="${tabName}"]`).classList.add('active');
+
+    // Masque les boutons flottants hors de la Matrice pour libérer l'espace bas
+    document.getElementById('floatingBar').classList.toggle('hidden', tabName !== 'matrix');
+
     renderApp();
 }
 
@@ -3287,10 +3517,10 @@ function exportDataJSON() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `tactique-os-${TODAY_STR}.json`;
+    a.download = `inconscient-${TODAY_STR}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast('Sauvegarde exportée avec succès !');
+    toast('Sauvegarde exportée');
 }
 
 function importDataJSON(e) {
@@ -3303,7 +3533,7 @@ function importDataJSON(e) {
             if (data && Array.isArray(data.tasks)) {
                 db = data;
                 renderApp();
-                toast('Données importées avec succès !');
+                toast('Données importées');
             }
         } catch (err) {
             alert('Fichier JSON invalide.');
@@ -3313,7 +3543,7 @@ function importDataJSON(e) {
 }
 
 function resetToDemonstrationData() {
-    if (!confirm('Écraser les données locales par la configuration de démonstration ?')) return;
+    if (!confirm('Réinitialiser toutes les données locales ?')) return;
     db = JSON.parse(JSON.stringify(INITIAL_DB));
     renderApp();
 }
@@ -3323,6 +3553,12 @@ function escapeHtml(s) {
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[c]));
 }
+
+window.addEventListener('resize', () => {
+    if (document.getElementById('tab-network').classList.contains('active')) {
+        renderNetworkView();
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     renderApp();
