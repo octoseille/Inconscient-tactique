@@ -226,7 +226,7 @@
         display: none;
         height: 100%;
         overflow-y: auto;
-        padding: 10px 12px 90px 12px;
+        padding: 10px 12px 130px 12px;
         flex-direction: column;
         gap: 14px;
         scrollbar-width: none;
@@ -242,7 +242,7 @@
         gap: 6px;
         flex: 1;
         min-height: 0;
-        margin-bottom: 70px;
+        margin-bottom: 10px;
     }
 
     .quadrant {
@@ -389,7 +389,7 @@
     /* CONTROLES FLOTTANTS */
     .floating-bar {
         position: fixed;
-        bottom: 74px;
+        bottom: 72px;
         right: 16px;
         display: flex;
         align-items: center;
@@ -441,7 +441,7 @@
         font-weight: 800;
     }
 
-    /* HEATMAP GLOBALE AVEC ALIGNEMENT CALENDAIRE STRICT (LUN-DIM) */
+    /* HEATMAP GLOBALE PLEINE LARGEUR (100% DU CADRE) */
     .global-heatmap-wrap {
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
@@ -450,6 +450,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+        width: 100%;
     }
 
     .heat-period-toggle {
@@ -477,57 +478,63 @@
     .calendar-heatmap-layout {
         display: flex;
         gap: 8px;
-        align-items: flex-start;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        scrollbar-width: none;
+        align-items: stretch;
+        width: 100%;
     }
-    .calendar-heatmap-layout::-webkit-scrollbar { display: none; }
 
     .day-labels-col {
         display: grid;
-        grid-template-rows: repeat(7, 13px);
-        gap: 3px;
+        grid-template-rows: repeat(7, 16px);
+        gap: 4px;
         font-size: 0.6rem;
         font-weight: 800;
         color: var(--text-tertiary);
-        line-height: 13px;
+        line-height: 16px;
         text-align: right;
         padding-right: 2px;
         flex-shrink: 0;
     }
 
     .global-iso-grid {
+        flex: 1;
+        width: 100%;
         display: grid;
-        grid-template-rows: repeat(7, 13px);
+        grid-template-rows: repeat(7, 16px);
         grid-auto-flow: column;
-        grid-auto-columns: 13px;
-        gap: 3px;
+        grid-template-columns: repeat(var(--cols, 12), minmax(0, 1fr));
+        gap: 4px;
     }
 
     .heat-cell {
-        width: 13px;
-        height: 13px;
-        border-radius: 3px;
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
         background: var(--heat-0);
         cursor: pointer;
-        transition: transform 0.12s;
+        transition: transform 0.12s, background-color 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.62rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.75);
     }
-    .heat-cell:active { transform: scale(1.3); z-index: 5; }
+    .heat-cell:active { transform: scale(0.95); z-index: 5; }
 
-    .heat-cell.level-0 { background: var(--heat-0); }
+    .heat-cell.level-0 { background: var(--heat-0); color: rgba(255, 255, 255, 0.28); }
     .heat-cell.level-1 { background: var(--heat-1); }
     .heat-cell.level-2 { background: var(--heat-2); }
     .heat-cell.level-3 { background: var(--heat-3); }
-    .heat-cell.level-4 { background: var(--heat-4); box-shadow: 0 0 6px var(--accent-emerald-glow); }
+    .heat-cell.level-4 { background: var(--heat-4); color: #03140a; font-weight: 900; box-shadow: 0 0 6px var(--accent-emerald-glow); }
 
     .heat-cell.bad-1 { background: var(--heat-bad-1); }
     .heat-cell.bad-2 { background: var(--heat-bad-2); }
     .heat-cell.bad-3 { background: var(--heat-bad-3); }
-    .heat-cell.bad-4 { background: var(--heat-bad-4); box-shadow: 0 0 6px rgba(255, 61, 113, 0.45); }
+    .heat-cell.bad-4 { background: var(--heat-bad-4); color: #fff; font-weight: 900; box-shadow: 0 0 6px rgba(255, 61, 113, 0.45); }
 
     .heat-cell.empty-cell {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.02);
+        color: transparent;
         pointer-events: none;
     }
     .heat-cell.today-ring { outline: 1.5px solid #fff; outline-offset: 1px; }
@@ -538,7 +545,7 @@
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         gap: 12px;
-        padding: 4px 2px 12px 2px;
+        padding: 4px 2px 10px 2px;
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
     }
@@ -610,7 +617,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 10px 0 4px 0;
+        padding: 8px 0 2px 0;
         cursor: pointer;
     }
     .monument-val {
@@ -766,23 +773,63 @@
         border: 1px solid var(--border-subtle);
     }
 
-    /* MINI HEATMAP 4 SEMAINES */
+    /* MINI HEATMAP 4 SEMAINES PLEINE LARGEUR (TACTILE & ÉLÉGANTE) */
     .mini-heatmap-wrap {
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        background: rgba(0, 0, 0, 0.22);
-        padding: 10px 12px;
-        border-radius: 10px;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.25);
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
+        width: 100%;
     }
     .mini-heatmap-title {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         font-size: 0.65rem;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.6px;
         color: var(--text-secondary);
+    }
+    .mini-week-headers {
+        display: grid;
+        grid-template-columns: 28px repeat(4, 1fr);
+        gap: 5px;
+        font-size: 0.58rem;
+        font-weight: 800;
+        color: var(--text-tertiary);
+        text-align: center;
+    }
+    .mini-iso-layout {
+        display: flex;
+        gap: 5px;
+        align-items: stretch;
+        width: 100%;
+    }
+    .mini-day-labels {
+        width: 28px;
+        display: grid;
+        grid-template-rows: repeat(7, 22px);
+        gap: 4px;
+        font-size: 0.6rem;
+        font-weight: 800;
+        color: var(--text-tertiary);
+        line-height: 22px;
+        text-align: right;
+        padding-right: 3px;
+        flex-shrink: 0;
+    }
+    .mini-iso-grid {
+        flex: 1;
+        width: 100%;
+        display: grid;
+        grid-template-rows: repeat(7, 22px);
+        grid-auto-flow: column;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
     }
 
     /* INDICATEURS DE SLIDE */
@@ -790,7 +837,7 @@
         display: flex;
         justify-content: center;
         gap: 6px;
-        padding-top: 2px;
+        padding: 4px 0 10px 0;
     }
     .carousel-dot {
         width: 7px;
@@ -1094,7 +1141,7 @@
 
     <!-- ONGLET 2 : HABITUDES & SÉRIES -->
     <section class="tab-view" id="tab-routine">
-        <!-- HEATMAP GLOBALE CALENDRIER ISO (LUN-DIM) -->
+        <!-- HEATMAP GLOBALE CALENDRIER ISO PLEINE LARGEUR -->
         <div class="global-heatmap-wrap">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:0.92rem; font-weight:800; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
@@ -1116,17 +1163,17 @@
                     <span>SAM</span>
                     <span>DIM</span>
                 </div>
-                <div class="global-iso-grid" id="globalIsoGrid"></div>
+                <div class="global-iso-grid" id="globalIsoGrid" style="--cols: 12;"></div>
             </div>
 
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; color:var(--text-secondary); padding-top:4px; border-top:1px solid var(--border-subtle);">
                 <span id="globalHeatAverage">Moyenne : 0 act/j</span>
-                <div style="display:flex; gap:3px; align-items:center;">
+                <div style="display:flex; gap:4px; align-items:center;">
                     <span>Neutre</span>
-                    <div class="heat-cell level-0" style="width:10px;height:10px;"></div>
-                    <div class="heat-cell level-2" style="width:10px;height:10px;"></div>
-                    <div class="heat-cell level-4" style="width:10px;height:10px;"></div>
-                    <span style="margin-left:4px;">Cible</span>
+                    <div class="heat-cell level-0" style="width:12px;height:12px;"></div>
+                    <div class="heat-cell level-2" style="width:12px;height:12px;"></div>
+                    <div class="heat-cell level-4" style="width:12px;height:12px;"></div>
+                    <span style="margin-left:3px;">Cible</span>
                 </div>
             </div>
         </div>
@@ -1444,9 +1491,7 @@ async function checkGitHubLiveCommit() {
             toast('⚡ Nouveau commit GitHub synchronisé !');
             setTimeout(() => window.location.reload(), 500);
         }
-    } catch (e) {
-        // Silencieux en mode hors-ligne
-    }
+    } catch (e) {}
 }
 
 if ('serviceWorker' in navigator) {
@@ -1577,11 +1622,9 @@ function getStrictISOWindow(numWeeks) {
     today.setHours(12, 0, 0, 0);
     const currentIsoDay = getIsoDayOfWeek(today);
 
-    // Dimanche de la semaine en cours
     const endOfCurrentWeek = new Date(today);
     endOfCurrentWeek.setDate(today.getDate() + (7 - currentIsoDay));
 
-    // Lundi de la première semaine (numWeeks semaines en arrière)
     const totalDays = numWeeks * 7;
     const startOfWindow = new Date(endOfCurrentWeek);
     startOfWindow.setDate(endOfCurrentWeek.getDate() - totalDays + 1);
@@ -1596,7 +1639,8 @@ function getStrictISOWindow(numWeeks) {
             const isFuture = dateStr > TODAY_STR;
             week.push({
                 dateStr,
-                isoDay: d + 1, // 1 (Lundi) à 7 (Dimanche)
+                dayNumber: curr.getDate(),
+                isoDay: d + 1,
                 isToday: dateStr === TODAY_STR,
                 isFuture
             });
@@ -1834,12 +1878,8 @@ function toast(msg) {
 }
 
 /* ============================================================================
-   LOGIQUE MÉTIER DES HABITUDES (AVEC GESTION PROPRE DES JOURS NON RENSEIGNÉS)
+   LOGIQUE MÉTIER DES HABITUDES
 ============================================================================ */
-function hasHabitEntry(habit, dateStr) {
-    return Boolean(habit.history && habit.history[dateStr] !== undefined && habit.history[dateStr] !== false);
-}
-
 function getHabitVal(habit, dateStr) {
     if (!habit.history || habit.history[dateStr] === undefined) return 0;
     const v = habit.history[dateStr];
@@ -1960,7 +2000,7 @@ function renderHeader() {
 }
 
 /* ============================================================================
-   HABITUDES : HEATMAP ISO 8601, CARROUSEL & BARILLET HAPTIQUE SANS CONFLIT
+   HABITUDES : HEATMAP PLEINE LARGEUR, CARROUSEL & BARILLET HAPTIQUE
 ============================================================================ */
 function setGlobalHeatWeeks(weeks) {
     AudioEngine.click();
@@ -1986,7 +2026,9 @@ function renderHabitsView() {
 function renderGlobalIsoHeatmap() {
     const grid = document.getElementById('globalIsoGrid');
     if (!grid) return;
+    grid.style.setProperty('--cols', globalHeatWeeks);
     grid.innerHTML = '';
+
     const weeksMatrix = getStrictISOWindow(globalHeatWeeks);
     const habits = getFilteredHabits();
 
@@ -2029,6 +2071,10 @@ function renderGlobalIsoHeatmap() {
                 else el.classList.add('level-4');
             }
 
+            if (globalHeatWeeks === 4) {
+                el.textContent = cell.dayNumber;
+            }
+
             if (cell.isToday) el.classList.add('today-ring');
             el.title = `${cell.dateStr} : ${achievedCount}/${habits.length} cible(s) atteinte(s)`;
             grid.appendChild(el);
@@ -2069,7 +2115,6 @@ function getCardDynamicVisuals(habit) {
             btnLabel = 'Atteindre Cible';
         }
     } else {
-        // Polarité négative (Sobriété)
         if (!hasToday) {
             displayVal = '0';
             valColor = 'var(--text-secondary)';
@@ -2089,7 +2134,6 @@ function getCardDynamicVisuals(habit) {
     return { currentVal, achieved, streak, avg7, valColor, displayVal, displayUnit, btnClass, btnLabel };
 }
 
-// Mise à jour chirurgicale SANS détruire le carrousel ni interrompre le geste sur le barillet
 function updateHabitCardDOMInPlace(habitId) {
     const habit = db.habits.find(h => h.id === habitId);
     if (!habit) return;
@@ -2196,14 +2240,21 @@ function renderHabitsCarousel() {
         miniWrap.className = 'mini-heatmap-wrap';
         miniWrap.innerHTML = `
             <div class="mini-heatmap-title">
-                <span>Calendrier 4 Semaines (Lun - Dim)</span>
-                <span>Touchez une case pour éditer</span>
+                <span>📅 4 Dernières Semaines</span>
+                <span>Taper une case pour éditer</span>
             </div>
-            <div class="calendar-heatmap-layout" style="gap:6px;">
-                <div class="day-labels-col" style="font-size:0.55rem; line-height:11px; grid-template-rows:repeat(7, 11px); gap:2px;">
-                    <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+            <div class="mini-week-headers">
+                <span></span>
+                <span>S-3</span>
+                <span>S-2</span>
+                <span>S-1</span>
+                <span style="color:var(--accent-emerald);">CETTE SEM.</span>
+            </div>
+            <div class="mini-iso-layout">
+                <div class="mini-day-labels">
+                    <span>LUN</span><span>MAR</span><span>MER</span><span>JEU</span><span>VEN</span><span>SAM</span><span>DIM</span>
                 </div>
-                <div class="global-iso-grid" style="grid-template-rows:repeat(7, 11px); grid-auto-columns:11px; gap:2px;" id="miniGrid_${habit.id}"></div>
+                <div class="mini-iso-grid" id="miniGrid_${habit.id}"></div>
             </div>
         `;
 
@@ -2238,7 +2289,6 @@ function renderHabitsCarousel() {
         dots.appendChild(dot);
     });
 
-    // Restaure la carte active sans saut
     requestAnimationFrame(() => {
         if (activeCarouselIndex > 0 && carousel.offsetWidth > 0) {
             carousel.scrollLeft = activeCarouselIndex * carousel.offsetWidth;
@@ -2265,8 +2315,6 @@ function renderMiniIsoGrid(containerId, habit) {
         week.forEach(cell => {
             const el = document.createElement('div');
             el.className = 'heat-cell';
-            el.style.width = '11px';
-            el.style.height = '11px';
 
             if (cell.isFuture) {
                 el.classList.add('empty-cell');
@@ -2279,18 +2327,21 @@ function renderMiniIsoGrid(containerId, habit) {
 
             if (!hasEntry) {
                 el.classList.add('level-0');
+                el.textContent = cell.dayNumber;
             } else if (habit.valueType === 'boolean') {
                 el.classList.add(val ? 'level-4' : 'level-0');
+                el.textContent = val ? `${cell.dayNumber} ✓` : cell.dayNumber;
             } else if (habit.polarity === 'positive') {
                 if (val <= 0) el.classList.add('level-0');
                 else if (val < habit.targetValue * 0.5) el.classList.add('level-1');
                 else if (val < habit.targetValue) el.classList.add('level-2');
                 else el.classList.add('level-4');
+                el.textContent = val > 0 ? `${cell.dayNumber} · ${val}` : cell.dayNumber;
             } else {
-                // Polarité négative (Sobriété)
                 if (val <= habit.targetValue) el.classList.add('level-4');
                 else if (val <= habit.targetValue + habit.step) el.classList.add('bad-2');
                 else el.classList.add('bad-4');
+                el.textContent = `${cell.dayNumber} · ${val}`;
             }
 
             if (cell.isToday) el.classList.add('today-ring');
@@ -2328,7 +2379,6 @@ function setupHapticDial(habit, carouselElement) {
     let visualOffset = 0;
     const tickSpacingPx = 14;
 
-    // Bloque les événements tactiles natifs pour empêcher Chrome/Safari mobile de swiper la carte
     const blockTouchScroll = (e) => {
         e.stopPropagation();
         if (e.cancelable) e.preventDefault();
@@ -2426,8 +2476,6 @@ function stepHabitValue(habitId, delta) {
         next = Math.round(next);
     }
 
-    // Pour une habitude négative (ex: cigarettes/écarts), le plancher est 0.
-    // Pour le trading (unité R), on autorise les R-multiples négatifs.
     if (habit.polarity === 'negative' || habit.unit.toLowerCase() !== 'r') {
         next = Math.max(0, next);
     }
