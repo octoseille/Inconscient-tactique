@@ -391,6 +391,12 @@
         align-items: center;
     }
 
+    .special-tag-mini {
+        color: var(--accent-emerald);
+        font-weight: 900;
+        letter-spacing: 0.3px;
+    }
+
     .age-badge {
         font-size: 0.66rem;
         font-weight: 800;
@@ -1244,20 +1250,21 @@
         background: var(--bg-panel);
         border: 1px solid var(--border-medium);
         border-radius: var(--radius-lg);
-        padding: 16px;
+        padding: 14px 16px;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 6px;
+        gap: 5px;
+        flex-shrink: 0;
     }
     .timer-readout {
-        font-size: 3.1rem;
+        font-size: 2.85rem;
         font-weight: 900;
         font-variant-numeric: tabular-nums;
         color: var(--accent-emerald);
         letter-spacing: 1.5px;
-        margin: 6px 0;
+        margin: 4px 0;
         text-shadow: 0 0 20px var(--accent-emerald-glow);
     }
 
@@ -1268,6 +1275,7 @@
         background: var(--bg-panel);
         padding: 4px;
         border-radius: 10px;
+        flex-shrink: 0;
     }
     .focus-tab-btn {
         background: transparent;
@@ -1281,6 +1289,135 @@
     }
     .focus-tab-btn.active {
         background: var(--bg-card);
+        color: var(--accent-emerald);
+    }
+
+    /* SYSTÈME S.P.E.C.I.A.L. (SÉLECTEUR & HUD PIP-BOY) */
+    .special-selector-row {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        width: 100%;
+    }
+    .special-letter-btn {
+        height: 34px;
+        border-radius: 8px;
+        background: var(--bg-void);
+        border: 1px solid var(--border-medium);
+        color: var(--text-secondary);
+        font-size: 0.82rem;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+    .special-letter-btn:active {
+        transform: scale(0.92);
+    }
+    .special-letter-btn.active {
+        background: var(--accent-emerald);
+        color: #031208;
+        border-color: var(--accent-emerald);
+        box-shadow: 0 0 12px var(--accent-emerald-glow);
+    }
+
+    .special-hud-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-medium);
+        border-radius: var(--radius-md);
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: auto;
+        flex-shrink: 0;
+    }
+    .special-hud-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+    }
+    .special-hud-title {
+        font-size: 0.68rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--accent-emerald);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .special-bars-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+        align-items: end;
+    }
+    .special-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 3px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+    .special-col:active {
+        transform: scale(0.95);
+    }
+    .special-col.filter-active {
+        background: rgba(0, 230, 118, 0.1);
+        border-color: var(--accent-emerald);
+        box-shadow: inset 0 0 10px rgba(0, 230, 118, 0.15);
+    }
+    .special-col-val {
+        font-size: 0.56rem;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        color: var(--text-tertiary);
+    }
+    .special-col.filter-active .special-col-val {
+        color: var(--accent-emerald);
+    }
+    .special-bar-track {
+        width: 100%;
+        max-width: 24px;
+        height: 52px;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border-subtle);
+        border-radius: 5px;
+        padding: 3px;
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 2px;
+    }
+    .special-seg {
+        flex: 1;
+        width: 100%;
+        border-radius: 1.5px;
+        background: var(--heat-0);
+        transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    .special-seg.on {
+        background: var(--accent-emerald);
+        box-shadow: 0 0 5px var(--accent-emerald-glow);
+    }
+    .special-seg.low-stat.on {
+        background: var(--accent-amber);
+        box-shadow: none;
+    }
+    .special-col-letter {
+        font-size: 0.76rem;
+        font-weight: 900;
+        color: var(--text-secondary);
+        letter-spacing: 0.5px;
+    }
+    .special-col.filter-active .special-col-letter {
         color: var(--accent-emerald);
     }
 
@@ -1322,7 +1459,7 @@
     </div>
 
     <div class="search-wrapper" id="searchWrapper">
-        <input type="text" id="globalSearchInput" class="search-input" placeholder="Filtrer..." oninput="handleGlobalSearch(this.value)">
+        <input type="text" id="globalSearchInput" class="search-input" placeholder="Filtrer (titre, catégorie, attribut SPECIAL)..." oninput="handleGlobalSearch(this.value)">
     </div>
 
     <div class="cat-bar" id="categoryBar"></div>
@@ -1529,7 +1666,7 @@
         </div>
 
         <div class="form-group">
-            <div class="section-title">CLASSEMENT</div>
+            <div class="section-title">CLASSEMENT & COMPÉTENCE</div>
             <div class="form-group-card">
                 <div class="form-row">
                     <label style="font-size:0.85rem; font-weight:700;">Catégorie</label>
@@ -1539,9 +1676,12 @@
                     <label style="font-size:0.85rem; font-weight:700;">Création</label>
                     <input type="date" id="editTaskDate" class="form-select" onchange="updateTaskProp('createdAt', this.value)">
                 </div>
-                <div class="form-row">
-                    <label style="font-size:0.85rem; font-weight:700;">Projet / Groupe</label>
-                    <input type="text" id="editTaskProgram" class="form-select" style="user-select:text;" onchange="updateTaskProp('program', this.value)">
+                <div class="form-row" style="flex-direction:column; align-items:stretch; gap:8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <label style="font-size:0.85rem; font-weight:700;">S.P.E.C.I.A.L.</label>
+                        <span id="editTaskSpecialLabel" style="font-size:0.75rem; font-weight:800; color:var(--accent-emerald);">Aucun</span>
+                    </div>
+                    <div class="special-selector-row" id="editTaskSpecialSelector"></div>
                 </div>
             </div>
         </div>
@@ -1580,6 +1720,13 @@
                         <option value="boolean">Binaire (Oui / Non)</option>
                     </select>
                 </div>
+                <div class="form-row" style="flex-direction:column; align-items:stretch; gap:8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <label style="font-size:0.85rem; font-weight:700;">S.P.E.C.I.A.L.</label>
+                        <span id="habitSpecialLabel" style="font-size:0.75rem; font-weight:800; color:var(--accent-emerald);">Aucun</span>
+                    </div>
+                    <div class="special-selector-row" id="habitSpecialSelector"></div>
+                </div>
             </div>
         </div>
 
@@ -1616,7 +1763,7 @@
         <strong style="font-size:0.9rem;">Exécution & Priorités</strong>
         <span style="width:48px;"></span>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="gap:10px;">
         <div class="focus-hero-card" id="focusHeroBox"></div>
 
         <div class="focus-filter-tabs">
@@ -1625,7 +1772,23 @@
             <button class="focus-tab-btn" id="fTab_old" onclick="switchFocusListTab('old')">⏳ +90j (0)</button>
         </div>
 
-        <div id="focusCompactTasksList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        <div id="focusCompactTasksList" style="display:flex; flex-direction:column; gap:7px; flex:1; overflow-y:auto; min-height:90px; scrollbar-width:none;"></div>
+
+        <!-- HUD S.P.E.C.I.A.L. PIP-BOY -->
+        <div class="special-hud-card">
+            <div class="special-hud-header">
+                <div class="special-hud-title">
+                    <span>S.P.E.C.I.A.L.</span>
+                    <span id="specialFilterBadge" style="font-size:0.6rem; color:var(--accent-cyan); font-weight:800; cursor:pointer;" onclick="clearFocusSpecialFilter()"></span>
+                </div>
+                <div class="heat-period-toggle">
+                    <button class="heat-period-btn active" id="specBtn_7d" onclick="setSpecialHudPeriod('7d')">7J</button>
+                    <button class="heat-period-btn" id="specBtn_30d" onclick="setSpecialHudPeriod('30d')">30J</button>
+                    <button class="heat-period-btn" id="specBtn_all" onclick="setSpecialHudPeriod('all')">MAX</button>
+                </div>
+            </div>
+            <div class="special-bars-grid" id="specialHudBarsGrid"></div>
+        </div>
     </div>
 </div>
 
@@ -1817,6 +1980,20 @@ function haptic(ms = 10) {
 }
 
 /* ============================================================================
+   RÉFÉRENTIEL S.P.E.C.I.A.L.
+============================================================================ */
+const SPECIAL_KEYS = ['S', 'P', 'E', 'C', 'I', 'A', 'L'];
+const SPECIAL_META = {
+    S: { name: 'Force', desc: 'Puissance physique & posture' },
+    P: { name: 'Perception', desc: 'Observation, focus & signaux' },
+    E: { name: 'Endurance', desc: 'Résilience, souffle & énergie' },
+    C: { name: 'Charisme', desc: 'Social, réseau & négociation' },
+    I: { name: 'Intelligence', desc: 'Apprentissage, code & stratégie' },
+    A: { name: 'Agilité', desc: 'Réflexes, souplesse & adaptation' },
+    L: { name: 'Chance', desc: 'Audace, prise d’initiative & opportunités' }
+};
+
+/* ============================================================================
    CALENDRIER ISO 8601 (LUNDI -> DIMANCHE)
 ============================================================================ */
 function toDateStr(d) {
@@ -1879,6 +2056,13 @@ function calcDaysAgo(dateStr) {
     return Math.floor(diff / (1000 * 60 * 60 * 24));
 }
 
+function getDateDaysAgoStr(days) {
+    const d = new Date();
+    d.setHours(12, 0, 0, 0);
+    d.setDate(d.getDate() - days);
+    return toDateStr(d);
+}
+
 /* ============================================================================
    BASE DE DONNÉES & PERSISTANCE (TACTIQUE_OS_V3)
 ============================================================================ */
@@ -1899,6 +2083,7 @@ const INITIAL_DB = {
             targetValue: 500,
             step: 10,
             allowNegative: true,
+            special: 'P',
             history: {}
         },
         {
@@ -1911,6 +2096,7 @@ const INITIAL_DB = {
             targetValue: 45,
             step: 5,
             allowNegative: false,
+            special: 'S',
             history: {}
         },
         {
@@ -1923,6 +2109,7 @@ const INITIAL_DB = {
             targetValue: 0,
             step: 1,
             allowNegative: false,
+            special: 'E',
             history: {}
         }
     ],
@@ -1933,9 +2120,10 @@ const INITIAL_DB = {
             quadrant: 'q2',
             category: 'GLOBAL',
             priority: 'haute',
-            program: 'A2',
+            special: 'A',
             createdAt: TODAY_STR,
             completed: false,
+            completedAt: null,
             subtasks: [
                 { id: 's1', title: 'Plateau', done: false },
                 { id: 's2', title: 'Circulation', done: false }
@@ -1949,9 +2137,10 @@ const INITIAL_DB = {
             quadrant: 'q4',
             category: 'Santé',
             priority: 'normale',
-            program: 'Terrain',
+            special: 'E',
             createdAt: TODAY_STR,
             completed: false,
+            completedAt: null,
             subtasks: [],
             blockedBy: ['t_moto'],
             notes: ''
@@ -1964,10 +2153,13 @@ let globalHeatWeeks = 12;
 let activeCarouselIndex = 0;
 let activeEditDateByHabit = {};
 let editingHabitId = null;
+let tempHabitSpecial = null;
 let activeZoomQuadrant = null;
 let activeTaskId = null;
 let activeFocusTaskId = null;
 let activeFocusTab = 'levers';
+let activeSpecialPeriod = '7d';
+let activeFocusSpecialFilter = null;
 let selectedGraphNodeId = null;
 let focusTimer = null;
 let focusSeconds = 1500;
@@ -1987,7 +2179,22 @@ function loadDatabase() {
                 if (h.targetValue === undefined) h.targetValue = h.polarity === 'negative' ? 0 : 1;
                 if (!h.step) h.step = 1;
                 if (h.allowNegative === undefined) h.allowNegative = true;
+                if (!SPECIAL_KEYS.includes(h.special)) h.special = null;
                 if (!h.history) h.history = {};
+            });
+        }
+        if (parsed.tasks) {
+            parsed.tasks.forEach(t => {
+                if (!SPECIAL_KEYS.includes(t.special)) {
+                    const legacy = String(t.program || '').trim().toUpperCase();
+                    t.special = SPECIAL_KEYS.includes(legacy) ? legacy : null;
+                }
+                if (t.completed && !t.completedAt) {
+                    t.completedAt = t.createdAt || TODAY_STR;
+                } else if (!t.completed) {
+                    t.completedAt = null;
+                }
+                delete t.program;
             });
         }
         return Object.assign(JSON.parse(JSON.stringify(INITIAL_DB)), parsed);
@@ -2006,6 +2213,82 @@ function toast(msg) {
     el.style.display = 'block';
     clearTimeout(window._tTimer);
     window._tTimer = setTimeout(() => { el.style.display = 'none'; }, 2000);
+}
+
+/* ============================================================================
+   CALCULS S.P.E.C.I.A.L. (TÂCHES + HABITUDES SUR 7J / 30J / MAX)
+============================================================================ */
+function calcSpecialStats(period = '7d') {
+    const stats = { S: 0, P: 0, E: 0, C: 0, I: 0, A: 0, L: 0 };
+    const cutoffStr = period === '7d'
+        ? getDateDaysAgoStr(6)
+        : (period === '30d' ? getDateDaysAgoStr(29) : '0000-01-01');
+
+    // Tâches terminées (+10 XP par tâche)
+    db.tasks.forEach(t => {
+        if (t.completed && t.special && stats[t.special] !== undefined) {
+            const doneDate = t.completedAt || t.createdAt || TODAY_STR;
+            if (doneDate >= cutoffStr) {
+                stats[t.special] += 10;
+            }
+        }
+    });
+
+    // Habitudes validées (+2 XP par jour réussi)
+    db.habits.forEach(h => {
+        if (h.special && stats[h.special] !== undefined && h.history) {
+            Object.keys(h.history).forEach(ds => {
+                if (ds >= cutoffStr && ds <= TODAY_STR && isHabitAchieved(h, ds)) {
+                    stats[h.special] += 2;
+                }
+            });
+        }
+    });
+
+    return stats;
+}
+
+function getNeglectedSpecialSet() {
+    const stats7d = calcSpecialStats('7d');
+    const values = Object.values(stats7d);
+    const minVal = Math.min(...values);
+    const maxVal = Math.max(...values);
+    const neglected = new Set();
+    if (maxVal === 0) return neglected;
+
+    SPECIAL_KEYS.forEach(k => {
+        if (stats7d[k] === minVal || stats7d[k] <= maxVal * 0.25) {
+            neglected.add(k);
+        }
+    });
+    return neglected;
+}
+
+function renderSpecialSelectorWidget(containerId, labelId, currentVal, onSelectCallback) {
+    const box = document.getElementById(containerId);
+    const label = document.getElementById(labelId);
+    if (!box) return;
+
+    box.innerHTML = '';
+    if (label) {
+        label.textContent = currentVal && SPECIAL_META[currentVal]
+            ? `${currentVal} · ${SPECIAL_META[currentVal].name}`
+            : 'Aucun';
+    }
+
+    SPECIAL_KEYS.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'special-letter-btn' + (currentVal === letter ? ' active' : '');
+        btn.textContent = letter;
+        btn.onclick = () => {
+            AudioEngine.click();
+            haptic(8);
+            const nextVal = currentVal === letter ? null : letter;
+            onSelectCallback(nextVal);
+        };
+        box.appendChild(btn);
+    });
 }
 
 /* ============================================================================
@@ -2340,6 +2623,7 @@ function renderHabitsCarousel() {
 
     habits.forEach((habit, idx) => {
         const v = getCardDynamicVisuals(habit);
+        const specBadge = habit.special ? ` · <span class="special-tag-mini">[${habit.special}]</span>` : '';
 
         const card = document.createElement('div');
         card.className = 'habit-full-card';
@@ -2348,7 +2632,7 @@ function renderHabitsCarousel() {
         header.className = 'habit-card-header';
         header.innerHTML = `
             <div class="habit-title-box">
-                <span class="habit-category-badge">${escapeHtml(habit.category)}</span>
+                <span class="habit-category-badge">${escapeHtml(habit.category)}${specBadge}</span>
                 <span class="habit-card-title">${escapeHtml(habit.title)}</span>
             </div>
             <div class="habit-header-right">
@@ -2759,7 +3043,6 @@ function isBlocked(task) {
     return getUnfinishedBlockers(task).length > 0;
 }
 
-// Vérifie si A atteint B par un chemin de longueur >= 2 (pour éliminer les arêtes redondantes)
 function hasIndirectPath(sourceId, targetId) {
     const target = db.tasks.find(t => t.id === targetId);
     if (!target || !target.blockedBy) return false;
@@ -2783,10 +3066,8 @@ function hasIndirectPath(sourceId, targetId) {
     return false;
 }
 
-// Récupère toute la lignée (ancêtres + descendants) d'un nœud pour la mise en surbrillance
 function getConnectedLineageSet(rootId) {
     const lineage = new Set([rootId]);
-    // Ancêtres
     const upQueue = [rootId];
     while (upQueue.length > 0) {
         const cid = upQueue.shift();
@@ -2800,7 +3081,6 @@ function getConnectedLineageSet(rootId) {
             });
         }
     }
-    // Descendants
     const downQueue = [rootId];
     while (downQueue.length > 0) {
         const cid = downQueue.shift();
@@ -2830,7 +3110,6 @@ function renderNetworkView() {
 
     renderNodeInspector();
 
-    // 1. Collecte des nœuds et construction d'une liste d'adjacence non-orientée pour trouver les îlots
     const connectedIds = new Set();
     const undirectedAdj = {};
     let totalEdges = 0;
@@ -2864,7 +3143,6 @@ function renderNetworkView() {
         return;
     }
 
-    // 2. Partitionnement en Composantes Connexes (Îlots indépendants)
     const visitedCluster = new Set();
     const clusters = [];
 
@@ -2887,12 +3165,10 @@ function renderNetworkView() {
         clusters.push(comp);
     });
 
-    // Tri des îlots : les plus vastes en haut
     clusters.sort((a, b) => b.length - a.length);
 
     const activeLineage = selectedGraphNodeId ? getConnectedLineageSet(selectedGraphNodeId) : null;
 
-    // 3. Rendu de chaque îlot avec ordonnancement barycentrique de Sugiyama
     clusters.forEach((clusterTasks, cIdx) => {
         const clusterCard = document.createElement('div');
         clusterCard.className = 'network-cluster-card';
@@ -2908,7 +3184,6 @@ function renderNetworkView() {
         svg.id = `clusterSvg_${cIdx}`;
         clusterCard.appendChild(svg);
 
-        // Calcul du rang vertical (plus long chemin depuis les racines de l'îlot)
         const depthMap = {};
         const computeDepth = (task, visited = new Set()) => {
             if (depthMap[task.id] !== undefined) return depthMap[task.id];
@@ -2940,12 +3215,10 @@ function renderNetworkView() {
 
         const sortedLevels = Object.keys(tiers).map(Number).sort((a, b) => a - b);
 
-        // Tri du niveau 0 par effet de levier décroissant
         if (tiers[0]) {
             tiers[0].sort((a, b) => countUnlockedBy(b.id) - countUnlockedBy(a.id));
         }
 
-        // Barycentre de Sugiyama : aligne les enfants sous la position moyenne de leurs parents
         const posIndex = {};
         if (tiers[0]) tiers[0].forEach((t, i) => { posIndex[t.id] = i; });
 
@@ -2979,9 +3252,10 @@ function renderNetworkView() {
 
                 node.className = `graph-node ${statusClass}`;
                 node.id = `gnode_${t.id}`;
+                const specTag = t.special ? ` <span class="special-tag-mini">[${t.special}]</span>` : '';
                 node.innerHTML = `
                     <div class="node-cat">
-                        <span>${escapeHtml(t.category)}</span>
+                        <span>${escapeHtml(t.category)}${specTag}</span>
                         <span>${t.completed ? '✓' : (blocked ? '🔒' : `⚡${unlocks}`)}</span>
                     </div>
                     <div class="node-title">${escapeHtml(t.title)}</div>
@@ -3043,10 +3317,12 @@ function renderNodeInspector() {
         `;
     }
 
+    const specInfo = task.special ? ` · [${task.special}]` : '';
+
     bar.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
             <div style="min-width:0;">
-                <div style="font-size:0.6rem; color:var(--accent-cyan); font-weight:800; text-transform:uppercase;">NŒUD SÉLECTIONNÉ · ${escapeHtml(task.category)}</div>
+                <div style="font-size:0.6rem; color:var(--accent-cyan); font-weight:800; text-transform:uppercase;">NŒUD SÉLECTIONNÉ · ${escapeHtml(task.category)}${specInfo}</div>
                 <div style="font-size:0.92rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(task.title)}</div>
             </div>
             <div style="display:flex; gap:6px; flex-shrink:0;">
@@ -3093,7 +3369,6 @@ function drawClusterSvgCurves(clusterTasks, cIdx) {
         const y2 = targetRect.top - stageRect.top;
 
         targetTask.blockedBy.forEach(blockerId => {
-            // Réduction transitive : n'affiche pas la ligne directe si un chemin indirect existe déjà
             if (hasIndirectPath(blockerId, targetTask.id)) return;
 
             const blockerTask = clusterTasks.find(x => x.id === blockerId);
@@ -3148,7 +3423,7 @@ function quickLinkFromNetwork() {
 }
 
 /* ============================================================================
-   HUB FOCUS & AUJOURD'HUI COMPACT (BOUTON ✨)
+   HUB FOCUS, ALGORITHME D'ÉQUILIBRE & HUD S.P.E.C.I.A.L. (BOUTON ✨)
 ============================================================================ */
 const QUAD_CONFIG = {
     q1: { title: 'Faire', sub: 'Urgent & Important', color: 'var(--q1-color)', weight: 50 },
@@ -3162,12 +3437,15 @@ function getBestExecutableTask() {
     const candidates = db.tasks.filter(t => !t.completed && !isBlocked(t) && t.quadrant !== 'inbox');
     if (candidates.length === 0) return null;
 
+    const neglectedSet = getNeglectedSpecialSet();
+
     const scored = candidates.map(t => {
         const qScore = QUAD_CONFIG[t.quadrant].weight;
         const pScore = t.priority === 'critique' ? 40 : (t.priority === 'haute' ? 25 : 10);
         const levScore = countUnlockedBy(t.id) * 30;
         const ageScore = Math.min(40, calcDaysAgo(t.createdAt) * 0.5);
-        return { task: t, total: qScore + pScore + levScore + ageScore };
+        const balanceBonus = (t.special && neglectedSet.has(t.special)) ? 20 : 0;
+        return { task: t, total: qScore + pScore + levScore + ageScore + balanceBonus };
     }).sort((a, b) => b.total - a.total);
 
     return scored[0].task;
@@ -3189,6 +3467,27 @@ function switchFocusListTab(tab) {
     renderFocusHubContent();
 }
 
+function setSpecialHudPeriod(period) {
+    AudioEngine.click();
+    haptic(8);
+    activeSpecialPeriod = period;
+    renderSpecialHud();
+}
+
+function toggleFocusSpecialFilter(letter) {
+    AudioEngine.click();
+    haptic(10);
+    activeFocusSpecialFilter = (activeFocusSpecialFilter === letter) ? null : letter;
+    renderFocusHubContent();
+}
+
+function clearFocusSpecialFilter() {
+    AudioEngine.click();
+    haptic(8);
+    activeFocusSpecialFilter = null;
+    renderFocusHubContent();
+}
+
 function selectTaskForFocus(taskId) {
     AudioEngine.click();
     haptic(10);
@@ -3199,9 +3498,62 @@ function selectTaskForFocus(taskId) {
     renderFocusHubContent();
 }
 
+function renderSpecialHud() {
+    ['7d', '30d', 'all'].forEach(p => {
+        const btn = document.getElementById(`specBtn_${p}`);
+        if (btn) btn.classList.toggle('active', activeSpecialPeriod === p);
+    });
+
+    const filterBadge = document.getElementById('specialFilterBadge');
+    if (filterBadge) {
+        if (activeFocusSpecialFilter) {
+            filterBadge.textContent = `· Filtre [${activeFocusSpecialFilter}] ${SPECIAL_META[activeFocusSpecialFilter].name} ✕`;
+        } else {
+            filterBadge.textContent = '';
+        }
+    }
+
+    const stats = calcSpecialStats(activeSpecialPeriod);
+    const vals = Object.values(stats);
+    const maxVal = Math.max(...vals, 10);
+    const minVal = Math.min(...vals);
+    const hasActivity = Math.max(...vals) > 0;
+
+    const grid = document.getElementById('specialHudBarsGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    SPECIAL_KEYS.forEach(letter => {
+        const rawScore = stats[letter] || 0;
+        const filledSegments = rawScore === 0
+            ? 0
+            : Math.max(1, Math.min(10, Math.round((rawScore / maxVal) * 10)));
+        const isLowest = hasActivity && rawScore === minVal && rawScore < maxVal;
+
+        const col = document.createElement('div');
+        col.className = 'special-col' + (activeFocusSpecialFilter === letter ? ' filter-active' : '');
+        col.title = `${SPECIAL_META[letter].name} : ${rawScore} XP`;
+        col.onclick = () => toggleFocusSpecialFilter(letter);
+
+        let segsHtml = '';
+        for (let i = 1; i <= 10; i++) {
+            const onClass = i <= filledSegments ? ('on' + (isLowest ? ' low-stat' : '')) : '';
+            segsHtml += `<div class="special-seg ${onClass}"></div>`;
+        }
+
+        col.innerHTML = `
+            <span class="special-col-val">${rawScore}</span>
+            <div class="special-bar-track">${segsHtml}</div>
+            <span class="special-col-letter">${letter}</span>
+        `;
+        grid.appendChild(col);
+    });
+}
+
 function renderFocusHubContent() {
     const hero = document.getElementById('focusHeroBox');
     const target = db.tasks.find(t => t.id === activeFocusTaskId && !t.completed) || getBestExecutableTask();
+    const neglectedSet = getNeglectedSpecialSet();
 
     const m = String(Math.floor(focusSeconds / 60)).padStart(2, '0');
     const s = String(focusSeconds % 60).padStart(2, '0');
@@ -3211,16 +3563,24 @@ function renderFocusHubContent() {
     } else {
         activeFocusTaskId = target.id;
         const unlocks = countUnlockedBy(target.id);
+        const specBadge = target.special ? ` · <span class="special-tag-mini">[${target.special} · ${SPECIAL_META[target.special].name}]</span>` : '';
+        const balanceBadge = (target.special && neglectedSet.has(target.special))
+            ? `<span class="score-badge" style="color:var(--accent-cyan); border-color:var(--accent-cyan);">⚖️ ÉQUILIBRE</span>`
+            : '';
+
         hero.innerHTML = `
-            <span class="score-badge" style="color:var(--accent-emerald); border-color:var(--accent-emerald);">CIBLE PRIORITAIRE</span>
-            <div style="font-size:1.25rem; font-weight:900; margin-top:4px;">${escapeHtml(target.title)}</div>
+            <div style="display:flex; gap:6px; align-items:center;">
+                <span class="score-badge" style="color:var(--accent-emerald); border-color:var(--accent-emerald);">CIBLE PRIORITAIRE</span>
+                ${balanceBadge}
+            </div>
+            <div style="font-size:1.2rem; font-weight:900; margin-top:2px;">${escapeHtml(target.title)}</div>
             <div style="font-size:0.74rem; color:var(--text-secondary);">
-                ${QUAD_CONFIG[target.quadrant].title} · ${escapeHtml(target.category)} ${unlocks ? `· ⚡ Débloque ${unlocks}` : ''}
+                ${QUAD_CONFIG[target.quadrant].title} · ${escapeHtml(target.category)}${specBadge} ${unlocks ? `· ⚡ Débloque ${unlocks}` : ''}
             </div>
             <div class="timer-readout" id="focusClock">${m}:${s}</div>
             <div style="display:flex; gap:8px; width:100%;">
-                <button class="btn-action-primary" style="flex:1;" onclick="toggleTimer()">${focusTimer ? '⏸ Pause' : '▶ Démarrer'}</button>
-                <button class="stepper-btn" style="flex:1; font-size:0.85rem;" onclick="toggleTaskDone('${target.id}')">✓ Terminer</button>
+                <button class="btn-action-primary" style="flex:1; padding:10px;" onclick="toggleTimer()">${focusTimer ? '⏸ Pause' : '▶ Démarrer'}</button>
+                <button class="stepper-btn" style="flex:1; font-size:0.85rem; height:38px;" onclick="toggleTaskDone('${target.id}')">✓ Terminer</button>
             </div>
         `;
     }
@@ -3241,33 +3601,42 @@ function renderFocusHubContent() {
     const listEl = document.getElementById('focusCompactTasksList');
     listEl.innerHTML = '';
 
-    const currentList = activeFocusTab === 'levers' ? levers : (activeFocusTab === 'today' ? priorities : oldTasks);
+    let currentList = activeFocusTab === 'levers' ? levers : (activeFocusTab === 'today' ? priorities : oldTasks);
 
-    if (currentList.length === 0) {
-        listEl.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-tertiary); font-size:0.78rem;">Aucune tâche dans cette section.</div>`;
-        return;
+    if (activeFocusSpecialFilter) {
+        currentList = activeTasks.filter(t => t.special === activeFocusSpecialFilter);
     }
 
-    currentList.forEach(t => {
-        const age = calcDaysAgo(t.createdAt);
-        const unlocks = countUnlockedBy(t.id);
-        const card = document.createElement('div');
-        card.className = 'full-card';
-        if (t.id === activeFocusTaskId) card.style.borderColor = 'var(--accent-emerald)';
+    if (currentList.length === 0) {
+        const emptyMsg = activeFocusSpecialFilter
+            ? `Aucune tâche active pour [${activeFocusSpecialFilter}] ${SPECIAL_META[activeFocusSpecialFilter].name}.`
+            : 'Aucune tâche dans cette section.';
+        listEl.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-tertiary); font-size:0.78rem;">${emptyMsg}</div>`;
+    } else {
+        currentList.forEach(t => {
+            const age = calcDaysAgo(t.createdAt);
+            const unlocks = countUnlockedBy(t.id);
+            const specTag = t.special ? ` · <span class="special-tag-mini">[${t.special}]</span>` : '';
+            const card = document.createElement('div');
+            card.className = 'full-card';
+            if (t.id === activeFocusTaskId) card.style.borderColor = 'var(--accent-emerald)';
 
-        card.innerHTML = `
-            <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')"></div>
-            <div style="flex:1; min-width:0;" onclick="selectTaskForFocus('${t.id}')">
-                <div style="font-weight:800; font-size:0.86rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(t.title)}</div>
-                <div style="font-size:0.68rem; color:var(--text-secondary);">
-                    ${QUAD_CONFIG[t.quadrant].title} · ${escapeHtml(t.category)} ${unlocks ? `· ⚡${unlocks}` : ''}
+            card.innerHTML = `
+                <div class="radio-circle" style="color:${QUAD_CONFIG[t.quadrant].color}" onclick="event.stopPropagation(); toggleTaskDone('${t.id}')"></div>
+                <div style="flex:1; min-width:0;" onclick="selectTaskForFocus('${t.id}')">
+                    <div style="font-weight:800; font-size:0.86rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(t.title)}</div>
+                    <div style="font-size:0.68rem; color:var(--text-secondary);">
+                        ${QUAD_CONFIG[t.quadrant].title} · ${escapeHtml(t.category)}${specTag} ${unlocks ? `· ⚡${unlocks}` : ''}
+                    </div>
                 </div>
-            </div>
-            <span class="age-badge">${age}j</span>
-            <button class="btn-card-more" onclick="event.stopPropagation(); closeFocusModal(); openTaskDetail('${t.id}')">⋯</button>
-        `;
-        listEl.appendChild(card);
-    });
+                <span class="age-badge">${age}j</span>
+                <button class="btn-card-more" onclick="event.stopPropagation(); closeFocusModal(); openTaskDetail('${t.id}')">⋯</button>
+            `;
+            listEl.appendChild(card);
+        });
+    }
+
+    renderSpecialHud();
 }
 
 function toggleTimer() {
@@ -3313,9 +3682,10 @@ function getFilteredTasksForQuadrant(quadId) {
             if (searchQuery) {
                 const q = searchQuery.toLowerCase();
                 const matchTitle = t.title.toLowerCase().includes(q);
-                const matchProg = (t.program || '').toLowerCase().includes(q);
+                const specName = t.special && SPECIAL_META[t.special] ? SPECIAL_META[t.special].name.toLowerCase() : '';
+                const matchSpec = (t.special || '').toLowerCase() === q || specName.includes(q);
                 const matchCat = t.category.toLowerCase().includes(q);
-                if (!matchTitle && !matchProg && !matchCat) return false;
+                if (!matchTitle && !matchSpec && !matchCat) return false;
             }
             return true;
         })
@@ -3358,9 +3728,10 @@ function renderMatrix() {
             center.className = 'pill-center';
 
             let meta = [];
+            if (t.special) meta.push(`<span class="special-tag-mini">[${t.special}]</span>`);
             if (subTotal > 0) meta.push(`☰ ${subDone}/${subTotal}`);
             if (leverage > 0) meta.push(`⚡${leverage}`);
-            if (db.currentCategory === 'GLOBAL' && t.category !== 'GLOBAL') meta.push(t.category);
+            if (db.currentCategory === 'GLOBAL' && t.category !== 'GLOBAL') meta.push(escapeHtml(t.category));
 
             center.innerHTML = `
                 <div class="pill-title">${escapeHtml(t.title)}</div>
@@ -3468,7 +3839,6 @@ function attachMatrixPillDragAndTap(pillEl, task) {
             return;
         }
 
-        // Si simple tap court
         if (e.type === 'pointerup' && Math.abs(e.clientX - startX) < 8 && Math.abs(e.clientY - startY) < 8) {
             openTaskDetail(task.id);
         }
@@ -3494,7 +3864,8 @@ function openTaskDetail(taskId) {
     document.getElementById('editTaskQuadrant').value = t.quadrant;
     document.getElementById('editTaskPriority').value = t.priority || 'normale';
     document.getElementById('editTaskDate').value = t.createdAt;
-    document.getElementById('editTaskProgram').value = t.program || '';
+
+    renderTaskDetailSpecialSelector(t);
 
     const catSelect = document.getElementById('editTaskCategory');
     catSelect.innerHTML = '';
@@ -3510,6 +3881,19 @@ function openTaskDetail(taskId) {
     renderDependenciesSection(t);
 
     document.getElementById('taskDetailModal').classList.add('open');
+}
+
+function renderTaskDetailSpecialSelector(task) {
+    renderSpecialSelectorWidget(
+        'editTaskSpecialSelector',
+        'editTaskSpecialLabel',
+        task.special || null,
+        (nextVal) => {
+            task.special = nextVal;
+            renderTaskDetailSpecialSelector(task);
+            renderApp();
+        }
+    );
 }
 
 function closeTaskDetail() {
@@ -3654,11 +4038,15 @@ function toggleTaskDone(taskId) {
     }
 
     t.completed = !t.completed;
+    t.completedAt = t.completed ? TODAY_STR : null;
+
     if (t.completed) {
         AudioEngine.unlock();
         haptic([15, 45]);
         const unlocked = countUnlockedBy(t.id);
-        if (unlocked > 0) toast(`⚡ ${unlocked} tâche(s) débloquée(s)`);
+        const specGain = t.special ? ` · +10 ${SPECIAL_META[t.special].name}` : '';
+        if (unlocked > 0) toast(`⚡ ${unlocked} tâche(s) débloquée(s)${specGain}`);
+        else if (specGain) toast(`✓ Validé${specGain}`);
     } else {
         AudioEngine.click();
         haptic(12);
@@ -3695,9 +4083,10 @@ function submitQuickTask() {
         quadrant: activeZoomQuadrant,
         category: db.currentCategory,
         priority: activeZoomQuadrant === 'q1' ? 'haute' : 'normale',
-        program: '',
+        special: null,
         createdAt: TODAY_STR,
         completed: false,
+        completedAt: null,
         subtasks: [],
         blockedBy: [],
         notes: ''
@@ -3732,6 +4121,7 @@ function renderZoomList() {
 
     tasks.forEach(t => {
         const age = calcDaysAgo(t.createdAt);
+        const specTag = t.special ? ` · <span class="special-tag-mini">[${t.special}]</span>` : '';
         const card = document.createElement('div');
         card.className = 'full-card';
         card.style.opacity = t.completed ? '0.45' : '1';
@@ -3752,7 +4142,7 @@ function renderZoomList() {
             <div style="flex:1; min-width:0;">
                 <div style="font-weight:800; font-size:0.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(t.title)}</div>
                 <div style="font-size:0.68rem; color:var(--text-secondary); margin-top:2px;">
-                    ${escapeHtml(t.category)} · ${age}j
+                    ${escapeHtml(t.category)}${specTag} · ${age}j
                 </div>
             </div>
             ${quickDispatchHtml}
@@ -3765,8 +4155,21 @@ function renderZoomList() {
 /* ============================================================================
    MODALES D'HABITUDES & SYSTÈME (FICHIER / CATÉGORIES)
 ============================================================================ */
+function renderHabitModalSpecialSelector() {
+    renderSpecialSelectorWidget(
+        'habitSpecialSelector',
+        'habitSpecialLabel',
+        tempHabitSpecial,
+        (nextVal) => {
+            tempHabitSpecial = nextVal;
+            renderHabitModalSpecialSelector();
+        }
+    );
+}
+
 function openCreateHabitModal() {
     editingHabitId = null;
+    tempHabitSpecial = null;
     document.getElementById('habitModalHeading').textContent = 'Nouvelle Habitude';
     document.getElementById('btnDeleteHabit').style.display = 'none';
 
@@ -3778,6 +4181,7 @@ function openCreateHabitModal() {
     document.getElementById('habitValueTypeSelect').value = 'numeric';
     document.getElementById('habitAllowNegativeInput').checked = true;
     toggleHabitNumericFields('numeric');
+    renderHabitModalSpecialSelector();
 
     const catSelect = document.getElementById('habitCategorySelect');
     catSelect.innerHTML = '';
@@ -3797,6 +4201,7 @@ function openEditHabitModal(habitId) {
     const h = db.habits.find(x => x.id === habitId);
     if (!h) return;
 
+    tempHabitSpecial = h.special || null;
     document.getElementById('habitModalHeading').textContent = 'Configurer';
     document.getElementById('btnDeleteHabit').style.display = 'block';
 
@@ -3808,6 +4213,7 @@ function openEditHabitModal(habitId) {
     document.getElementById('habitStepInput').value = h.step;
     document.getElementById('habitAllowNegativeInput').checked = Boolean(h.allowNegative);
     toggleHabitNumericFields(h.valueType);
+    renderHabitModalSpecialSelector();
 
     const catSelect = document.getElementById('habitCategorySelect');
     catSelect.innerHTML = '';
@@ -3852,6 +4258,7 @@ function saveHabitFromModal() {
             h.targetValue = targetValue;
             h.step = step;
             h.allowNegative = allowNegative;
+            h.special = tempHabitSpecial;
         }
     } else {
         db.habits.push({
@@ -3864,6 +4271,7 @@ function saveHabitFromModal() {
             targetValue,
             step,
             allowNegative,
+            special: tempHabitSpecial,
             history: {}
         });
         activeCarouselIndex = getFilteredHabits().length - 1;
@@ -3992,7 +4400,8 @@ function importDataJSON(e) {
         try {
             const data = JSON.parse(evt.target.result);
             if (data && Array.isArray(data.tasks)) {
-                db = data;
+                localStorage.setItem(DB_KEY, JSON.stringify(data));
+                db = loadDatabase();
                 renderApp();
                 toast('Données importées');
             }
